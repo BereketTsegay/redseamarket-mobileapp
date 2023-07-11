@@ -7,6 +7,10 @@ const AppImages = {
     FACEBOOK: require('../images/facebook.png'),
     GOOGLE: require('../images/google.png'),
     HOME: require('../images/home.png'),
+    AD: require('../images/ad.png'),
+    HEART: require('../images/heart.png'),
+    MENU: require('../images/menu.png'),
+    ADD: require('../images/add.png'),
   };
   
   export default AppImages;

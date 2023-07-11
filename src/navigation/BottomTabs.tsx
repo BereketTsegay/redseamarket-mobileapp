@@ -34,18 +34,24 @@ const BottomTabs: React.FC<Props> = () => {
     let icon = '';
 
     switch (routeName) {
-      case 'title1':
+      case RouteNames.AdsScreen:
+        icon = AppImages.AD;
+        break;
+      case RouteNames.FavoritesScreen:
+        icon = AppImages.HEART;
+        break;
+        case RouteNames.HomeScreen:
         icon = AppImages.HOME;
         break;
-      case 'title2':
-        icon = AppImages.GOOGLE;
+      case RouteNames.ProfileScreen:
+        icon = AppImages.MENU;
         break;
     }
 
     return (
       <Image
         source={icon}
-        tintColor={routeName === selectedTab ? 'black' : 'gray'}
+        tintColor={routeName === selectedTab ? '#0052BE' : '#4394FF'}
       />
     );
   };
@@ -71,24 +77,38 @@ const BottomTabs: React.FC<Props> = () => {
         bgColor="white"
         initialRouteName="title1"
         borderTopLeftRight
+        screenOptions={{
+          headerShown:false
+        }}
         renderCircle={({ selectedTab, navigate }) => (
           <Animated.View style={styles.btnCircleUp}>
             <TouchableOpacity
               style={styles.button}
             >
-              <Image source={AppImages.HOME}/>
+              <Image source={AppImages.ADD} tintColor={'white'}/>
             </TouchableOpacity>
           </Animated.View>
         )}
         tabBar={renderTabBar}
       >
         <CurvedBottomBar.Screen
-          name="title1"
+          name={RouteNames.HomeScreen}
           position="LEFT"
           component={HomeScreen}
+          
+        />
+         <CurvedBottomBar.Screen
+          name={RouteNames.FavoritesScreen}
+          position="LEFT"
+          component={FavoritesScreen}
+        />
+         <CurvedBottomBar.Screen
+          name={RouteNames.AdsScreen}
+          position="RIGHT"
+          component={AdsScreen}
         />
         <CurvedBottomBar.Screen
-          name="title2"
+          name={RouteNames.ProfileScreen}
           component={ProfileScreen}
           position="RIGHT"
         />
@@ -119,7 +139,8 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
     },
-    bottomBar: {},
+    bottomBar: {
+    },
     btnCircleUp: {
       width: 60,
       height: 60,
@@ -150,14 +171,6 @@ const styles = StyleSheet.create({
     img: {
       width: 30,
       height: 30,
-    },
-    screen1: {
-      flex: 1,
-      backgroundColor: '#BFEFFF',
-    },
-    screen2: {
-      flex: 1,
-      backgroundColor: '#FFEBCD',
     },
   });
 
