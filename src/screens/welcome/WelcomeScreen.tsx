@@ -8,6 +8,8 @@ import {ImageBackground, StyleSheet, TouchableOpacity} from 'react-native';
 import AppColors from '../../constants/AppColors';
 import AppImages from '../../constants/AppImages';
 import AppFonts from '../../constants/AppFonts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
 export type WelcomeScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'WelcomeScreen'
@@ -22,8 +24,15 @@ interface Props {}
 
 const WelcomeScreen: React.FC<Props> = () => {
   const navigation = useNavigation<WelcomeScreenNavigationProps>();
+  const [token, setToken] = useState(null);
   useEffect(() => {
+   checkToken()
   }, []);
+
+  const checkToken = async() => {
+    const Token = await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN);
+    setToken(Token);
+  }
 
   return (
    <ImageBackground
@@ -32,7 +41,9 @@ const WelcomeScreen: React.FC<Props> = () => {
     <Text style={styles.text}>Red sea Market</Text>
     <Text style={styles.text1}>General trading</Text>
 
-    <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.LoginScreen)}
+    <TouchableOpacity onPress={()=>{token?
+    navigation.navigate(RouteNames.BottomTabs):
+    navigation.navigate(RouteNames.LoginScreen)}}
     style={styles.button}>
       <Text style={styles.text2}>Let's Get Started</Text>
     </TouchableOpacity>

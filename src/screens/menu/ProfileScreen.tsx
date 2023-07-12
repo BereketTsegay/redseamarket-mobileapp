@@ -4,6 +4,10 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
+import AppColors from '../../constants/AppColors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
+import { TouchableOpacity } from 'react-native';
 export type ProfileScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'ProfileScreen'
@@ -21,9 +25,16 @@ const ProfileScreen: React.FC<Props> = () => {
   useEffect(() => {
   }, []);
 
+  const Logout = async () => { 
+    await AsyncStorage.removeItem(AppStrings.ACCESS_TOKEN);
+    navigation.replace(RouteNames.WelcomeScreen)
+ };
+
   return (
-    <View flex center>
-        <Text>ProfileScreen</Text>
+    <View flex center backgroundColor='#FFFFFF'>
+      <TouchableOpacity onPress={Logout}>
+        <Text color={AppColors.lightBlue}>Logout</Text>
+        </TouchableOpacity>
         </View>
     
   );

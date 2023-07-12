@@ -22,7 +22,7 @@ const FavoritesScreen: React.FC<Props> = () => {
   }, []);
 
   return (
-    <View flex center>
+    <View flex center backgroundColor='#FFFFFF'>
         <Text>FavoritesScreen</Text>
         </View>
     

@@ -22,7 +22,7 @@ const HomeScreen: React.FC<Props> = () => {
   }, []);
 
   return (
-    <View flex center>
+    <View flex center backgroundColor='#FFFFFF'>
         <Text>HomeScreen</Text>
         </View>
     

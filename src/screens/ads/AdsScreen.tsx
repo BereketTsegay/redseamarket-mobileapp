@@ -22,7 +22,7 @@ const AdsScreen: React.FC<Props> = () => {
   }, []);
 
   return (
-    <View flex center>
+    <View flex center backgroundColor='#FFFFFF'>
         <Text>AdsScreen</Text>
         </View>
     

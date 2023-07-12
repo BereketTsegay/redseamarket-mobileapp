@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
       borderTopStartRadius:44,
       borderTopEndRadius:44,
       paddingHorizontal:50,
-      paddingVertical:30
+      paddingVertical:40
     },
     text:{
       fontSize:24,
@@ -36,21 +36,35 @@ const styles = StyleSheet.create({
       paddingVertical:5,
       borderRadius:8,
       alignItems:'center',
-      justifyContent:'center'
+      justifyContent:'center',
+      width:'100%',
+      marginTop:50
     },
     
     heading:{
-        color:'#00259D',
+        color:AppColors.primaryBlue,
         fontSize:22,
         fontFamily:AppFonts.POPPINS_MEDIUM,
-        alignSelf:'center'
     },
-    bottomText:{
-        color:'#00259D',
-        fontSize:12,
-        fontFamily:AppFonts.POPPINS_REGULAR,
-        alignSelf:'center'
-    }
+    subTitle:{
+        color:AppColors.darkishBlue,
+        fontSize:10,
+        fontFamily:AppFonts.POPPINS_MEDIUM,
+        textAlign:'center',
+        width:'70%'
+    },
+    numberText:{
+      fontSize:17,
+      color:AppColors.darkBlue,
+      fontFamily:AppFonts.POPPINS_BOLD
+    },
+    textInputContainer: {
+      marginVertical: 20,
+    },
+    roundedTextInput: {
+      borderWidth: 1,
+      borderColor:'#707070'
+    },
   });
 
   export default styles;

@@ -5,6 +5,7 @@ import WelcomeScreen from '../screens/welcome/WelcomeScreen';
 import LoginScreen from '../screens/login/LoginScreen';
 import RegisterScreen from '../screens/register/RegisterScreen';
 import OtpVerificationScreen from '../screens/otp/OtpVerificationScreen';
+import PostListScreen from '../screens/post/PostListScreen';
 import BottomTabs from './BottomTabs';
 
 const Stack = createNativeStackNavigator();
@@ -23,6 +24,7 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.RegisterScreen} component={RegisterScreen}/>
         <Stack.Screen name={RouteNames.OtpVerificationScreen} component={OtpVerificationScreen}/>
         <Stack.Screen name={RouteNames.BottomTabs} component={BottomTabs}/>
+        <Stack.Screen name={RouteNames.PostListScreen} component={PostListScreen}/>
      
     </Stack.Navigator>
   );

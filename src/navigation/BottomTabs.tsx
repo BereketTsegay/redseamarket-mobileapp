@@ -16,6 +16,7 @@ import HomeScreen from '../screens/home/HomeScreen';
 import PostListScreen from '../screens/post/PostListScreen';
 import { Animated, StyleSheet } from 'react-native';
 import { CurvedBottomBar } from 'react-native-curved-bottom-bar';
+import AppFonts from '../constants/AppFonts';
 
 
 export type BottomTabsNavigationProps = NativeStackNavigationProp<
@@ -29,30 +30,44 @@ interface Props {}
 
 const BottomTabs: React.FC<Props> = () => {
   const navigation = useNavigation<BottomTabsNavigationProps>();
+
+  const handleCenterButtonClick = () => {
+    // Perform navigation to another screen here
+    navigation.navigate(RouteNames.PostListScreen);
+  };
   
   const _renderIcon = (routeName, selectedTab) => {
     let icon = '';
+    let name = '';
 
     switch (routeName) {
       case RouteNames.AdsScreen:
         icon = AppImages.AD;
+        name = 'My Ads';
         break;
       case RouteNames.FavoritesScreen:
         icon = AppImages.HEART;
+        name = 'Favorites'
         break;
         case RouteNames.HomeScreen:
         icon = AppImages.HOME;
+        name = 'Home'
         break;
       case RouteNames.ProfileScreen:
         icon = AppImages.MENU;
+        name = 'Menu'
         break;
     }
 
     return (
+      <View center>
       <Image
         source={icon}
-        tintColor={routeName === selectedTab ? '#0052BE' : '#4394FF'}
+        tintColor={routeName === selectedTab ? '#0052BE' : AppColors.lightBlue}
+        style={{width:19,height:20}}
       />
+      <Text style={{fontSize:7,color:AppColors.lightBlue,fontFamily:AppFonts.POPPINS_MEDIUM}}>{name}</Text>
+      </View>
     );
   };
   const renderTabBar = ({ routeName, selectedTab, navigate }) => {
@@ -72,17 +87,17 @@ const BottomTabs: React.FC<Props> = () => {
         type="DOWN"
         style={styles.bottomBar}
         shadowStyle={styles.shawdow}
-        height={55}
-        circleWidth={50}
+        height={60}
+        circleWidth={60}
         bgColor="white"
-        initialRouteName="title1"
+        initialRouteName={RouteNames.HomeScreen}
         borderTopLeftRight
         screenOptions={{
-          headerShown:false
+          headerShown:false,
         }}
         renderCircle={({ selectedTab, navigate }) => (
           <Animated.View style={styles.btnCircleUp}>
-            <TouchableOpacity
+            <TouchableOpacity onPress={handleCenterButtonClick}
               style={styles.button}
             >
               <Image source={AppImages.ADD} tintColor={'white'}/>
@@ -147,7 +162,7 @@ const styles = StyleSheet.create({
       borderRadius: 30,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#E8E8E8',
+      backgroundColor: '#00DCFF',
       bottom: 30,
       shadowColor: '#000',
       shadowOffset: {

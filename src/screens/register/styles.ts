@@ -50,13 +50,13 @@ const styles = StyleSheet.create({
         color:'black'
     },
     heading:{
-        color:'#00259D',
+        color:AppColors.primaryBlue,
         fontSize:22,
         fontFamily:AppFonts.POPPINS_MEDIUM,
         alignSelf:'center'
     },
     bottomText:{
-        color:'#00259D',
+        color:AppColors.primaryBlue,
         fontSize:12,
         fontFamily:AppFonts.POPPINS_REGULAR,
         alignSelf:'center'
