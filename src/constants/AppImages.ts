@@ -11,6 +11,11 @@ const AppImages = {
     HEART: require('../images/heart.png'),
     MENU: require('../images/menu.png'),
     ADD: require('../images/add.png'),
+    SEARCH: require('../images/search.png'),
+    ARROW_DOWN: require('../images/arrow-down.png'),
+    ARROW_RIGHT: require('../images/arrow-right.png'),
+    CIRCLE: require('../images/circle.png'),
+    PLACEHOLDER: require('../images/placeholder-image.png'),
   };
   
   export default AppImages;

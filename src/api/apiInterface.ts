@@ -4,6 +4,8 @@ import {
     apiClient,
     getWithAuthCall,
   } from './apiClient';
+import { Country } from './country/countryResponse';
+import { Dashboard } from './home/DashBoardResponse';
 import { LoginResponse } from './login/LoginCreateSlice';
 import { ResendOtpResponse } from './otp/OtpResendSlice';
 import { OtpResponse } from './otp/OtpVerificationSlice';
@@ -89,4 +91,40 @@ import { RegisterResponse } from './register/RegisterCreateSlice';
         };
       }
     };
+
+        //API FOR DASHBOARD LIST
+        export const fetchDashBoardList = async (
+          requestBody: any,
+        ): Promise<NetworkResponse<Dashboard | null>> => {
+          const response = await apiClient('app/customer/dashboard', 'POST', requestBody);
+          if (response.status) {
+            const json = await response.data;
+            return {
+              kind: 'success',
+              body: json,
+            };
+          } else {
+            return {
+              kind: 'failure',
+            };
+          }
+        };
+
+               //API FOR DASHBOARD LIST
+               export const fetchCountryList = async (
+                requestBody: any,
+              ): Promise<NetworkResponse<Country | null>> => {
+                const response = await apiClient('app/customer/get/country', 'POST', requestBody);
+                if (response.status) {
+                  const json = await response.data;
+                  return {
+                    kind: 'success',
+                    body: json,
+                  };
+                } else {
+                  return {
+                    kind: 'failure',
+                  };
+                }
+              };
   
