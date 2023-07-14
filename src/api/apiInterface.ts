@@ -5,7 +5,7 @@ import {
     getWithAuthCall,
   } from './apiClient';
 import { Country } from './country/countryResponse';
-import { Dashboard } from './home/DashBoardResponse';
+import { DashBoardDetails, Dashboard } from './home/DashBoardResponse';
 import { LoginResponse } from './login/LoginCreateSlice';
 import { ResendOtpResponse } from './otp/OtpResendSlice';
 import { OtpResponse } from './otp/OtpVerificationSlice';
@@ -60,7 +60,7 @@ import { RegisterResponse } from './register/RegisterCreateSlice';
   export const VerifyOtp = async (
     requestBody: any,
   ): Promise<NetworkResponse<OtpResponse>> => {
-    const response = await SimpleApiClient('app/vefify/opt', 'POST', requestBody);
+    const response = await SimpleApiClient('app/verify/otp', 'POST', requestBody);
     if (response.status) {
       const json = await response.data;
       return {
@@ -110,7 +110,25 @@ import { RegisterResponse } from './register/RegisterCreateSlice';
           }
         };
 
-               //API FOR DASHBOARD LIST
+             //API FOR DASHBOARD DETAILS
+             export const fetchDashBoardDetails = async (
+              requestBody: any,
+            ): Promise<NetworkResponse<DashBoardDetails | null>> => {
+              const response = await apiClient('app/customer/ad/view', 'POST', requestBody);
+              if (response.status) {
+                const json = await response.data;
+                return {
+                  kind: 'success',
+                  body: json,
+                };
+              } else {
+                return {
+                  kind: 'failure',
+                };
+              }
+            };
+
+               //API FOR COUNTRY LIST
                export const fetchCountryList = async (
                 requestBody: any,
               ): Promise<NetworkResponse<Country | null>> => {

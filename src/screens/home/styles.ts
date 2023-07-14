@@ -3,6 +3,13 @@ import AppFonts from "../../constants/AppFonts";
 import AppColors from "../../constants/AppColors";
 
 const styles = StyleSheet.create({
+  topBackground:{
+    backgroundColor:AppColors.darkBlue,
+    height:200,
+    justifyContent:'space-between',
+    paddingHorizontal:10,
+    paddingTop:20
+  },
     rowContainer: {
         // flexDirection: 'row',
         // justifyContent: 'space-between',

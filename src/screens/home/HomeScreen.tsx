@@ -8,7 +8,7 @@ import AppImages from '../../constants/AppImages';
 import SelectDropdown from 'react-native-select-dropdown';
 import styles from './styles';
 import AppColors from '../../constants/AppColors';
-import { ActivityIndicator, FlatList, ImageBackground, ScrollView } from 'react-native';
+import { ActivityIndicator, FlatList, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,7 +30,7 @@ interface Props {}
 
 const HomeScreen: React.FC<Props> = () => {
   const navigation = useNavigation<HomeScreenNavigationProps>();
-  const [countryId, setCountryId] = useState('');
+  const [countryId, setCountryId] = useState(69);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {dashboardLists,loadingDashBoardList} = useSelector(
     (state: RootState) => state.DashBoardList,
@@ -84,9 +84,10 @@ const HomeScreen: React.FC<Props> = () => {
     <View flex backgroundColor="#FFFFFF" paddingB-60>
         <ImageBackground 
          source={dashboardLists?.data.slider != null ? {uri:'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider.image}: null}
-        style={{backgroundColor:AppColors.darkBlue,height:200,justifyContent:'flex-end',paddingHorizontal:10}}
+        style={styles.topBackground}
         >
-          <Text style={{alignSelf:'center',fontSize:16,fontFamily:AppFonts.POPPINS_BOLD,bottom:20,color:'white'}}>{dashboardLists?.data.slider != null ?dashboardLists?.data.slider.name : ''}</Text>
+           <Text style={{fontSize:15,fontFamily:AppFonts.POPPINS_SEMIBOLD,color:'white',width:'30%'}}>Red sea Market</Text>
+          <Text style={{alignSelf:'center',fontSize:16,fontFamily:AppFonts.POPPINS_BOLD,color:'white'}}>{dashboardLists?.data.slider != null ?dashboardLists?.data.slider.name : ''}</Text>
     <View center style={styles.rowContainer}>
      
      {Dropdown()}
@@ -112,17 +113,15 @@ const HomeScreen: React.FC<Props> = () => {
   renderItem={({ item, index }) => {
     return (
       <View center key={index} style={{ flex: 1, margin: 10 }}>
-        <ImageBackground key={index} source={AppImages.CIRCLE} style={{width:42, height:31 }}>
         <Image
           source={
             item.image == null
               ? AppImages.PLACEHOLDER
               : { uri: 'https://admin-jamal.prompttechdemohosting.com/' + item.image }
           }
-          style={{width:45, height:25, right:5, top:10}}
+          style={{width:55, height:35}}
           resizeMode="contain"
         />
-        </ImageBackground>
       </View>
     );
   }}
@@ -145,7 +144,8 @@ const HomeScreen: React.FC<Props> = () => {
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View row marginV-20>
           {item.ads.map((item,index)=>(
-              <View backgroundColor='white' key={index} marginR-20 style={{elevation:5,width:100}}>
+            <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:countryId})}>
+              <View backgroundColor='white' key={index} marginR-20 style={{elevation:4,width:100}}>
                  <Image source={item.ad_image == null ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ad_image?.image}} 
                  resizeMode={'cover'} style={{height:70,width:'100%'}}/>
                  <View margin-3>
@@ -154,6 +154,7 @@ const HomeScreen: React.FC<Props> = () => {
                  <Text style={styles.cityText}>{item.area}</Text>
                  </View>
                 </View>
+                </TouchableOpacity>
                 ))}
                 </View>
 </ScrollView>

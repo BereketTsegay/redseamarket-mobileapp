@@ -115,3 +115,110 @@ export type Slider = {
     created_at: Date;
     updated_at: Date;
 }
+
+
+export type DashBoardDetails = {
+    status:  string;
+    message: string;
+    code:    number;
+    ads:     Details_Ad[];
+    lastpay: number;
+}
+
+export type Details_Ad = {
+    id:                   number;
+    category_id:          number;
+    subcategory_id:       number;
+    title:                string;
+    title_arabic:         string;
+    canonical_name:       string;
+    description:          string;
+    description_arabic:   string;
+    price:                number;
+    negotiable_flag:      number;
+    country_id:           number;
+    state_id:             number;
+    city_id:              number;
+    sellerinformation_id: number;
+    customer_id:          number;
+    payment_id:           number;
+    featured_flag:        number;
+    latitude:             string;
+    longitude:            string;
+    view_count:           number;
+    status:               number;
+    notification_status:  string;
+    created_at:           Date;
+    updated_at:           Date;
+    area:                 string;
+    accept_at:            Date;
+    start_at:             Date;
+    sub_area:             string;
+    sub_area2:            string;
+    image:                Image[];
+    created_on:           string;
+    updated_on:           string;
+    country_name:         string;
+    currency:             string;
+    state_name:           string;
+    city_name:            string;
+    seller:               string;
+    category:             Category;
+    payment:              Payment;
+    custom_value:         CustomValue[];
+    seller_information:   SellerInformation;
+}
+
+export type Category = {
+    id:             number;
+    name:           string;
+    canonical_name: string;
+    description:    string;
+    image:          string;
+    display_flag:   number;
+    status:         number;
+    sort_order:     number;
+    reserved_flag:  number;
+    delete_status:  number;
+    created_at:     Date;
+    updated_at:     Date;
+    expire_days:    null;
+    type:           number;
+    percentage:     null;
+}
+
+
+export type Image = {
+    id:         number;
+    image:      string;
+    created_at: Date;
+    updated_at: Date;
+}
+
+export type Payment = {
+    id:           number;
+    payment_id:   string;
+    amount:       number;
+    ads_id:       number;
+    name:         string;
+    email:        string;
+    phone:        string;
+    payment_type: number;
+    document:     null;
+    status:       string;
+    created_at:   Date;
+    updated_at:   Date;
+    parent:       string;
+}
+
+export type SellerInformation = {
+    id:              number;
+    name:            string;
+    email:           string;
+    phone:           string;
+    phone_hide_flag: number;
+    address:         string;
+    created_at:      Date;
+    updated_at:      Date;
+}
+

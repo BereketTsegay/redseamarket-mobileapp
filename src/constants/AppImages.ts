@@ -14,6 +14,7 @@ const AppImages = {
     SEARCH: require('../images/search.png'),
     ARROW_DOWN: require('../images/arrow-down.png'),
     ARROW_RIGHT: require('../images/arrow-right.png'),
+    ARROW_LEFT: require('../images/arrow-left.png'),
     CIRCLE: require('../images/circle.png'),
     PLACEHOLDER: require('../images/placeholder-image.png'),
   };

@@ -5,6 +5,7 @@ import OtpResendSlice from './src/api/otp/OtpResendSlice';
 import LoginCreateSlice from './src/api/login/LoginCreateSlice';
 import DashBoardListSlice from './src/api/home/DashBoardListSlice';
 import CountryListSlice from './src/api/country/CountryListSlice';
+import DashBoardDetailsSlice from './src/api/home/DashBoardDetailsSlice';
 
 const rootReducer = combineReducers({
   registerCreate: RegisterCreateSlice,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   otpResend: OtpResendSlice,
   loginCreate: LoginCreateSlice,
   DashBoardList: DashBoardListSlice,
-  CountryList: CountryListSlice
+  CountryList: CountryListSlice,
+  DashBoardDetails: DashBoardDetailsSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

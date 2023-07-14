@@ -8,5 +8,6 @@ export const RouteNames = {
   FavoritesScreen:'FavoritesScreen',
   HomeScreen:'HomeScreen',
   ProfileScreen:'ProfileScreen',
-  PostListScreen:'PostListScreen'
+  PostListScreen:'PostListScreen',
+  DetailsScreen:'DetailsScreen'
 } as const;
