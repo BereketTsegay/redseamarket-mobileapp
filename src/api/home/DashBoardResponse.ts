@@ -164,6 +164,10 @@ export type Details_Ad = {
     city_name:            string;
     seller:               string;
     category:             Category;
+    motore_value:         MotoreValue;
+    motor_features:       MotorFeature[];
+    property_rend:        Property;
+    property_sale:        Property;
     payment:              Payment;
     custom_value:         CustomValue[];
     seller_information:   SellerInformation;
@@ -187,6 +191,64 @@ export type Category = {
     percentage:     null;
 }
 
+export type MotorFeature = {
+    id:         number;
+    ads_id:     number;
+    value:      string;
+    created_at: Date;
+    updated_at: Date;
+}
+
+export type MotoreValue = {
+    id:                number;
+    ads_id:            number;
+    make_id:           number;
+    model_id:          number;
+    varient_id:        number;
+    registration_year: string;
+    fuel_type:         string;
+    transmission:      string;
+    condition:         string;
+    milage:            number;
+    created_at:        Date;
+    updated_at:        Date;
+    make:              Make;
+    model:             Make;
+    variant:           Variant;
+}
+
+export type Make = {
+    id:         number;
+    name:       string;
+    status:     number;
+    sort_order: number;
+    image?:     string;
+    created_at: Date;
+    updated_at: Date;
+    make_id?:   number;
+}
+
+export type Variant = {
+    id:         number;
+    model_id:   number;
+    name:       string;
+    status:     number;
+    order:      number;
+    created_at: Date;
+    updated_at: Date;
+}
+
+export type Property = {
+    id:            number;
+    ads_id:        number;
+    size:          number;
+    room:          number;
+    furnished:     string;
+    building_type: string;
+    parking:       number;
+    created_at:    Date;
+    updated_at:    Date;
+}
 
 export type Image = {
     id:         number;

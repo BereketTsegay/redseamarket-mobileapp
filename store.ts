@@ -6,6 +6,8 @@ import LoginCreateSlice from './src/api/login/LoginCreateSlice';
 import DashBoardListSlice from './src/api/home/DashBoardListSlice';
 import CountryListSlice from './src/api/country/CountryListSlice';
 import DashBoardDetailsSlice from './src/api/home/DashBoardDetailsSlice';
+import CurrencyListSlice from './src/api/currency/CurrencyListSlice';
+import CategoryListSlice from './src/api/category/CategoryListSlice';
 
 const rootReducer = combineReducers({
   registerCreate: RegisterCreateSlice,
@@ -14,7 +16,9 @@ const rootReducer = combineReducers({
   loginCreate: LoginCreateSlice,
   DashBoardList: DashBoardListSlice,
   CountryList: CountryListSlice,
-  DashBoardDetails: DashBoardDetailsSlice
+  DashBoardDetails: DashBoardDetailsSlice,
+  CurrencyList: CurrencyListSlice,
+  CategoryList: CategoryListSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

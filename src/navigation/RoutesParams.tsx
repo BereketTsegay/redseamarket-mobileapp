@@ -10,4 +10,5 @@ export type RootStackParams = {
   ProfileScreen:undefined;
   PostListScreen:undefined;
   DetailsScreen:undefined;
+  CategoryListScreen:undefined;
 };

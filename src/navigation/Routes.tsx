@@ -9,5 +9,6 @@ export const RouteNames = {
   HomeScreen:'HomeScreen',
   ProfileScreen:'ProfileScreen',
   PostListScreen:'PostListScreen',
-  DetailsScreen:'DetailsScreen'
+  DetailsScreen:'DetailsScreen',
+  CategoryListScreen:'CategoryListScreen'
 } as const;

@@ -5,7 +5,8 @@ import {
     getWithAuthCall,
   } from './apiClient';
 import { Country } from './country/countryResponse';
-import { DashBoardDetails, Dashboard } from './home/DashBoardResponse';
+import { CurrencyResponse } from './currency/CurrencyResponse';
+import { DashBoardDetails, Dashboard, Details_Ad } from './home/DashBoardResponse';
 import { LoginResponse } from './login/LoginCreateSlice';
 import { ResendOtpResponse } from './otp/OtpResendSlice';
 import { OtpResponse } from './otp/OtpVerificationSlice';
@@ -145,4 +146,40 @@ import { RegisterResponse } from './register/RegisterCreateSlice';
                   };
                 }
               };
+
+                //API FOR COUNTRY LIST
+                export const fetchCurrencyList = async (
+                  requestBody: any,
+                ): Promise<NetworkResponse<CurrencyResponse | null>> => {
+                  const response = await apiClient('app/get/currency', 'POST', requestBody);
+                  if (response.status) {
+                    const json = await response.data;
+                    return {
+                      kind: 'success',
+                      body: json,
+                    };
+                  } else {
+                    return {
+                      kind: 'failure',
+                    };
+                  }
+                };
+
+                  //API FOR CATEGORY LIST
+                  export const fetchCategoryList = async (
+                    requestBody: any,
+                  ): Promise<NetworkResponse<Details_Ad | null>> => {
+                    const response = await apiClient('app/customer/get/category/ads', 'POST', requestBody);
+                    if (response.status) {
+                      const json = await response.data;
+                      return {
+                        kind: 'success',
+                        body: json,
+                      };
+                    } else {
+                      return {
+                        kind: 'failure',
+                      };
+                    }
+                  };
   

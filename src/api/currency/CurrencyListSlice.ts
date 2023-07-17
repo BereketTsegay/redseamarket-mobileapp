@@ -11,8 +11,8 @@ export type CurrencyListState = {
 
 const initialState: CurrencyListState = {
     currencyLists: null,
-    loadingCountryList: false,
-    countryListError: false,
+    loadingCurrencyList: false,
+    currencyListError: false,
 };
 
 export const fetchCurrencyList = createAsyncThunk<
@@ -22,7 +22,7 @@ export const fetchCurrencyList = createAsyncThunk<
   const response = await apiInterface.fetchCurrencyList(requestBody);
   if (response.kind == 'success') {
     return {
-        countryLists: response.body ?? null,
+      currencyLists: response.body ?? null,
     };
   } else {
     throw 'Error fetching customers';
@@ -36,20 +36,20 @@ const CurrencyListSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchCurrencyList.pending, state => {
-        state.loadingCountryList = true;
-        state.countryListError = false;
-        state.countryLists = null;
+        state.loadingCurrencyList = true;
+        state.currencyListError = false;
+        state.currencyLists = null;
       })
       .addCase(fetchCurrencyList.fulfilled, (state, action) => {
-        state.countryLists = null;
-        state.countryLists = action.payload.countryLists;
-        state.countryListError = false;
-        state.loadingCountryList = false;
+        state.currencyLists = null;
+        state.currencyLists = action.payload.currencyLists;
+        state.currencyListError = false;
+        state.loadingCurrencyList = false;
       })
       .addCase(fetchCurrencyList.rejected, state => {
-        state.countryListError = true;
-        state.loadingCountryList = false;
-        state.countryLists = null;
+        state.currencyListError = true;
+        state.loadingCurrencyList = false;
+        state.currencyLists = null;
       });
   },
 });

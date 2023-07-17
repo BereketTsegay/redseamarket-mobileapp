@@ -8,6 +8,7 @@ import OtpVerificationScreen from '../screens/otp/OtpVerificationScreen';
 import PostListScreen from '../screens/post/PostListScreen';
 import BottomTabs from './BottomTabs';
 import DetailsScreen from '../screens/details/DetailsScreen';
+import CategoryListScreen from '../screens/category/CategoryListScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,7 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.BottomTabs} component={BottomTabs}/>
         <Stack.Screen name={RouteNames.PostListScreen} component={PostListScreen}/>
         <Stack.Screen name={RouteNames.DetailsScreen} component={DetailsScreen}/>
+        <Stack.Screen name={RouteNames.CategoryListScreen} component={CategoryListScreen}/>
      
     </Stack.Navigator>
   );

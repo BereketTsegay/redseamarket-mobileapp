@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
     paddingTop:20
   },
     rowContainer: {
-        // flexDirection: 'row',
-        // justifyContent: 'space-between',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         // alignItems: 'center',
         // width:'100%',
       },
