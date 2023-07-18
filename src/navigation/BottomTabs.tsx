@@ -14,9 +14,13 @@ import AdsScreen from '../screens/ads/AdsScreen';
 import FavoritesScreen from '../screens/fav/FavoritesScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import PostListScreen from '../screens/post/PostListScreen';
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, ImageBackground, StyleSheet } from 'react-native';
 import { CurvedBottomBar } from 'react-native-curved-bottom-bar';
 import AppFonts from '../constants/AppFonts';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProfileDetails } from '../api/profile/ProfileDetailsSlice';
 
 
 export type BottomTabsNavigationProps = NativeStackNavigationProp<
@@ -30,6 +34,12 @@ interface Props {}
 
 const BottomTabs: React.FC<Props> = () => {
   const navigation = useNavigation<BottomTabsNavigationProps>();
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  
+
+  useEffect(() => {
+    dispatch(fetchProfileDetails({requestBody: ''}));
+  },[]);
 
   const handleCenterButtonClick = () => {
     // Perform navigation to another screen here
@@ -46,7 +56,7 @@ const BottomTabs: React.FC<Props> = () => {
         name = 'My Ads';
         break;
       case RouteNames.FavoritesScreen:
-        icon = AppImages.HEART;
+        icon = AppImages.HEART_FILL;
         name = 'Favorites'
         break;
         case RouteNames.HomeScreen:
@@ -96,11 +106,13 @@ const BottomTabs: React.FC<Props> = () => {
           headerShown:false,
         }}
         renderCircle={({ selectedTab, navigate }) => (
-          <Animated.View style={styles.btnCircleUp}>
+          <Animated.View>
             <TouchableOpacity onPress={handleCenterButtonClick}
               style={styles.button}
             >
+              <ImageBackground source={AppImages.CIRCLE} style={styles.btnCircleUp}>
               <Image source={AppImages.ADD} tintColor={'white'}/>
+              </ImageBackground>
             </TouchableOpacity>
           </Animated.View>
         )}
@@ -157,12 +169,8 @@ const styles = StyleSheet.create({
     bottomBar: {
     },
     btnCircleUp: {
-      width: 60,
-      height: 60,
-      borderRadius: 30,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#00DCFF',
       bottom: 30,
       shadowColor: '#000',
       shadowOffset: {
@@ -172,6 +180,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.2,
       shadowRadius: 1.41,
       elevation: 1,
+      padding:18
     },
     imgCircle: {
       width: 30,

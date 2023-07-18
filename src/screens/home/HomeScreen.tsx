@@ -165,7 +165,12 @@ const HomeScreen: React.FC<Props> = () => {
         <View marginH-20>
           <View row centerV style={{justifyContent:'space-between'}}>
           <Text style={styles.categoryText}>Popular in {item.name}</Text>
+          <TouchableOpacity onPress={()=>{
+            if(isValidate()){
+              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,countryId:countryId})
+            }}}>
           <Image source={AppImages.ARROW_RIGHT} style={{height:10,width:15}} tintColor={'black'}/>
+          </TouchableOpacity>
           </View>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View row marginV-20>

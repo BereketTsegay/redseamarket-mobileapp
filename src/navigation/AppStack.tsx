@@ -9,6 +9,9 @@ import PostListScreen from '../screens/post/PostListScreen';
 import BottomTabs from './BottomTabs';
 import DetailsScreen from '../screens/details/DetailsScreen';
 import CategoryListScreen from '../screens/category/CategoryListScreen';
+import FilterScreen from '../screens/category/FilterScreen';
+import PostSecondScreen from '../screens/post/PostSecondScreen';
+import PlaceAdScreen from '../screens/post/PlaceAdScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +32,9 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.PostListScreen} component={PostListScreen}/>
         <Stack.Screen name={RouteNames.DetailsScreen} component={DetailsScreen}/>
         <Stack.Screen name={RouteNames.CategoryListScreen} component={CategoryListScreen}/>
+        <Stack.Screen name={RouteNames.FilterScreen} component={FilterScreen}/>
+        <Stack.Screen name={RouteNames.PostSecondScreen} component={PostSecondScreen}/>
+        <Stack.Screen name={RouteNames.PlaceAdScreen} component={PlaceAdScreen}/>
      
     </Stack.Navigator>
   );

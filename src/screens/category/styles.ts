@@ -49,6 +49,21 @@ const styles = StyleSheet.create({
         fontSize:10,
         color:'black',
         fontFamily:AppFonts.POPPINS_REGULAR,
+    },
+    filterText:{
+        fontSize:14,
+        color:'black',
+        fontFamily:AppFonts.POPPINS_SEMIBOLD
+    },
+    resetText:{
+        fontSize:11,
+        color:'black',
+        fontFamily:AppFonts.POPPINS_MEDIUM
+    },
+    topView:{
+        justifyContent:'space-between',
+        borderBottomColor:'#00000029',
+        borderBottomWidth:1,
     }
 })
 

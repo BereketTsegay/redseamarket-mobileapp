@@ -53,6 +53,7 @@ export type Ad = {
     start_at:            Date;
     sub_area:            null | string;
     sub_area2:           null | string;
+    isFavourite:         number;
     country:             string;
     currency:            string;
     state:               string;
@@ -162,6 +163,7 @@ export type Details_Ad = {
     currency:             string;
     state_name:           string;
     city_name:            string;
+    isFavourite:          number;
     seller:               string;
     category:             Category;
     motore_value:         MotoreValue;

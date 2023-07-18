@@ -10,5 +10,8 @@ export const RouteNames = {
   ProfileScreen:'ProfileScreen',
   PostListScreen:'PostListScreen',
   DetailsScreen:'DetailsScreen',
-  CategoryListScreen:'CategoryListScreen'
+  CategoryListScreen:'CategoryListScreen',
+  FilterScreen:'FilterScreen',
+  PostSecondScreen:'PostSecondScreen',
+  PlaceAdScreen:'PlaceAdScreen'
 } as const;

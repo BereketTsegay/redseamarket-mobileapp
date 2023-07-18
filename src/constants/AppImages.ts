@@ -8,7 +8,8 @@ const AppImages = {
     GOOGLE: require('../images/google.png'),
     HOME: require('../images/home.png'),
     AD: require('../images/ad.png'),
-    HEART: require('../images/heart.png'),
+    HEART_FILL: require('../images/heart.png'),
+    HEART: require('../images/heart-line.png'),
     MENU: require('../images/menu.png'),
     ADD: require('../images/add.png'),
     SEARCH: require('../images/search.png'),
@@ -17,6 +18,7 @@ const AppImages = {
     ARROW_LEFT: require('../images/arrow-left.png'),
     CIRCLE: require('../images/circle.png'),
     PLACEHOLDER: require('../images/placeholder-image.png'),
+    RIGHT_ARROW: require('../images/right-arrow.png'),
   };
   
   export default AppImages;

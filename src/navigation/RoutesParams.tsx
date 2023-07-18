@@ -11,4 +11,7 @@ export type RootStackParams = {
   PostListScreen:undefined;
   DetailsScreen:undefined;
   CategoryListScreen:undefined;
+  FilterScreen:undefined;
+  PostSecondScreen:undefined;
+  PlaceAdScreen:undefined;
 };

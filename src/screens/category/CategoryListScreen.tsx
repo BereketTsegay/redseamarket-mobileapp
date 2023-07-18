@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategoryList } from '../../api/category/CategoryListSlice';
 import AppColors from '../../constants/AppColors';
 import CarouselView from '../../components/CarouselView';
+import FavoriteComponent from '../../components/FavoriteComponent';
 export type CategoryListScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'CategoryListScreen'
@@ -35,12 +36,20 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
   const {currencyLists} = useSelector((state: RootState) => state.CurrencyList);
 
   useEffect(() => {
+    list()
+  }, []);
+
+  const list = () => {
     let request = JSON.stringify({
       category: cat_Id,
       country: countryId,
     });
     dispatch(fetchCategoryList({requestBody: request}));
-  }, []);
+  }
+
+  const favDone = () => {
+    list()
+  }
 
   return (
     <View flex backgroundColor='#FFFFFF' paddingV-20>
@@ -58,7 +67,9 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
 
           <View row centerV style={styles.row}>
             <Text style={styles.text}>Search Alert</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.FilterScreen)}>
             <Text style={styles.text}>Filter</Text>
+            </TouchableOpacity>
             <Text style={styles.text}>Sort</Text>
           </View>
           <View flex paddingH-20>
@@ -75,26 +86,23 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
                 <TouchableOpacity onPress={()=>{
                       navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:countryId})}}>
                 <View style={styles.view} >
-                     {/* <Image source={item.image == null ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.image[0].image}}
-                     style={{height:100,width:'100%',borderTopLeftRadius:20,borderTopRightRadius:20}}/> */}
+                     <Image source={(item.image == null || item.image.length == 0 || item.image[0].image == null) ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.image[0].image}}
+                     style={{height:100,width:'100%',borderTopLeftRadius:20,borderTopRightRadius:20}}/>
                     <View
             padding-10
             style={{
               position: 'absolute',
               alignSelf:'flex-end'
             }}>
-            <TouchableOpacity >
-              <View style={styles.circle}>
-                <Image
-                  source={AppImages.HEART}
-                  style={{width: 20, height: 20}}
-                />
-              </View>
-            </TouchableOpacity>
+          <FavoriteComponent
+                    id={item.id}
+                    status={item.isFavourite}
+                    done={favDone}
+                  />
           </View>
                     <View marginH-20>
                     <Text style={styles.priceText}>{currencyLists?.currency.currency_code} {currencyLists?.currency.value * item.price}</Text>
-                    <Text style={[styles.locationText,{fontSize:16}]} numberOfLines={1} ellipsizeMode='tail'>{item.title}</Text>
+                   <Text style={[styles.locationText,{fontSize:16}]} numberOfLines={1} ellipsizeMode='tail'>{item.title}</Text>
                     <Text style={styles.titleText} numberOfLines={1} ellipsizeMode='tail'>{item.description}</Text>
                     
                     <Text style={[styles.locationText]}>{item.country_name}</Text>

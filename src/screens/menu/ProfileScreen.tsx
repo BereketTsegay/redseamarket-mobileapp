@@ -8,6 +8,7 @@ import AppColors from '../../constants/AppColors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
 import { TouchableOpacity } from 'react-native';
+import Header from '../../components/Header';
 export type ProfileScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'ProfileScreen'
@@ -31,10 +32,13 @@ const ProfileScreen: React.FC<Props> = () => {
  };
 
   return (
-    <View flex center backgroundColor='#FFFFFF'>
+    <View flex backgroundColor='#FFFFFF'>
+      <Header/>
+      <View flex center>
       <TouchableOpacity onPress={Logout}>
         <Text color={AppColors.lightBlue}>Logout</Text>
         </TouchableOpacity>
+        </View>
         </View>
     
   );
