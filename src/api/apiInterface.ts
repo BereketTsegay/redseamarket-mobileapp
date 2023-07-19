@@ -19,6 +19,7 @@ import {ResendOtpResponse} from './otp/OtpResendSlice';
 import {OtpResponse} from './otp/OtpVerificationSlice';
 import { ProfileResponse } from './profile/ProfileResponse';
 import {RegisterResponse} from './register/RegisterCreateSlice';
+import { SubCategoryResponse } from './subCategories/SubCategoryResponse';
 
 type ResponseKind = 'success' | 'failure';
 
@@ -195,6 +196,28 @@ export const fetchCategoryList = async (
 ): Promise<NetworkResponse<Details_Ad | null>> => {
   const response = await apiClient(
     'app/customer/get/category/ads',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR SUB AND INNER CATEGORY LIST
+export const fetchSubCategoryList = async (
+  requestBody: any,
+): Promise<NetworkResponse<SubCategoryResponse | null>> => {
+  const response = await apiClient(
+    'app/customer/get/subcategory',
     'POST',
     requestBody,
   );

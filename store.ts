@@ -12,6 +12,7 @@ import FavCreateSlice from './src/api/favorites/FavCreateSlice';
 import FavListSlice from './src/api/favorites/FavListSlice';
 import AdListSlice from './src/api/ads/AdListSlice';
 import ProfileDetailsSlice from './src/api/profile/ProfileDetailsSlice';
+import SubCategoryListSlice from './src/api/subCategories/SubCategoryListSlice';
 
 const rootReducer = combineReducers({
   registerCreate: RegisterCreateSlice,
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   FavCreate: FavCreateSlice,
   FavList: FavListSlice,
   AdList: AdListSlice,
-  ProfileDetails:ProfileDetailsSlice
+  ProfileDetails:ProfileDetailsSlice,
+  SubCategoryList: SubCategoryListSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

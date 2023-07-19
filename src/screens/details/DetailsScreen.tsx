@@ -24,6 +24,7 @@ import SaleAndRentDetails from './SaleAndRentDetails';
 import CustomDetails from './CustomDetails';
 import AppColors from '../../constants/AppColors';
 import FavoriteComponent from '../../components/FavoriteComponent';
+import moment from 'moment';
 export type DetailsScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'DetailsScreen'
@@ -145,6 +146,17 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                     details={dashboardDetails?.ads[0].custom_value}
                   />
                 ) : null}
+
+                
+            <View style={styles.row}>
+              <Text style={styles.motorText}>Posted On</Text>
+              <Text style={styles.motorText1}>{dashboardDetails?.ads[0].created_on}</Text>
+            </View>
+
+            <View marginB-20 style={styles.row}>
+              <Text style={styles.motorText}>Updated at</Text>
+              <Text style={styles.motorText1}>{dashboardDetails?.ads[0].updated_on}</Text>
+            </View>
 
                 <Text style={styles.subHeading}>Description</Text>
                 <Text

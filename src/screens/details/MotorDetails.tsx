@@ -6,7 +6,7 @@ import { ScrollView } from "react-native";
 
 const MotorDetails = ({features,details}) => {
     return(
-        <View marginV-10>
+        <View marginT-10>
             <ScrollView horizontal>
                 {features.map(item=>(
                     <View key={item.id} marginB-10 center paddingH-10 paddingV-2 backgroundColor="#7070703D" marginH-5 style={{borderRadius:8}}>
@@ -55,15 +55,6 @@ const MotorDetails = ({features,details}) => {
               <Text style={styles.motorText1}>{details?.condition}</Text>
             </View>
 
-            <View style={styles.row}>
-              <Text style={styles.motorText}>Posted On</Text>
-              <Text style={styles.motorText1}>{moment(details?.created_at).format('DD-MMM-YYYY')}</Text>
-            </View>
-
-            <View style={styles.row}>
-              <Text style={styles.motorText}>Updated at</Text>
-              <Text style={styles.motorText1}>{moment(details?.updated_at).format('DD-MMM-YYYY')}</Text>
-            </View>
         </View>
     )
 }

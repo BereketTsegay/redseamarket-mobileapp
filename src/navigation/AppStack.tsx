@@ -12,6 +12,10 @@ import CategoryListScreen from '../screens/category/CategoryListScreen';
 import FilterScreen from '../screens/category/FilterScreen';
 import PostSecondScreen from '../screens/post/PostSecondScreen';
 import PlaceAdScreen from '../screens/post/PlaceAdScreen';
+import CustomPlaceAd from '../screens/post/CustomPlaceAd';
+import SellerInformation from '../screens/post/SellerInformation';
+import PaymentScreen from '../screens/post/PaymentScreen';
+import SuccessPage from '../screens/success/SuccessPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +39,10 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.FilterScreen} component={FilterScreen}/>
         <Stack.Screen name={RouteNames.PostSecondScreen} component={PostSecondScreen}/>
         <Stack.Screen name={RouteNames.PlaceAdScreen} component={PlaceAdScreen}/>
+        <Stack.Screen name={RouteNames.CustomPlaceAd} component={CustomPlaceAd}/>
+        <Stack.Screen name={RouteNames.SellerInformation} component={SellerInformation}/>
+        <Stack.Screen name={RouteNames.PaymentScreen} component={PaymentScreen}/>
+        <Stack.Screen name={RouteNames.SuccessPage} component={SuccessPage}/>
      
     </Stack.Navigator>
   );

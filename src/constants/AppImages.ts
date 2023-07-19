@@ -19,6 +19,11 @@ const AppImages = {
     CIRCLE: require('../images/circle.png'),
     PLACEHOLDER: require('../images/placeholder-image.png'),
     RIGHT_ARROW: require('../images/right-arrow.png'),
+    MASTER: require('../images/master.png'),
+    VISA: require('../images/visa.png'),
+    BANKING: require('../images/banking.png'),
+    TRANSFER: require('../images/transfer.png'),
+    SUCCESS: require('../images/success.png'),
   };
   
   export default AppImages;

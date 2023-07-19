@@ -167,10 +167,10 @@ const LoginScreen: React.FC<Props> = () => {
         </View>
       }/>
 
-      <View row center marginV-20>
+      {/* <View row center marginV-20>
         <Image source={AppImages.FACEBOOK} style={{width:26, height:26}}/>
         <Image source={AppImages.GOOGLE} style={{width:26, height:26,marginLeft:20}}/>
-      </View>
+      </View> */}
     <TouchableOpacity onPress={() => {
             if (isValidate()) {
               Login()

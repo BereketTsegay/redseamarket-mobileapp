@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title:{
-    fontSize: 18,
+    fontSize: 12,
     fontFamily: AppFonts.POPPINS_REGULAR,
     color: 'black',
   },
@@ -62,6 +62,33 @@ const styles = StyleSheet.create({
     fontSize:12,
     fontFamily:AppFonts.POPPINS_LIGHT
     
+  },
+  buttonLabelStyle:{
+fontSize:14,
+fontFamily:AppFonts.POPPINS_MEDIUM,
+color:'black'
+  },
+  bottomView:{
+    position:'absolute',
+    bottom:0,
+    backgroundColor:'white',
+    width:'100%',
+    paddingVertical:20,
+    paddingHorizontal:30,
+    elevation:10,
+    borderTopRightRadius:40,
+    borderTopLeftRadius:40
+  },
+  card:{
+    height:40,
+    borderWidth:1,
+    borderColor:'#BBBBBB7A',
+    borderRadius:6,
+    marginBottom:20,
+    flexDirection:'row',
+    justifyContent:"space-between",
+    alignItems:'center',
+    paddingHorizontal:15
   }
 });
 export default styles;

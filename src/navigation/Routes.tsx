@@ -13,5 +13,9 @@ export const RouteNames = {
   CategoryListScreen:'CategoryListScreen',
   FilterScreen:'FilterScreen',
   PostSecondScreen:'PostSecondScreen',
-  PlaceAdScreen:'PlaceAdScreen'
+  PlaceAdScreen:'PlaceAdScreen',
+  CustomPlaceAd:'CustomPlaceAd',
+  SellerInformation:'SellerInformation',
+  PaymentScreen:'PaymentScreen',
+  SuccessPage:'SuccessPage'
 } as const;

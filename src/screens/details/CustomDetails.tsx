@@ -6,7 +6,7 @@ import { FlatList } from "react-native";
 
 const CustomDetails = ({details}) => {
     return(
-        <View marginV-10>
+        <View marginT-10>
              <Text style={styles.subHeading}>Details</Text>
 
              <FlatList
@@ -18,7 +18,7 @@ const CustomDetails = ({details}) => {
               <Text style={styles.motorText1}>{item.value}</Text>
             </View>
                 )}}/>
-
+               
            
         </View>
     )

@@ -9,38 +9,23 @@ import AppImages from '../../constants/AppImages';
 import styles from './styles';
 import AppColors from '../../constants/AppColors';
 const {TextField} = Incubator;
-export type PlaceAdScreenNavigationProps = NativeStackNavigationProp<
+export type CustomPlaceAdNavigationProps = NativeStackNavigationProp<
   RootStackParams,
-  'PlaceAdScreen'
+  'CustomPlaceAd'
 >;
 
-export type PlaceAdScreenRouteProps = RouteProp<
+export type CustomPlaceAdRouteProps = RouteProp<
   RootStackParams,
-  'PlaceAdScreen'
+  'CustomPlaceAd'
 >;
 
 interface Props {}
 
-const PlaceAdScreen: React.FC<Props> = ({route}) => {
-  const navigation = useNavigation<PlaceAdScreenNavigationProps>();
-  const {cat_id, sub_id} = route.params;
+const CustomPlaceAd: React.FC<Props> = ({route}) => {
+  const navigation = useNavigation<CustomPlaceAdNavigationProps>();
+  const {cat_id,sub_id}= route.params;
   useEffect(() => {
   }, []);
-
-  const InputField = ({title,multiline,height}) => {
-    return(
-      <TextField
-          placeholder={title}
-          placeholderTextColor={"#000000"}
-          color={"#000000"}
-          style={styles.fieldText}
-          fieldStyle={[styles.fieldStyle,{height:height}]}
-          paddingH-15
-          marginB-20
-          multiline={multiline}
-          />
-    )
-  }
 
   return (
     <View flex backgroundColor='white' padding-20>
@@ -61,17 +46,15 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
           <Text style={styles.AdTitle}>Tell us about your car</Text>
 
      <ScrollView showsVerticalScrollIndicator={false}>
-        <View marginV-20>
-          <InputField
-          title={'Title in English'}
-          multiline={false}
-          height={45}
-          />
-          
-        <InputField
-          title={'Title in Arabic'}
-          multiline={false}
-          height={45}
+        <View>
+          <TextField
+          placeholder={'Title'}
+          placeholderTextColor={"#000000"}
+          color={"#000000"}
+          style={styles.fieldText}
+          fieldStyle={styles.fieldStyle}
+          paddingH-15
+          marginV-20
           />
 
           <TextField
@@ -84,33 +67,48 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
           marginB-20
           />
 
-
           <View paddingH-15 marginB-20 centerV style={[styles.fieldStyle,{borderStyle:'dashed'}]}>
             <Text style={styles.fieldText}>Upload Image</Text>
           </View>
 
-     <InputField
-          title={'Price'}
-          multiline={false}
-          height={45}
+          <TextField
+          placeholder={'Select Country'}
+          placeholderTextColor={"#000000"}
+          color={"#000000"}
+          style={styles.fieldText}
+          fieldStyle={styles.fieldStyle}
+          paddingH-15
+          marginB-20
           />
 
-<InputField
-          title={'Description in English'}
-          multiline={true}
-          height={80}
+     <TextField
+          placeholder={'Price'}
+          placeholderTextColor={"#000000"}
+          color={"#000000"}
+          style={styles.fieldText}
+          fieldStyle={styles.fieldStyle}
+          paddingH-15
+          marginB-20
           />
 
-<InputField
-          title={'Description in Arabic'}
-          multiline={true}
-          height={80}
+<TextField
+          placeholder={'Description'}
+          placeholderTextColor={"#000000"}
+          color={"#000000"}
+          style={styles.fieldText}
+          fieldStyle={[styles.fieldStyle,{height:80}]}
+          paddingH-15
+          marginB-20
           />
 
-<InputField
-          title={'Area'}
-          multiline={false}
-          height={45}
+<TextField
+          placeholder={'Area'}
+          placeholderTextColor={"#000000"}
+          color={"#000000"}
+          style={styles.fieldText}
+          fieldStyle={styles.fieldStyle}
+          paddingH-15
+          marginB-20
           />
           
           <Checkbox
@@ -130,7 +128,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
           <Button
           label={'Next'}
           style={{backgroundColor:AppColors.lightBlue}}
-          onPress={()=>navigation.navigate(RouteNames.CustomPlaceAd,{cat_id:cat_id,sub_id:sub_id})}/>
+          onPress={()=>navigation.navigate(RouteNames.SellerInformation)}/>
                 </View>
      </ScrollView>
         </View>
@@ -138,4 +136,4 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
   );
 };
 
-export default PlaceAdScreen;
+export default CustomPlaceAd;

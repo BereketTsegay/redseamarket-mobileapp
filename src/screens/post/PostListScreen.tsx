@@ -26,7 +26,6 @@ const PostListScreen: React.FC<Props> = () => {
   const {dashboardLists,loadingDashBoardList} = useSelector(
     (state: RootState) => state.DashBoardList,
   );
- console.log(dashboardLists?.data.categories[0].image)
   useEffect(() => {}, []);
 
   return (
@@ -51,7 +50,7 @@ const PostListScreen: React.FC<Props> = () => {
       <View style={styles.container}>
         {dashboardLists?.data.categories.map((item,index) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate(RouteNames.PostSecondScreen)}
+            onPress={() => navigation.navigate(RouteNames.PostSecondScreen,{Id:item.id,name:item.name})}
             key={index}
             style={styles.itemContainer}>
             <Image

@@ -14,4 +14,8 @@ export type RootStackParams = {
   FilterScreen:undefined;
   PostSecondScreen:undefined;
   PlaceAdScreen:undefined;
+  CustomPlaceAd:undefined;
+  SellerInformation:undefined;
+  PaymentScreen:undefined;
+  SuccessPage:undefined;
 };
