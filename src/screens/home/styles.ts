@@ -13,26 +13,26 @@ const styles = StyleSheet.create({
     rowContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        // alignItems: 'center',
-        // width:'100%',
+        alignItems: 'center',
+        width:'100%',
       },
       dropdown1BtnStyle: {
         backgroundColor: 'white',
         borderRadius: 40,
         borderWidth: 1,
         borderColor: 'white',
-        paddingHorizontal: 15,
         height: 40,
-        width:'40%',
+        width:'20%',
         
       },
-      dropdown1BtnTxtStyle: { color: '#444', textAlign: 'left' },
+      dropdown1BtnTxtStyle: { color: '#444', textAlign: 'right' },
       dropdown1DropdownStyle: { backgroundColor: '#EFEFEF' },
       dropdown1RowStyle: {
         backgroundColor: '#EFEFEF',
         borderBottomColor: '#C5C5C5',
+        
       },
-      dropdown1RowTxtStyle: { color: '#444', textAlign: 'left' },
+      dropdown1RowTxtStyle: { color: '#444', textAlign: 'right' },
       textFieldStyle: {
         borderWidth: 1,
         borderColor: 'white',

@@ -112,7 +112,7 @@ const HomeScreen: React.FC<Props> = () => {
     <View center style={styles.rowContainer}>
      
      {Dropdown('country',countryLists?.country)}
-      {/* <TextField
+      <TextField
         fieldStyle={styles.textFieldStyle}
         style={{fontSize:12}}
         paddingV-5
@@ -120,7 +120,7 @@ const HomeScreen: React.FC<Props> = () => {
         placeholder={'What are you looking for ?'}
         keyboardType="default"
         leadingAccessory={<Image source={AppImages.SEARCH} />}
-      /> */}
+      />
      {Dropdown('language',lang)}
     </View>
     </ImageBackground>

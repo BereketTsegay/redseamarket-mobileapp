@@ -8,6 +8,7 @@ import { FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import AppImages from '../../constants/AppImages';
 import styles from './styles';
 import AppColors from '../../constants/AppColors';
+import InputField from '../../components/InputField';
 const {TextField} = Incubator;
 export type SellerInformationNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -45,46 +46,33 @@ const SellerInformation: React.FC<Props> = () => {
           <Text style={styles.AdTitle}>Seller information</Text>
 
      <ScrollView showsVerticalScrollIndicator={false}>
-        <View>
-          <TextField
-          placeholder={'Name'}
-          placeholderTextColor={"#000000"}
-          color={"#000000"}
-          style={styles.fieldText}
-          fieldStyle={styles.fieldStyle}
-          paddingH-15
-          marginV-20
+        <View marginV-20>
+        <InputField
+          title={'Name'}
+          multiline={false}
+          height={45}
+          type={'none'}
           />
 
-          <TextField
-          placeholder={'Email'}
-          placeholderTextColor={"#000000"}
-          color={"#000000"}
-          style={styles.fieldText}
-          fieldStyle={styles.fieldStyle}
-          paddingH-15
-          marginB-20
+<InputField
+          title={'Email'}
+          multiline={false}
+          height={45}
+          type={'none'}
           />
 
-     <TextField
-          placeholder={'Phone'}
-          placeholderTextColor={"#000000"}
-          color={"#000000"}
-          keyboardType={'numeric'}
-          style={styles.fieldText}
-          fieldStyle={styles.fieldStyle}
-          paddingH-15
-          marginB-20
+<InputField
+          title={'Phone'}
+          multiline={false}
+          height={45}
+          type={'numeric'}
           />
 
-<TextField
-          placeholder={'Address'}
-          placeholderTextColor={"#000000"}
-          color={"#000000"}
-          style={styles.fieldText}
-          fieldStyle={[styles.fieldStyle,{height:80}]}
-          paddingH-15
-          marginB-20
+<InputField
+          title={'Address'}
+          multiline={false}
+          height={80}
+          type={'none'}
           />
           
           <Checkbox

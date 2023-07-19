@@ -24,6 +24,7 @@ const AppImages = {
     BANKING: require('../images/banking.png'),
     TRANSFER: require('../images/transfer.png'),
     SUCCESS: require('../images/success.png'),
+    UPLOAD: require('../images/upload.png'),
   };
   
   export default AppImages;

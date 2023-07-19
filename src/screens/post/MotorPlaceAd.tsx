@@ -11,20 +11,20 @@ import AppColors from '../../constants/AppColors';
 import InputField from '../../components/InputField';
 import ItemDropdown from '../../components/ItemDropdown';
 const {TextField} = Incubator;
-export type CustomPlaceAdNavigationProps = NativeStackNavigationProp<
+export type MotorPlaceAdNavigationProps = NativeStackNavigationProp<
   RootStackParams,
-  'CustomPlaceAd'
+  'MotorPlaceAd'
 >;
 
-export type CustomPlaceAdRouteProps = RouteProp<
+export type MotorPlaceAdRouteProps = RouteProp<
   RootStackParams,
-  'CustomPlaceAd'
+  'MotorPlaceAd'
 >;
 
 interface Props {}
 
-const CustomPlaceAd: React.FC<Props> = ({route}) => {
-  const navigation = useNavigation<CustomPlaceAdNavigationProps>();
+const MotorPlaceAd: React.FC<Props> = ({route}) => {
+  const navigation = useNavigation<MotorPlaceAdNavigationProps>();
   const {cat_id,sub_id}= route.params;
   const [data,setData] = useState([
     {name:'Item1',id:1},
@@ -53,15 +53,55 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
 
      <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
-     
-        <InputField
-          title={'Custom Title'}
+
+<ItemDropdown value={'Make'} data={data}/>
+
+<ItemDropdown value={'Model'} data={data}/>
+
+<ItemDropdown value={'Variant'} data={data}/>
+
+<InputField
+          title={'Registered Year'}
           multiline={false}
           height={45}
           type={'numeric'}
           />
 
-<ItemDropdown value={'Select Item'} data={data}/>
+<ItemDropdown value={'Fuel Type'} data={data}/>
+
+<Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Transmission</Text>
+
+<Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Condition</Text>
+
+<InputField
+          title={'Mileage'}
+          multiline={false}
+          height={45}
+          type={'numeric'}
+          />
+
+          <Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Features</Text>
+
+<Checkbox
+          label={'checkbox'}
+          labelStyle={styles.fieldText}
+          value={false}
+          color={'grey'}
+          containerStyle={{marginBottom:20}}/>
+
+<Checkbox
+          label={'checkbox'}
+          labelStyle={styles.fieldText}
+          value={false}
+          color={'grey'}
+          containerStyle={{marginBottom:20}}/>
+
+<Checkbox
+          label={'checkbox'}
+          labelStyle={styles.fieldText}
+          value={false}
+          color={'grey'}
+          containerStyle={{marginBottom:20}}/>
 
 <Checkbox
           label={'checkbox'}
@@ -81,4 +121,4 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
   );
 };
 
-export default CustomPlaceAd;
+export default MotorPlaceAd;

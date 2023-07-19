@@ -18,4 +18,6 @@ export type RootStackParams = {
   SellerInformation:undefined;
   PaymentScreen:undefined;
   SuccessPage:undefined;
+  MotorPlaceAd:undefined;
+  SaleRentPlaceAd:undefined;
 };

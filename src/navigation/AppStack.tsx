@@ -16,6 +16,8 @@ import CustomPlaceAd from '../screens/post/CustomPlaceAd';
 import SellerInformation from '../screens/post/SellerInformation';
 import PaymentScreen from '../screens/post/PaymentScreen';
 import SuccessPage from '../screens/success/SuccessPage';
+import MotorPlaceAd from '../screens/post/MotorPlaceAd';
+import SaleRentPlaceAd from '../screens/post/SaleRentPlaceAd';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +45,8 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.SellerInformation} component={SellerInformation}/>
         <Stack.Screen name={RouteNames.PaymentScreen} component={PaymentScreen}/>
         <Stack.Screen name={RouteNames.SuccessPage} component={SuccessPage}/>
+        <Stack.Screen name={RouteNames.MotorPlaceAd} component={MotorPlaceAd}/>
+        <Stack.Screen name={RouteNames.SaleRentPlaceAd} component={SaleRentPlaceAd}/>
      
     </Stack.Navigator>
   );

@@ -11,20 +11,20 @@ import AppColors from '../../constants/AppColors';
 import InputField from '../../components/InputField';
 import ItemDropdown from '../../components/ItemDropdown';
 const {TextField} = Incubator;
-export type CustomPlaceAdNavigationProps = NativeStackNavigationProp<
+export type SaleRentPlaceAdNavigationProps = NativeStackNavigationProp<
   RootStackParams,
-  'CustomPlaceAd'
+  'SaleRentPlaceAd'
 >;
 
-export type CustomPlaceAdRouteProps = RouteProp<
+export type SaleRentPlaceAdRouteProps = RouteProp<
   RootStackParams,
-  'CustomPlaceAd'
+  'SaleRentPlaceAd'
 >;
 
 interface Props {}
 
-const CustomPlaceAd: React.FC<Props> = ({route}) => {
-  const navigation = useNavigation<CustomPlaceAdNavigationProps>();
+const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
+  const navigation = useNavigation<SaleRentPlaceAdNavigationProps>();
   const {cat_id,sub_id}= route.params;
   const [data,setData] = useState([
     {name:'Item1',id:1},
@@ -81,4 +81,4 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
   );
 };
 
-export default CustomPlaceAd;
+export default SaleRentPlaceAd;
