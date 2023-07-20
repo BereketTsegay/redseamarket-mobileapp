@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Button, Checkbox, Image, Incubator, Text, View} from 'react-native-ui-lib';
+import {Button, Checkbox, Image, Incubator, RadioButton, RadioGroup, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -10,6 +10,11 @@ import styles from './styles';
 import AppColors from '../../constants/AppColors';
 import InputField from '../../components/InputField';
 import ItemDropdown from '../../components/ItemDropdown';
+import AppFonts from '../../constants/AppFonts';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMotorDropdown } from '../../api/motor/MotorDropdownSlice';
 const {TextField} = Incubator;
 export type MotorPlaceAdNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -26,12 +31,51 @@ interface Props {}
 const MotorPlaceAd: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<MotorPlaceAdNavigationProps>();
   const {cat_id,sub_id}= route.params;
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {motorDropdown} = useSelector(
+    (state: RootState) => state.MotorDropdown,
+  );
+  const [fuelOption, setFuelOption] = useState([
+    {
+        id: 'Petrol',
+        name: 'Petrol',
+    },
+    {
+        id: 'Diesel',
+        name: 'Diesel',
+    },
+    {
+        id: 'LPG Gas',
+        name: 'LPG Gas',
+    },
+    {
+      id: 'Electric',
+        name: 'Electric',
+    },
+])
   const [data,setData] = useState([
     {name:'Item1',id:1},
     {name:'Item2', id:2}
   ])
   useEffect(() => {
+    dispatch(fetchMotorDropdown({url:'app/customer/get/make',requestBody: ''}));
   }, []);
+
+  const renderRadioButton = (
+    value,name
+  ) => {
+    return (
+      <View marginB-20>
+        <RadioButton
+          value={value}
+          label={name}
+          color={'grey'}
+          labelStyle={styles.fieldText}
+        />
+        </View>
+    );
+  };
+
 
   return (
     <View flex backgroundColor='white' padding-20>
@@ -54,7 +98,7 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
      <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
 
-<ItemDropdown value={'Make'} data={data}/>
+<ItemDropdown value={'Make'} data={motorDropdown?.make}/>
 
 <ItemDropdown value={'Model'} data={data}/>
 
@@ -67,11 +111,25 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
           type={'numeric'}
           />
 
-<ItemDropdown value={'Fuel Type'} data={data}/>
+<ItemDropdown value={'Fuel Type'} data={fuelOption}/>
 
 <Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Transmission</Text>
+<RadioGroup
+              // initialValue={}
+              // onValueChange={(value: any) =>}
+              >
+              {renderRadioButton(1,'Manual')}
+              {renderRadioButton(2,'Automatic')}
+            </RadioGroup>
 
 <Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Condition</Text>
+<RadioGroup
+              // initialValue={}
+              // onValueChange={(value: any) =>}
+              >
+              {renderRadioButton(1,'New')}
+              {renderRadioButton(2,'Used')}
+            </RadioGroup>
 
 <InputField
           title={'Mileage'}
@@ -83,28 +141,28 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
           <Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Features</Text>
 
 <Checkbox
-          label={'checkbox'}
+          label={'Air Conditioner'}
+          labelStyle={styles.fieldText}
+          value={true}
+          color={'grey'}
+          containerStyle={{marginBottom:20}}/>
+
+<Checkbox
+          label={'GPS'}
           labelStyle={styles.fieldText}
           value={false}
           color={'grey'}
           containerStyle={{marginBottom:20}}/>
 
 <Checkbox
-          label={'checkbox'}
+          label={'Security System'}
           labelStyle={styles.fieldText}
           value={false}
           color={'grey'}
           containerStyle={{marginBottom:20}}/>
 
 <Checkbox
-          label={'checkbox'}
-          labelStyle={styles.fieldText}
-          value={false}
-          color={'grey'}
-          containerStyle={{marginBottom:20}}/>
-
-<Checkbox
-          label={'checkbox'}
+          label={'Spare Tire'}
           labelStyle={styles.fieldText}
           value={false}
           color={'grey'}

@@ -13,6 +13,10 @@ import FavListSlice from './src/api/favorites/FavListSlice';
 import AdListSlice from './src/api/ads/AdListSlice';
 import ProfileDetailsSlice from './src/api/profile/ProfileDetailsSlice';
 import SubCategoryListSlice from './src/api/subCategories/SubCategoryListSlice';
+import MotorDropdownSlice from './src/api/motor/MotorDropdownSlice';
+import StateListSlice from './src/api/country/StateListSlice';
+import CityListSlice from './src/api/country/CityListSlice';
+import StoreCountrySlice from './src/api/country/StoreCountrySlice';
 
 const rootReducer = combineReducers({
   registerCreate: RegisterCreateSlice,
@@ -23,12 +27,16 @@ const rootReducer = combineReducers({
   CountryList: CountryListSlice,
   DashBoardDetails: DashBoardDetailsSlice,
   CurrencyList: CurrencyListSlice,
+  StateList: StateListSlice,
+  CityList: CityListSlice,
   CategoryList: CategoryListSlice,
   FavCreate: FavCreateSlice,
   FavList: FavListSlice,
   AdList: AdListSlice,
   ProfileDetails:ProfileDetailsSlice,
-  SubCategoryList: SubCategoryListSlice
+  SubCategoryList: SubCategoryListSlice,
+  MotorDropdown: MotorDropdownSlice,
+  StoreCountry: StoreCountrySlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

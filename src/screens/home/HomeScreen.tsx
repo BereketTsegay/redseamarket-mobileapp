@@ -31,7 +31,7 @@ interface Props {}
 
 const HomeScreen: React.FC<Props> = () => {
   const navigation = useNavigation<HomeScreenNavigationProps>();
-  const [countryId, setCountryId] = useState(null);
+  const [countryId, setCountryId] = useState(229);
   const [lang, setLang] = useState([{code:'English',name:'UK', id:1}]);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {dashboardLists,loadingDashBoardList} = useSelector(
@@ -111,12 +111,12 @@ const HomeScreen: React.FC<Props> = () => {
           <Text style={{alignSelf:'center',fontSize:16,fontFamily:AppFonts.POPPINS_BOLD,color:'white'}}>{dashboardLists?.data.slider != null ?dashboardLists?.data.slider.name : ''}</Text>
     <View center style={styles.rowContainer}>
      
-     {Dropdown('country',countryLists?.country)}
+     {Dropdown('AE',countryLists?.country)}
       <TextField
         fieldStyle={styles.textFieldStyle}
         style={{fontSize:12}}
         paddingV-5
-        paddingH-10
+        paddingH-2
         placeholder={'What are you looking for ?'}
         keyboardType="default"
         leadingAccessory={<Image source={AppImages.SEARCH} />}

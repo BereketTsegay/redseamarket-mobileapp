@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'white',
         height: 40,
-        width:'20%',
+        width:'23%',
         
       },
       dropdown1BtnTxtStyle: { color: '#444', textAlign: 'right' },
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         borderColor: 'white',
         backgroundColor: 'white',
         borderRadius: 40,
-        marginHorizontal: 10,
+        marginHorizontal: 5,
       },
       categoryText:{
         fontSize:14,

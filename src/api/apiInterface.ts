@@ -15,6 +15,7 @@ import {
   Details_Ad,
 } from './home/DashBoardResponse';
 import {LoginResponse} from './login/LoginCreateSlice';
+import { Motor } from './motor/MotorResponse';
 import {ResendOtpResponse} from './otp/OtpResendSlice';
 import {OtpResponse} from './otp/OtpVerificationSlice';
 import { ProfileResponse } from './profile/ProfileResponse';
@@ -172,6 +173,50 @@ export const fetchCountryList = async (
   }
 };
 
+//API FOR STATE LIST
+export const fetchStateList = async (
+  requestBody: any,
+): Promise<NetworkResponse<Country | null>> => {
+  const response = await apiClient(
+    'app/customer/get/state',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR CITY LIST
+export const fetchCityList = async (
+  requestBody: any,
+): Promise<NetworkResponse<Country | null>> => {
+  const response = await apiClient(
+    'app/customer/get/city',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
 //API FOR COUNTRY LIST
 export const fetchCurrencyList = async (
   requestBody: any,
@@ -218,6 +263,29 @@ export const fetchSubCategoryList = async (
 ): Promise<NetworkResponse<SubCategoryResponse | null>> => {
   const response = await apiClient(
     'app/customer/get/subcategory',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR MOTOR MAKE, MODEL AND VARIANT LIST
+export const fetchMotorDropdown = async (
+  url: any,
+  requestBody: any,
+): Promise<NetworkResponse<Motor | null>> => {
+  const response = await apiClient(
+    url,
     'POST',
     requestBody,
   );

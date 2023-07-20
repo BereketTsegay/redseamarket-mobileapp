@@ -51,14 +51,14 @@ const SellerInformation: React.FC<Props> = () => {
           title={'Name'}
           multiline={false}
           height={45}
-          type={'none'}
+          type={'default'}
           />
 
 <InputField
           title={'Email'}
           multiline={false}
           height={45}
-          type={'none'}
+          type={'default'}
           />
 
 <InputField
@@ -72,7 +72,7 @@ const SellerInformation: React.FC<Props> = () => {
           title={'Address'}
           multiline={false}
           height={80}
-          type={'none'}
+          type={'default'}
           />
           
           <Checkbox

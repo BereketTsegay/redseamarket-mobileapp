@@ -10,7 +10,7 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFavList } from '../../api/favorites/FavListSlice';
-import { ActivityIndicator, FlatList } from 'react-native';
+import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import AppColors from '../../constants/AppColors';
 import Header from '../../components/Header';
 export type FavoritesScreenNavigationProps = NativeStackNavigationProp<
@@ -58,6 +58,9 @@ const FavoritesScreen: React.FC<Props> = () => {
     showsVerticalScrollIndicator={false}
     renderItem={({item})=>{
       return(
+        // <TouchableOpacity onPress={()=>{
+        //     navigation.navigate(RouteNames.DetailsScreen,{adId:item.ads_id,countryId:countryId})
+        //   }}>
               <View style={styles.view}>
                  <Image source={item.ads.image[0].image == null || item.ads.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ads.image[0].image}} 
                  resizeMode={'cover'} style={{height:70,width:'100%',borderTopLeftRadius:4,borderTopRightRadius:4}}/>
@@ -68,6 +71,7 @@ const FavoritesScreen: React.FC<Props> = () => {
                  <Text style={styles.cityText}>{item.ads.area}</Text>
                  </View>
                 </View>
+                // </TouchableOpacity>
       )
     }}/>}
         </View>
