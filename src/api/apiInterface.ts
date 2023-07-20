@@ -279,13 +279,56 @@ export const fetchSubCategoryList = async (
   }
 };
 
-//API FOR MOTOR MAKE, MODEL AND VARIANT LIST
-export const fetchMotorDropdown = async (
-  url: any,
+//API FOR MOTOR MAKE LIST
+export const fetchMakeList = async (
   requestBody: any,
 ): Promise<NetworkResponse<Motor | null>> => {
   const response = await apiClient(
-    url,
+    'app/customer/get/make',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR MOTOR MODEL LIST
+export const fetchModelList = async (
+  requestBody: any,
+): Promise<NetworkResponse<Motor | null>> => {
+  const response = await apiClient(
+    'app/customer/get/model',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR MOTOR VARIANT LIST
+export const fetchVariantList = async (
+  requestBody: any,
+): Promise<NetworkResponse<Motor | null>> => {
+  const response = await apiClient(
+    'app/customer/get/variant',
     'POST',
     requestBody,
   );

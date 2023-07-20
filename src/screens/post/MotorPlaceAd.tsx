@@ -14,7 +14,7 @@ import AppFonts from '../../constants/AppFonts';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMotorDropdown } from '../../api/motor/MotorDropdownSlice';
+import { fetchMakeList } from '../../api/motor/MakeListSlice';
 const {TextField} = Incubator;
 export type MotorPlaceAdNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -32,8 +32,8 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<MotorPlaceAdNavigationProps>();
   const {cat_id,sub_id}= route.params;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const {motorDropdown} = useSelector(
-    (state: RootState) => state.MotorDropdown,
+  const {makeList} = useSelector(
+    (state: RootState) => state.MakeList,
   );
   const [fuelOption, setFuelOption] = useState([
     {
@@ -58,7 +58,7 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
     {name:'Item2', id:2}
   ])
   useEffect(() => {
-    dispatch(fetchMotorDropdown({url:'app/customer/get/make',requestBody: ''}));
+    dispatch(fetchMakeList({requestBody: ''}));
   }, []);
 
   const renderRadioButton = (
@@ -98,7 +98,7 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
      <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
 
-<ItemDropdown value={'Make'} data={motorDropdown?.make}/>
+<ItemDropdown value={'Make'} data={makeList?.make}/>
 
 <ItemDropdown value={'Model'} data={data}/>
 

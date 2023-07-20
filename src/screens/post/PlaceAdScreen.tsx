@@ -178,7 +178,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
           <Button
           label={'Next'}
           style={{backgroundColor:AppColors.lightBlue}}
-          onPress={()=>navigation.navigate(RouteNames.SaleRentPlaceAd,{cat_id:cat_id,sub_id:sub_id})}/>
+          onPress={()=>navigation.navigate(RouteNames.MotorPlaceAd,{cat_id:cat_id,sub_id:sub_id})}/>
                 </View>
      </ScrollView>
         </View>
