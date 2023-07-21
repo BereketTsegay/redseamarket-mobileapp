@@ -43,7 +43,7 @@ const PostSecondScreen: React.FC<Props> = ({route}) => {
     });
   }
   else{
-    navigation.navigate(RouteNames.PlaceAdScreen,{cat_id:Id,sub_id:item.id})
+    navigation.navigate(RouteNames.PlaceAdScreen,{cat_id:Id,sub_id:item.id,name:name})
   }
   };
   
@@ -71,7 +71,7 @@ const PostSecondScreen: React.FC<Props> = ({route}) => {
                 <View style={{borderBottomColor:'#00000029',borderBottomWidth:1}}/>
                 </TouchableOpacity>
                 {isOpen && item.subcategory_child.map((childItem)=>(
-                <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.PlaceAdScreen,{cat_id:Id,sub_id:childItem.id})} 
+                <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.PlaceAdScreen,{cat_id:Id,sub_id:childItem.id,name:name})} 
                  key={childItem.id}>
                 <View row marginH-30 marginV-20>
                  <Text style={[styles.subHeading,{fontSize:12}]}>{childItem.name}</Text>

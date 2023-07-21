@@ -25,6 +25,7 @@ const AppImages = {
     TRANSFER: require('../images/transfer.png'),
     SUCCESS: require('../images/success.png'),
     UPLOAD: require('../images/upload.png'),
+    DELETE: require('../images/delete.png'),
   };
   
   export default AppImages;

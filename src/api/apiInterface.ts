@@ -7,6 +7,7 @@ import {
 } from './apiClient';
 import {Country} from './country/countryResponse';
 import {CurrencyResponse} from './currency/CurrencyResponse';
+import { CustomField } from './customField/CustomFieldResponse';
 import {FavResponse} from './favorites/FavCreateSlice';
 import {FavList} from './favorites/FavListResponse';
 import {
@@ -351,6 +352,28 @@ export const createFavorite = async (
 ): Promise<NetworkResponse<FavResponse | null>> => {
   const response = await apiClient(
     'app/customer/favourite/adOrRemove',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR CUSTOM FIELD LIST
+export const fetchCustomField = async (
+  requestBody: any,
+): Promise<NetworkResponse<CustomField | null>> => {
+  const response = await apiClient(
+    'app/customer/ads/custom_field_and_dependency',
     'POST',
     requestBody,
   );

@@ -18,6 +18,7 @@ import PaymentScreen from '../screens/post/PaymentScreen';
 import SuccessPage from '../screens/success/SuccessPage';
 import MotorPlaceAd from '../screens/post/MotorPlaceAd';
 import SaleRentPlaceAd from '../screens/post/SaleRentPlaceAd';
+import { PlaceAdProvider } from '../api/placeAd/PlaceAdContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ const Stack = createNativeStackNavigator();
 const AppStack = () => {
 
   return (
+    <PlaceAdProvider>
     <Stack.Navigator
       screenOptions={{
         headerShown: false
@@ -49,6 +51,7 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.SaleRentPlaceAd} component={SaleRentPlaceAd}/>
      
     </Stack.Navigator>
+    </PlaceAdProvider>
   );
 };
 

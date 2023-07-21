@@ -19,6 +19,7 @@ import StoreCountrySlice from './src/api/country/StoreCountrySlice';
 import MakeListSlice from './src/api/motor/MakeListSlice';
 import ModelListSlice from './src/api/motor/ModelListSlice';
 import VariantListSlice from './src/api/motor/VariantListSlice';
+import CustomFieldSlice from './src/api/customField/CustomFieldSlice';
 
 const rootReducer = combineReducers({
   registerCreate: RegisterCreateSlice,
@@ -40,7 +41,8 @@ const rootReducer = combineReducers({
   StoreCountry: StoreCountrySlice,
   MakeList: MakeListSlice,
   ModelList: ModelListSlice,
-  VariantList: VariantListSlice
+  VariantList: VariantListSlice,
+  CustomFieldList: CustomFieldSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

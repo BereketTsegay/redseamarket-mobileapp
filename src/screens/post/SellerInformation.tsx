@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Button, Checkbox, Image, Incubator, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
@@ -9,6 +9,7 @@ import AppImages from '../../constants/AppImages';
 import styles from './styles';
 import AppColors from '../../constants/AppColors';
 import InputField from '../../components/InputField';
+import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 const {TextField} = Incubator;
 export type SellerInformationNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -24,6 +25,7 @@ interface Props {}
 
 const SellerInformation: React.FC<Props> = () => {
   const navigation = useNavigation<SellerInformationNavigationProps>();
+  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
   useEffect(() => {
   }, []);
 
@@ -52,6 +54,8 @@ const SellerInformation: React.FC<Props> = () => {
           multiline={false}
           height={45}
           type={'default'}
+          value={placeAdInput.name}
+          onChange={(text)=>{setPlaceAdInput({...placeAdInput, name:text})}}
           />
 
 <InputField
@@ -59,6 +63,8 @@ const SellerInformation: React.FC<Props> = () => {
           multiline={false}
           height={45}
           type={'default'}
+          value={placeAdInput.email}
+          onChange={(text)=>{setPlaceAdInput({...placeAdInput, email:text})}}
           />
 
 <InputField
@@ -66,6 +72,8 @@ const SellerInformation: React.FC<Props> = () => {
           multiline={false}
           height={45}
           type={'numeric'}
+          value={placeAdInput.phone}
+          onChange={(text)=>{setPlaceAdInput({...placeAdInput, phone:text})}}
           />
 
 <InputField
@@ -73,12 +81,16 @@ const SellerInformation: React.FC<Props> = () => {
           multiline={false}
           height={80}
           type={'default'}
+          value={placeAdInput.address}
+          onChange={(text)=>{setPlaceAdInput({...placeAdInput, address:text})}}
           />
           
           <Checkbox
           label={'Phone Hide'}
-          labelStyle={styles.fieldText}
-          value={true}
+          labelStyle={styles.fieldText} 
+          value={placeAdInput.phone_hide}
+          onValueChange={(value)=>{setPlaceAdInput({...placeAdInput, phone_hide:value})}}
+        
           color={'grey'}
           containerStyle={{marginBottom:20}}/>
 

@@ -10,6 +10,9 @@ import styles from './styles';
 import AppColors from '../../constants/AppColors';
 import InputField from '../../components/InputField';
 import ItemDropdown from '../../components/ItemDropdown';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../../store';
+import { useDispatch, useSelector } from 'react-redux';
 const {TextField} = Incubator;
 export type CustomPlaceAdNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -25,13 +28,21 @@ interface Props {}
 
 const CustomPlaceAd: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<CustomPlaceAdNavigationProps>();
-  const {cat_id,sub_id}= route.params;
+  const {cat_id,sub_id,name}= route.params;
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {customLists} = useSelector(
+    (state: RootState) => state.CustomFieldList,
+  );
   const [data,setData] = useState([
     {name:'Item1',id:1},
     {name:'Item2', id:2}
   ])
   useEffect(() => {
+   
   }, []);
+
+  console.log(customLists)
+
 
   return (
     <View flex backgroundColor='white' padding-20>
@@ -49,26 +60,49 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
             </View>
           </View>
 
-          <Text style={styles.AdTitle}>Tell us about your car</Text>
+          <Text style={styles.AdTitle}>Tell us about your {name}</Text>
 
      <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
-     
-        <InputField
-          title={'Custom Title'}
+
+          {customLists?.data.category_field.map((item)=>(
+       <>
+       {item.field.type == "text" &&
+       <InputField
+          title={item.field.name}
           multiline={false}
           height={45}
           type={'numeric'}
-          />
+          />}
 
-<ItemDropdown value={'Select Item'} data={data}/>
+{item.field.type == "date" &&
+       <InputField
+          title={item.field.name}
+          multiline={false}
+          height={45}
+          type={'numeric'}
+          />}
+
+{item.field.type == "textarea" &&
+       <InputField
+          title={item.field.name}
+          multiline={false}
+          height={80}
+          type={'numeric'}
+          />}
+
+{/* <ItemDropdown value={'Select Item'} data={data}/>
 
 <Checkbox
           label={'checkbox'}
           labelStyle={styles.fieldText}
           value={false}
           color={'grey'}
-          containerStyle={{marginBottom:20}}/>
+          containerStyle={{marginBottom:20}}/> */}
+          </>
+          ))}
+     
+        
 
           <Button
           label={'Next'}

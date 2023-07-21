@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Button,
   Checkbox,
@@ -19,6 +19,7 @@ import styles from './styles';
 import AppColors from '../../constants/AppColors';
 import InputField from '../../components/InputField';
 import ItemDropdown from '../../components/ItemDropdown';
+import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 const {TextField} = Incubator;
 export type SaleRentPlaceAdNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -34,7 +35,8 @@ interface Props {}
 
 const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<SaleRentPlaceAdNavigationProps>();
-  const {cat_id, sub_id} = route.params;
+  const {cat_id, sub_id,name} = route.params;
+  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
   const [data, setData] = useState([
     {
       id: 'Apartment',
@@ -58,6 +60,10 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
     },
   ]);
   useEffect(() => {}, []);
+
+  const setBuilding = (value) => {
+    setPlaceAdInput({...placeAdInput, building:value})
+  }
 
   const renderRadioButton = (value, name) => {
     return (
@@ -88,7 +94,7 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
         </View>
       </View>
 
-      <Text style={styles.AdTitle}>Tell us about your car</Text>
+      <Text style={styles.AdTitle}>Tell us about your {name}</Text>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
@@ -97,6 +103,8 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
             multiline={false}
             height={45}
             type={'numeric'}
+            value={placeAdInput.size}
+            onChange={(text)=>{setPlaceAdInput({...placeAdInput, size:text})}}
           />
 
           <InputField
@@ -104,25 +112,28 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
             multiline={false}
             height={45}
             type={'numeric'}
+            value={placeAdInput.room}
+            onChange={(text)=>{setPlaceAdInput({...placeAdInput, room:text})}}
           />
 
           <Text style={[styles.title, {fontSize: 14, marginBottom: 20}]}>
             Furnished
           </Text>
           <RadioGroup
-          // initialValue={}
-          // onValueChange={(value: any) =>}
+          initialValue={placeAdInput.furnished}
+          onValueChange={(value: any) =>setPlaceAdInput({...placeAdInput, furnished:value})}
           >
             {renderRadioButton(1, 'Yes')}
             {renderRadioButton(2, 'No')}
           </RadioGroup>
 
-          <ItemDropdown value={'Building Type'} data={data} />
+          <ItemDropdown value={'Building Type'} data={data} add={setBuilding}/>
 
           <Checkbox
             label={'Parking'}
             labelStyle={styles.fieldText}
-            value={false}
+            value={placeAdInput.parking}
+            onValueChange={(value: any) =>setPlaceAdInput({...placeAdInput, parking:value})}
             color={'grey'}
             containerStyle={{marginBottom: 20}}
           />
