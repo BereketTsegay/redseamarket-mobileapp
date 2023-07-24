@@ -19,6 +19,7 @@ import {LoginResponse} from './login/LoginCreateSlice';
 import { Motor } from './motor/MotorResponse';
 import {ResendOtpResponse} from './otp/OtpResendSlice';
 import {OtpResponse} from './otp/OtpVerificationSlice';
+import { PlaceAdResponse } from './placeAd/PlaceAdSlice';
 import { ProfileResponse } from './profile/ProfileResponse';
 import {RegisterResponse} from './register/RegisterCreateSlice';
 import { SubCategoryResponse } from './subCategories/SubCategoryResponse';
@@ -352,6 +353,28 @@ export const createFavorite = async (
 ): Promise<NetworkResponse<FavResponse | null>> => {
   const response = await apiClient(
     'app/customer/favourite/adOrRemove',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR PLACING AD
+export const createAd = async (
+  requestBody: any,
+): Promise<NetworkResponse<PlaceAdResponse | null>> => {
+  const response = await ApiFormData(
+    'app/customer/ads/store',
     'POST',
     requestBody,
   );

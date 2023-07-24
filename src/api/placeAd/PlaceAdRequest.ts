@@ -36,10 +36,10 @@ export class PlaceAdRequest{
      transmission: String = '';
      condition: String = '';
      mileage: Number = 0;
-     aircondition: String = '';
-     gps: String = '';
-     security: String = '';
-     tire: String = '';
+     aircondition: Number = 0;
+     gps: Number = 0;
+     security: Number = 0;
+     tire: Number = 0;
 
      //Sale or Rent Information
      size: String = '';
@@ -47,8 +47,14 @@ export class PlaceAdRequest{
      furnished: String = '';
      building: String = '';
      parking: Boolean = false;
+     fieldValue: Field[] = [];
 }
 
-export class Image {
-    value: String = '';
+export type Image = {
+    file: String;
+}
+
+export type Field = {
+    field_id: string;
+    value: any;
 }

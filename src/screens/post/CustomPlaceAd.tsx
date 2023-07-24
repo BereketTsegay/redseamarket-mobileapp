@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Button, Checkbox, Image, Incubator, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
@@ -13,6 +13,7 @@ import ItemDropdown from '../../components/ItemDropdown';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
+import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 const {TextField} = Incubator;
 export type CustomPlaceAdNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -28,20 +29,31 @@ interface Props {}
 
 const CustomPlaceAd: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<CustomPlaceAdNavigationProps>();
-  const {cat_id,sub_id,name}= route.params;
-  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {name}= route.params;
+  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
   const {customLists} = useSelector(
     (state: RootState) => state.CustomFieldList,
   );
-  const [data,setData] = useState([
-    {name:'Item1',id:1},
-    {name:'Item2', id:2}
-  ])
+
+
   useEffect(() => {
    
   }, []);
 
-  console.log(customLists)
+  const updateFieldValue = (fieldId, value) => {
+    const existingIndex = placeAdInput.fieldValue.findIndex((field) => field.field_id === fieldId);
+
+    if(existingIndex>=0){
+      const updatedFieldValue = [...placeAdInput.fieldValue];
+      updatedFieldValue[existingIndex].value = value;
+      setPlaceAdInput({ ...placeAdInput, fieldValue: updatedFieldValue });
+    }else{
+      setPlaceAdInput({
+        ...placeAdInput,
+        fieldValue: [...placeAdInput.fieldValue, { field_id: fieldId, value: value }],
+      });
+    }
+  };
 
 
   return (
@@ -72,7 +84,10 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
           title={item.field.name}
           multiline={false}
           height={45}
-          type={'numeric'}
+          type={'default'}
+          value={placeAdInput.textValue}
+          onChange={(text) => updateFieldValue(item.field.id, text)}
+          trailing={null}
           />}
 
 {item.field.type == "date" &&
@@ -80,7 +95,10 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
           title={item.field.name}
           multiline={false}
           height={45}
-          type={'numeric'}
+          type={'default'}
+          value={placeAdInput.textValue}
+          onChange={(text) => updateFieldValue(item.field.id, text)}
+          trailing={null}
           />}
 
 {item.field.type == "textarea" &&
@@ -88,7 +106,10 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
           title={item.field.name}
           multiline={false}
           height={80}
-          type={'numeric'}
+          type={'default'}
+          value={placeAdInput.textValue}
+          onChange={(text) => updateFieldValue(item.field.id, text)}
+          trailing={null}
           />}
 
 {/* <ItemDropdown value={'Select Item'} data={data}/>

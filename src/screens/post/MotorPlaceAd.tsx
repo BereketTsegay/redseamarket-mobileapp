@@ -33,7 +33,7 @@ interface Props {}
 
 const MotorPlaceAd: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<MotorPlaceAdNavigationProps>();
-  const {cat_id,sub_id,name}= route.params;
+  const {name}= route.params;
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {makeList} = useSelector(
@@ -63,10 +63,15 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
         name: 'Electric',
     },
 ])
-  const [data,setData] = useState([
-    {name:'Item1',id:1},
-    {name:'Item2', id:2}
-  ])
+const [errors, setErrors] = useState({
+  make_id: false,
+  model_id: false,
+  registration_year: false,
+  fuel: false,
+  transmission:false,
+  condition: false,
+  mileage: false
+});
   useEffect(() => {
     dispatch(fetchMakeList({requestBody: ''}));
   }, []);
@@ -102,10 +107,12 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
 
   const setMake = (value) => {
     setPlaceAdInput({...placeAdInput, make_id:value})
+    setErrors({...errors, make_id: false});
   }
 
   const setModel = (value) => {
     setPlaceAdInput({...placeAdInput, model_id:value})
+    setErrors({...errors, model_id: false});
   }
 
   const setVariant = (value) => {
@@ -114,7 +121,28 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
 
   const setFuel = (value) => {
     setPlaceAdInput({...placeAdInput, fuel:value})
+    setErrors({...errors, fuel: false});
   }
+
+  const nextScreen = () => {
+    const hasErrors = !placeAdInput.make_id || !placeAdInput.model_id || !placeAdInput.registration_year || !placeAdInput.fuel || !placeAdInput.transmission || !placeAdInput.condition || !placeAdInput.mileage;
+
+    if (hasErrors) {
+      setErrors({
+        make_id: !placeAdInput.make_id,
+        model_id: !placeAdInput.model_id,
+        registration_year: !placeAdInput.registration_year,
+        fuel: !placeAdInput.fuel,
+        transmission: !placeAdInput.transmission,
+        condition: !placeAdInput.condition,
+        mileage: !placeAdInput.mileage,
+      });
+      return;
+    }
+    else{
+      navigation.navigate(RouteNames.SellerInformation)
+  }
+  };
 
 
   return (
@@ -138,9 +166,17 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
      <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
 
+        <View>
+          {  errors.make_id &&
+              <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
 <ItemDropdown value={'Make'} data={makeList?.make} add={setMake}/>
+</View>
 
+<View>
+          {  errors.model_id &&
+              <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
 <ItemDropdown value={'Model'} data={modelList?.model} add={setModel}/>
+</View>
 
 <ItemDropdown value={'Variant'} data={variantList?.variant} add={setVariant}/>
 
@@ -150,24 +186,44 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
           height={45}
           type={'numeric'}
           value={placeAdInput.registration_year}
-            onChange={(text)=>{setPlaceAdInput({...placeAdInput, registration_year:text})}}
+            onChange={(text)=>{setPlaceAdInput({...placeAdInput, registration_year:text})
+            setErrors({...errors, registration_year: false});
+          }}
+          trailing={
+            errors.registration_year &&
+            <Text color={'red'}>required field</Text>
+          }
           />
 
-<ItemDropdown value={'Fuel Type'} data={fuelOption} add={setVariant}/>
+<View>
+          {  errors.fuel &&
+              <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
+<ItemDropdown value={'Fuel Type'} data={fuelOption} add={setFuel}/>
+</View>
 
-<Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Transmission</Text>
+<View row marginB-20>
+<Text style={[styles.title,{fontSize:14}]}>Transmission</Text>
+{  errors.transmission &&
+              <Text color={'red'}>required field</Text>}
+</View>
 <RadioGroup
               initialValue={placeAdInput.transmission}
-              onValueChange={(value: any) =>setPlaceAdInput({...placeAdInput, transmission:value})}
+              onValueChange={(value: any) =>{setPlaceAdInput({...placeAdInput, transmission:value})
+              setErrors({...errors, transmission: false});}}
               >
               {renderRadioButton(1,'Manual')}
               {renderRadioButton(2,'Automatic')}
             </RadioGroup>
 
-<Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Condition</Text>
+            <View row marginB-20>
+<Text style={[styles.title,{fontSize:14}]}>Condition</Text>
+{  errors.condition &&
+              <Text color={'red'}>required field</Text>}
+</View>
 <RadioGroup
               initialValue={placeAdInput.condition}
-              onValueChange={(value: any) =>setPlaceAdInput({...placeAdInput, condition:value})}
+              onValueChange={(value: any) =>{setPlaceAdInput({...placeAdInput, condition:value})
+              setErrors({...errors, condition: false});}}
               >
               {renderRadioButton(1,'New')}
               {renderRadioButton(2,'Used')}
@@ -179,7 +235,13 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
           height={45}
           type={'numeric'}
           value={placeAdInput.mileage}
-          onChange={(text)=>{setPlaceAdInput({...placeAdInput, mileage:text})}}
+          onChange={(text)=>{setPlaceAdInput({...placeAdInput, mileage:text})
+          setErrors({...errors, mileage: false});
+            }}
+            trailing={
+              errors.mileage &&
+              <Text color={'red'}>required field</Text>
+            }
           />
 
           <Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Features</Text>
@@ -219,7 +281,7 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
           <Button
           label={'Next'}
           style={{backgroundColor:AppColors.lightBlue}}
-          onPress={()=>navigation.navigate(RouteNames.SellerInformation)}/>
+          onPress={nextScreen}/>
                 </View>
      </ScrollView>
         </View>

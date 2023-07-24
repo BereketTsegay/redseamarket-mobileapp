@@ -4,12 +4,16 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import { FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import { FlatList, ScrollView, ToastAndroid, TouchableOpacity } from 'react-native';
 import AppImages from '../../constants/AppImages';
 import styles from './styles';
 import AppColors from '../../constants/AppColors';
 import InputField from '../../components/InputField';
 import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
+import { createAd, reset } from '../../api/placeAd/PlaceAdSlice';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../../store';
+import { useDispatch, useSelector } from 'react-redux';
 const {TextField} = Incubator;
 export type SellerInformationNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -25,9 +29,114 @@ interface Props {}
 
 const SellerInformation: React.FC<Props> = () => {
   const navigation = useNavigation<SellerInformationNavigationProps>();
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
+  const {PlaceAdData,loadingPlaceAd,PlaceAdError} = useSelector((state: RootState) => state.PlaceAd);
+  const [terms, setTerms] = useState(false)
+  const [errors, setErrors] = useState({
+    name: false,
+    email: false,
+    address: false
+  });
+  
   useEffect(() => {
   }, []);
+
+  const submit = () => {
+    const hasErrors = !placeAdInput.name || !placeAdInput.email || !placeAdInput.address;
+
+    if (hasErrors) {
+      setErrors({
+        name: !placeAdInput.name,
+        email: !placeAdInput.email,
+        address: !placeAdInput.address
+      });
+      return;
+    }
+    else{
+        const formData = new FormData();
+      
+        const keysToAppend = [
+          'address',
+          'aircondition',
+          'area',
+          'building',
+          'canonical_name',
+          'category',
+          'city',
+          'condition',
+          'country',
+          'description',
+          'descriptioninArabic',
+          'email',
+          'featured',
+          'fuel',
+          'furnished',
+          'gps',
+          'latitude',
+          'longitude',
+          'make_id',
+          'mileage',
+          'model_id',
+          'name',
+          'negotiable',
+          'parking',
+          'phone',
+          'phone_hide',
+          'price',
+          'registration_year',
+          'room',
+          'security',
+          'size',
+          'state',
+          'sub_area',
+          'sub_area2',
+          'subcategory',
+          'tire',
+          'title',
+          'titleinArabic',
+          'transmission',
+          'variant_id',
+          'fieldValue'
+        ];
+      
+        keysToAppend.forEach((key) => {
+          formData.append(key, placeAdInput[key] ?? '');
+        });
+
+        placeAdInput.image.forEach((image) => {
+          formData.append('image', {
+            uri: image,
+            name: 'image.jpg',
+            type: 'image/jpeg',
+          });
+        });
+        // console.log(formData._parts[40], '-------------------------');
+        dispatch(createAd({requestBody: formData}))
+        .then(() => {
+          dispatch(reset());
+        })
+        .catch((err: any) => console.log(err));
+    }
+  }
+
+  if (PlaceAdData != null) {
+    if (!loadingPlaceAd && !PlaceAdError && PlaceAdData.status == 'success') {
+      ToastAndroid.show(
+        JSON.stringify(PlaceAdData.message),
+        ToastAndroid.SHORT,
+      );
+      console.log(PlaceAdData,'success')
+      navigation.navigate(RouteNames.PaymentScreen)
+    } else {
+      console.log(PlaceAdData,'failure')
+        ToastAndroid.show(
+          JSON.stringify(PlaceAdData.message),
+          ToastAndroid.SHORT,
+        );
+      }
+     
+    }
 
   return (
     <View flex backgroundColor='white' padding-20>
@@ -55,7 +164,13 @@ const SellerInformation: React.FC<Props> = () => {
           height={45}
           type={'default'}
           value={placeAdInput.name}
-          onChange={(text)=>{setPlaceAdInput({...placeAdInput, name:text})}}
+          onChange={(text)=>{setPlaceAdInput({...placeAdInput, name:text})
+          setErrors({...errors, name: false});
+        }}
+        trailing={
+          errors.name &&
+          <Text color={'red'}>required field</Text>
+        }
           />
 
 <InputField
@@ -64,7 +179,13 @@ const SellerInformation: React.FC<Props> = () => {
           height={45}
           type={'default'}
           value={placeAdInput.email}
-          onChange={(text)=>{setPlaceAdInput({...placeAdInput, email:text})}}
+          onChange={(text)=>{setPlaceAdInput({...placeAdInput, email:text})
+          setErrors({...errors, email: false});
+            }}
+            trailing={
+              errors.email &&
+              <Text color={'red'}>required field</Text>
+            }
           />
 
 <InputField
@@ -74,6 +195,7 @@ const SellerInformation: React.FC<Props> = () => {
           type={'numeric'}
           value={placeAdInput.phone}
           onChange={(text)=>{setPlaceAdInput({...placeAdInput, phone:text})}}
+          trailing={null}
           />
 
 <InputField
@@ -82,7 +204,13 @@ const SellerInformation: React.FC<Props> = () => {
           height={80}
           type={'default'}
           value={placeAdInput.address}
-          onChange={(text)=>{setPlaceAdInput({...placeAdInput, address:text})}}
+          onChange={(text)=>{setPlaceAdInput({...placeAdInput, address:text})
+          setErrors({...errors, address: false});
+        }}
+        trailing={
+          errors.address &&
+          <Text color={'red'}>required field</Text>
+        }
           />
           
           <Checkbox
@@ -97,9 +225,10 @@ const SellerInformation: React.FC<Props> = () => {
 <Checkbox
           label={'Accept Terms & Conditions'}
           labelStyle={[styles.fieldText,{color:'#006EFF'}]}
-          value={false}
+          value={terms}
           color={'grey'}
-          containerStyle={{marginBottom:20}}/>
+          containerStyle={{marginBottom:20}}
+          onValueChange={(value)=>setTerms(value)}/>
 
           <View row style={{justifyContent:'space-between'}}>
           <Button
@@ -110,8 +239,9 @@ const SellerInformation: React.FC<Props> = () => {
           <Button
           label={'Create'}
           labelStyle={[styles.buttonLabelStyle,{color:'white'}]}
-          style={{backgroundColor:AppColors.lightBlue,width:'48%'}}
-          onPress={()=>navigation.navigate(RouteNames.PaymentScreen)}/>
+          style={{backgroundColor:AppColors.lightBlue,width:'48%',opacity:terms ? 1 : 0.5}}
+          onPress={()=>{terms ? submit() : null}}
+          />
 
           </View>
 
@@ -124,3 +254,7 @@ const SellerInformation: React.FC<Props> = () => {
 };
 
 export default SellerInformation;
+
+function dispatch(arg0: any) {
+  throw new Error('Function not implemented.');
+}

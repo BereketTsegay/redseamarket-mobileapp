@@ -25,4 +25,5 @@ export type CountryElement = {
     updated_at:   null;
     phone_length: null;
     status:       number;
+    flag:         string;
 }

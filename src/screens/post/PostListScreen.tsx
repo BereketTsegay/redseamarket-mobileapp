@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Image, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
@@ -9,6 +9,7 @@ import AppImages from '../../constants/AppImages';
 import styles from './styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 export type PostListScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'PostListScreen'
@@ -23,6 +24,7 @@ interface Props {}
 
 const PostListScreen: React.FC<Props> = () => {
   const navigation = useNavigation<PostListScreenNavigationProps>();
+  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
   const {dashboardLists,loadingDashBoardList} = useSelector(
     (state: RootState) => state.DashBoardList,
   );
@@ -50,7 +52,8 @@ const PostListScreen: React.FC<Props> = () => {
       <View style={styles.container}>
         {dashboardLists?.data.categories.map((item,index) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate(RouteNames.PostSecondScreen,{Id:item.id,name:item.name})}
+            onPress={() => {setPlaceAdInput({...placeAdInput, category:item.id})
+              navigation.navigate(RouteNames.PostSecondScreen,{Id:item.id,name:item.name})}}
             key={index}
             style={styles.itemContainer}>
             <Image

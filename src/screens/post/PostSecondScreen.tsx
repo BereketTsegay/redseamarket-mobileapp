@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Image, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchSubCategoryList } from '../../api/subCategories/SubCategoryListSlice';
 import AppColors from '../../constants/AppColors';
 import AppFonts from '../../constants/AppFonts';
+import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 export type PostSecondScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'PostSecondScreen'
@@ -27,6 +28,7 @@ interface Props {}
 
 const PostSecondScreen: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<PostSecondScreenNavigationProps>();
+  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
   const {Id,name} = route.params;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {subCategoryLists,loadingSubCategoryLists} = useSelector(
@@ -43,6 +45,7 @@ const PostSecondScreen: React.FC<Props> = ({route}) => {
     });
   }
   else{
+    setPlaceAdInput({...placeAdInput, subcategory: item.id})
     navigation.navigate(RouteNames.PlaceAdScreen,{cat_id:Id,sub_id:item.id,name:name})
   }
   };
@@ -71,7 +74,8 @@ const PostSecondScreen: React.FC<Props> = ({route}) => {
                 <View style={{borderBottomColor:'#00000029',borderBottomWidth:1}}/>
                 </TouchableOpacity>
                 {isOpen && item.subcategory_child.map((childItem)=>(
-                <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.PlaceAdScreen,{cat_id:Id,sub_id:childItem.id,name:name})} 
+                <TouchableOpacity onPress={()=>{setPlaceAdInput({...placeAdInput, subcategory: childItem.id})
+                  navigation.navigate(RouteNames.PlaceAdScreen,{cat_id:Id,sub_id:childItem.id,name:name})}} 
                  key={childItem.id}>
                 <View row marginH-30 marginV-20>
                  <Text style={[styles.subHeading,{fontSize:12}]}>{childItem.name}</Text>

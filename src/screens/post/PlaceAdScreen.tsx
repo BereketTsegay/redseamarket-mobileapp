@@ -51,7 +51,15 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
   const {customLists} = useSelector(
     (state: RootState) => state.CustomFieldList,
   );
-
+  const [errors, setErrors] = useState({
+    title: false,
+    titleinArabic: false,
+    description: false,
+    descriptioninArabic: false,
+    price:false,
+    country: false,
+  });
+  
   useEffect(() => {
     let request = JSON.stringify({
       country: placeAdInput.country,
@@ -82,6 +90,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
 
   const setCountry = value => {
     setPlaceAdInput({...placeAdInput, country: value});
+    setErrors({...errors, country: false});
   };
 
   const setState = value => {
@@ -92,21 +101,34 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
   };
 
   const nextScreen = () => {
+    const hasErrors = !placeAdInput.title || !placeAdInput.description || !placeAdInput.country || !placeAdInput.titleinArabic || !placeAdInput.descriptioninArabic || !placeAdInput.price;
+
+    if (hasErrors) {
+      setErrors({
+        title: !placeAdInput.title,
+        titleinArabic: !placeAdInput.titleinArabic,
+        description: !placeAdInput.description,
+        descriptioninArabic: !placeAdInput.descriptioninArabic,
+        price: !placeAdInput.price,
+        country: !placeAdInput.country,
+      });
+      return;
+    }
+    else{
     if (cat_id == 1) {
-      navigation.navigate(RouteNames.MotorPlaceAd, {cat_id: cat_id,sub_id: sub_id,name: name,});
+      navigation.navigate(RouteNames.MotorPlaceAd, {name: name,});
     } 
     else if (cat_id == 2 || cat_id == 3) {
-      navigation.navigate(RouteNames.SaleRentPlaceAd, {cat_id: cat_id,sub_id: sub_id,name: name,});
+      navigation.navigate(RouteNames.SaleRentPlaceAd, {name: name,});
     } else {
       if (customLists?.data.category_field.length == 0) {
         navigation.navigate(RouteNames.SellerInformation);
       } else {
-        navigation.navigate(RouteNames.CustomPlaceAd, {cat_id: cat_id,sub_id: sub_id,name: name, });
+        navigation.navigate(RouteNames.CustomPlaceAd, {name: name, });
       }
     }
+  }
   };
-
-  console.log(placeAdInput.featured)
 
   const openDocumentFile = async () => {
     try {
@@ -165,7 +187,14 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             height={45}
             type={'default'}
             value={placeAdInput.title}
-            onChange={(text)=>{setPlaceAdInput({...placeAdInput, title: text, canonical_name:text})}}
+            onChange={(text) => {
+              setPlaceAdInput({...placeAdInput, title: text, canonical_name: text});
+              setErrors({...errors, title: false});
+            }}
+            trailing={
+              errors.title &&
+              <Text color={'red'}>required field</Text>
+            }
           />
 
           <InputField
@@ -174,7 +203,13 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             height={45}
             type={'default'}
             value={placeAdInput.titleinArabic}
-            onChange={(text)=>{setPlaceAdInput({...placeAdInput, titleinArabic:text})}}
+            onChange={(text)=>{setPlaceAdInput({...placeAdInput, titleinArabic:text})
+            setErrors({...errors, titleinArabic: false});
+          }}
+          trailing={
+            errors.titleinArabic &&
+            <Text color={'red'}>required field</Text>
+          }
           />
 
           <TextField
@@ -211,11 +246,11 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             {placeAdInput.image.length != 0 &&
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View row>
-           {placeAdInput.image.map((value,index)=>(
+           {placeAdInput.image.map((file,index)=>(
             <TouchableOpacity 
             onPress={()=>deleteImageAtIndex(index)} 
             key={index}>
-            <ImageBackground source={{uri:value}} style={{width:60,height:60,marginHorizontal:5}}>
+            <ImageBackground source={{uri:file}} style={{width:60,height:60,marginHorizontal:5}}>
               <Image source={AppImages.DELETE} style={{alignSelf:'flex-end',backgroundColor:'white'}}/>
               </ImageBackground>
               </TouchableOpacity>
@@ -223,12 +258,17 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
               </View>
               </ScrollView>}
           </View>
-
+          
+          <View>
+          {  errors.country &&
+              <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
           <ItemDropdown
             value={'Select Country'}
             data={countryLists?.country}
             add={setCountry}
           />
+          
+          </View>
 
           <InputField
             title={'Price'}
@@ -236,7 +276,13 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             height={45}
             type={'numeric'}
             value={placeAdInput.price}
-            onChange={(text)=>{setPlaceAdInput({...placeAdInput, price:text})}}
+            onChange={(text)=>{setPlaceAdInput({...placeAdInput, price:text})
+            setErrors({...errors, price: false});
+            }}
+            trailing={
+              errors.price &&
+              <Text color={'red'}>required field</Text>
+            }
           />
 
           <InputField
@@ -245,7 +291,13 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             height={80}
             type={'default'}
             value={placeAdInput.description}
-            onChange={(text)=>{setPlaceAdInput({...placeAdInput, description:text})}}
+            onChange={(text)=>{setPlaceAdInput({...placeAdInput, description:text})
+            setErrors({...errors, description: false});
+            }}
+            trailing={
+              errors.description &&
+              <Text color={'red'}>required field</Text>
+            }
           />
 
           <InputField
@@ -254,7 +306,13 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             height={80}
             type={'default'}
             value={placeAdInput.descriptioninArabic}
-            onChange={(text)=>{setPlaceAdInput({...placeAdInput, descriptioninArabic:text})}}
+            onChange={(text)=>{setPlaceAdInput({...placeAdInput, descriptioninArabic:text})
+            setErrors({...errors, descriptioninArabic: false});
+            }}
+            trailing={
+              errors.descriptioninArabic &&
+              <Text color={'red'}>required field</Text>
+            }
           />
 
           <ItemDropdown
@@ -276,6 +334,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             type={'default'}
             value={placeAdInput.area}
             onChange={(text)=>{setPlaceAdInput({...placeAdInput, area:text})}}
+            trailing={null}
           />
 
           <InputField
@@ -285,6 +344,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             type={'default'}
             value={placeAdInput.sub_area}
             onChange={(text)=>{setPlaceAdInput({...placeAdInput, sub_area:text})}}
+            trailing={null}
           />
 
           <InputField
@@ -294,6 +354,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             type={'default'}
             value={placeAdInput.sub_area2}
             onChange={(text)=>{setPlaceAdInput({...placeAdInput, sub_area2:text})}}
+            trailing={null}
           />
 
           <Checkbox
