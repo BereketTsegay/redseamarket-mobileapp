@@ -90,6 +90,17 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
           trailing={null}
           />}
 
+{item.field.type == "Number" &&
+       <InputField
+          title={item.field.name}
+          multiline={false}
+          height={45}
+          type={'numeric'}
+          value={placeAdInput.textValue}
+          onChange={(text) => updateFieldValue(item.field.id, text)}
+          trailing={null}
+          />}
+
 {item.field.type == "date" &&
        <InputField
           title={item.field.name}
@@ -112,14 +123,17 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
           trailing={null}
           />}
 
-{/* <ItemDropdown value={'Select Item'} data={data}/>
+ {/* <ItemDropdown value={'Select Item'} data={data}/> */}
 
+{item.field.type == "Checkbox" &&
 <Checkbox
-          label={'checkbox'}
+          label={item.field.name}
           labelStyle={styles.fieldText}
-          value={false}
+          value={placeAdInput.textValue}
           color={'grey'}
-          containerStyle={{marginBottom:20}}/> */}
+          containerStyle={{marginBottom:20}}
+          onValueChange={(value) => updateFieldValue(item.field.id, value)}/> 
+}
           </>
           ))}
      

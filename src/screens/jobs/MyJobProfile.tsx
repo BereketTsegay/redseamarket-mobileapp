@@ -144,7 +144,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
                 styles.fieldStyle,
                 {borderStyle: 'dashed', justifyContent: 'space-between'},
               ]}>
-              <Text >Upload Resume</Text>
+              <Text style={styles.fieldText}>Upload Resume</Text>
               <Image
                 source={AppImages.UPLOAD}
                 tintColor={AppColors.lightBlue}
@@ -152,7 +152,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             </View>
             </TouchableOpacity>
             <Text style={{color: 'red', fontSize: 8}}>
-              *Maximum 5 images are allowed
+              *Maximum 500kb file size are allowed
             </Text>
             {/* {placeAdInput.image.length != 0 &&
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>

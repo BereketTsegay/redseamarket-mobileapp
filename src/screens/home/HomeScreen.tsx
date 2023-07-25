@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Image, Incubator, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
@@ -16,6 +16,8 @@ import { fetchDashBoardList } from '../../api/home/DashBoardListSlice';
 import AppFonts from '../../constants/AppFonts';
 import { fetchCountryList } from '../../api/country/CountryListSlice';
 import { fetchCurrencyList } from '../../api/currency/CurrencyListSlice';
+import CountrySelectionModal from '../../components/CountrySelectionModal';
+import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 const {TextField} = Incubator;
 export type HomeScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -31,8 +33,9 @@ interface Props {}
 
 const HomeScreen: React.FC<Props> = () => {
   const navigation = useNavigation<HomeScreenNavigationProps>();
-  const [countryId, setCountryId] = useState(229);
   const [lang, setLang] = useState([{code:'English',name:'UK', id:1}]);
+  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
+  const [showCountryModal, setShowCountryModal] = useState(true);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {dashboardLists,loadingDashBoardList} = useSelector(
     (state: RootState) => state.DashBoardList,
@@ -48,37 +51,41 @@ const HomeScreen: React.FC<Props> = () => {
 
   useEffect(() => {
     let request = JSON.stringify({
-      country: countryId
+      country: placeAdInput.common_country_id
     })
     dispatch(fetchDashBoardList({requestBody: request}));
-  }, [countryId]);
+  }, [placeAdInput.common_country_id]);
 
   useEffect(() => {
     let request = JSON.stringify({
-      country: countryId
+      country: placeAdInput.common_country_id
     })
     dispatch(fetchCurrencyList({requestBody: request}));
-  }, [countryId]);
+  }, [placeAdInput.common_country_id]);
 
   useEffect(() => {
     dispatch(fetchCountryList({requestBody: ''}));
   }, []);
 
-  function isValidate(): boolean {
-    if(countryId == null){
-      Alert.alert('Please Select a Country')
-      return false;
-    }
-    return true;
-    }
+  // function isValidate(): boolean {
+  //   if(placeAdInput.common_country_id == null){
+  //     Alert.alert('Please Select a Country')
+  //     return false;
+  //   }
+  //   return true;
+  //   }
 
+    const handleCountrySelect = (countryId: number) => {
+      setPlaceAdInput({...placeAdInput, common_country_id:countryId})
+      setShowCountryModal(false);
+    };
 
   const Dropdown = (value,data) => {
     return (
       <SelectDropdown
         data={data}
         onSelect={(selectedItem, index) => {
-          setCountryId(selectedItem.id);
+          setPlaceAdInput({...placeAdInput, common_country_id:selectedItem.id})
         }}
         defaultButtonText={value}
         buttonTextAfterSelection={(selectedItem, index) => {
@@ -126,6 +133,12 @@ const HomeScreen: React.FC<Props> = () => {
      {Dropdown('language',lang)}
     </View>
     </ImageBackground>
+    <CountrySelectionModal
+        isVisible={showCountryModal}
+        countryLists={countryLists?.country}
+        onSelectCountry={handleCountrySelect}
+        onRequestClose={() => setShowCountryModal(false)}
+      />
 
     <View padding-20>
       <Text style={styles.categoryText}>Category</Text>
@@ -137,9 +150,8 @@ const HomeScreen: React.FC<Props> = () => {
     return (
       <View center key={index} style={{ flex: 1, margin: 10 }}>
          <TouchableOpacity onPress={()=>{
-            if(isValidate()){
-              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,countryId:countryId})
-            }}}>
+              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,countryId:placeAdInput.common_country_id})
+            }}>
         <Image
           source={
             item.image == null
@@ -168,9 +180,8 @@ const HomeScreen: React.FC<Props> = () => {
           <View row centerV style={{justifyContent:'space-between'}}>
           <Text style={styles.categoryText}>Popular in {item.name}</Text>
           <TouchableOpacity onPress={()=>{
-            if(isValidate()){
-              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,countryId:countryId})
-            }}}>
+              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,countryId:placeAdInput.common_country_id})
+            }}>
           <Image source={AppImages.ARROW_RIGHT} style={{height:10,width:15}} tintColor={'black'}/>
           </TouchableOpacity>
           </View>
@@ -178,9 +189,8 @@ const HomeScreen: React.FC<Props> = () => {
             <View row marginV-20>
           {item.ads.map((item,index)=>(
             <TouchableOpacity onPress={()=>{
-            if(isValidate()){
-              navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:countryId})
-            }}}>
+              navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:placeAdInput.common_country_id})
+            }}>
               <View backgroundColor='white' key={index} marginR-20 style={{elevation:4,width:100}}>
                  <Image source={item.ad_image == null ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ad_image?.image}} 
                  resizeMode={'cover'} style={{height:70,width:'100%'}}/>

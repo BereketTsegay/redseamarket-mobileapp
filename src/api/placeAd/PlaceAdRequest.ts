@@ -48,6 +48,9 @@ export class PlaceAdRequest{
      building: String = '';
      parking: Boolean = false;
      fieldValue: Field[] = [];
+
+     //Common Country id
+     common_country_id: any = null;
 }
 
 export type Image = {

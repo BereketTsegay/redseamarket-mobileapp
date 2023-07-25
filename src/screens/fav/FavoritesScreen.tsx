@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Image, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
@@ -13,6 +13,7 @@ import { fetchFavList } from '../../api/favorites/FavListSlice';
 import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import AppColors from '../../constants/AppColors';
 import Header from '../../components/Header';
+import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 export type FavoritesScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'FavoritesScreen'
@@ -28,6 +29,7 @@ interface Props {}
 const FavoritesScreen: React.FC<Props> = () => {
   const navigation = useNavigation<FavoritesScreenNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
   const {favLists,loadingFavLists} = useSelector(
     (state: RootState) => state.FavList)
     const {currencyLists} = useSelector(
@@ -58,9 +60,9 @@ const FavoritesScreen: React.FC<Props> = () => {
     showsVerticalScrollIndicator={false}
     renderItem={({item})=>{
       return(
-        // <TouchableOpacity onPress={()=>{
-        //     navigation.navigate(RouteNames.DetailsScreen,{adId:item.ads_id,countryId:countryId})
-        //   }}>
+        <TouchableOpacity onPress={()=>{
+            navigation.navigate(RouteNames.DetailsScreen,{adId:item.ads_id,countryId:placeAdInput.common_country_id})
+          }}>
               <View style={styles.view}>
                  <Image source={item.ads.image[0].image == null || item.ads.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ads.image[0].image}} 
                  resizeMode={'contain'} style={{height:70,width:'100%',borderTopLeftRadius:4,borderTopRightRadius:4}}/>
@@ -71,7 +73,7 @@ const FavoritesScreen: React.FC<Props> = () => {
                  <Text style={styles.cityText}>{item.ads.area}</Text>
                  </View>
                 </View>
-                // </TouchableOpacity>
+                </TouchableOpacity>
       )
     }}/>}
         </View>

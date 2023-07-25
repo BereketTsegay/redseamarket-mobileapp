@@ -49,6 +49,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
   useEffect(() => {
     list()
   }, []);
+  console.log(dashboardDetails)
   
   const list = () => {
     let request = JSON.stringify({
@@ -78,6 +79,21 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
 
   return (
     <>
+    {dashboardDetails?.status == 'error' &&
+    <View flex backgroundColor="#FFFFFF" padding-20>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+              <View style={styles.circle}>
+                <Image
+                  source={AppImages.ARROW_LEFT}
+                  style={{width: 25, height: 25}}
+                />
+              </View>
+            </TouchableOpacity>
+            <View flex center>
+      <Text style={styles.titleText}>{dashboardDetails.message}</Text>
+      </View>
+      </View>}
+
       {dashboardDetails?.ads.length != 0 && (
         <View flex backgroundColor="#FFFFFF">
           <CarouselView data={dashboardDetails?.ads[0].image} />

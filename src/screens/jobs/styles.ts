@@ -25,6 +25,11 @@ const styles =StyleSheet .create({
         height:45,
         borderRadius:8
       },
+      fieldText:{
+        fontSize:12,
+        fontFamily:AppFonts.POPPINS_LIGHT
+        
+      },
 })
 
 export default styles;
