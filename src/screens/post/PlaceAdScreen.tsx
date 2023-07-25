@@ -45,9 +45,13 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
   const {cat_id, sub_id, name} = route.params;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
+  const [priceValue, setPriceValue] = useState('')
   const {countryLists} = useSelector((state: RootState) => state.CountryList);
   const {stateLists} = useSelector((state: RootState) => state.StateList);
   const {cityLists} = useSelector((state: RootState) => state.CityList);
+  const {currencyLists} = useSelector(
+    (state: RootState) => state.CurrencyList,
+  );
   const {customLists} = useSelector(
     (state: RootState) => state.CustomFieldList,
   );
@@ -56,9 +60,13 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
     titleinArabic: false,
     description: false,
     descriptioninArabic: false,
-    price:false,
+    priceValue:false,
     country: false,
+    state: false,
+    city: false,
+    area: false
   });
+
   
   useEffect(() => {
     let request = JSON.stringify({
@@ -85,7 +93,9 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
   useEffect(() => {
     getWithAuthCall('app/featured')
     .then(response=>
-      setPlaceAdInput({...placeAdInput, featured:response.data.data}))
+      setPlaceAdInput({...placeAdInput, featured:response.data.data})
+      )
+      
   }, []);
 
   const setCountry = value => {
@@ -95,13 +105,15 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
 
   const setState = value => {
     setPlaceAdInput({...placeAdInput, state: value});
+    setErrors({...errors, state: false});
   };
   const setCity = value => {
     setPlaceAdInput({...placeAdInput, city: value});
+    setErrors({...errors, city: false});
   };
 
   const nextScreen = () => {
-    const hasErrors = !placeAdInput.title || !placeAdInput.description || !placeAdInput.country || !placeAdInput.titleinArabic || !placeAdInput.descriptioninArabic || !placeAdInput.price;
+    const hasErrors = !placeAdInput.title || !placeAdInput.description || !placeAdInput.country || !placeAdInput.titleinArabic || !placeAdInput.descriptioninArabic || !priceValue || !placeAdInput.state || !placeAdInput.city || !placeAdInput.area;
 
     if (hasErrors) {
       setErrors({
@@ -109,8 +121,11 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
         titleinArabic: !placeAdInput.titleinArabic,
         description: !placeAdInput.description,
         descriptioninArabic: !placeAdInput.descriptioninArabic,
-        price: !placeAdInput.price,
+        priceValue: !priceValue,
         country: !placeAdInput.country,
+        state: !placeAdInput.state,
+        city: !placeAdInput.city,
+        area: !placeAdInput.area,
       });
       return;
     }
@@ -275,13 +290,18 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             multiline={false}
             height={45}
             type={'numeric'}
-            value={placeAdInput.price}
-            onChange={(text)=>{setPlaceAdInput({...placeAdInput, price:text})
-            setErrors({...errors, price: false});
+            value={placeAdInput.price_norm}
+            onChange={(text)=>{setPriceValue(text)
+              setPlaceAdInput({...placeAdInput, price:(text * currencyLists?.usdval).toFixed(2)})
+            setErrors({...errors, priceValue: false});
             }}
             trailing={
-              errors.price &&
+            <View row>
+              {errors.priceValue &&
               <Text color={'red'}>required field</Text>
+            }
+            <Text>{placeAdInput.price != 0 && placeAdInput.price + ' USD'}</Text>
+              </View>
             }
           />
 
@@ -315,17 +335,25 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             }
           />
 
+<View>
+          {  errors.state &&
+              <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
           <ItemDropdown
             value={'Select State'}
             data={stateLists?.state}
             add={setState}
           />
+          </View>
 
+          <View>
+          {  errors.city &&
+              <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
           <ItemDropdown
             value={'Select City'}
             data={cityLists?.city}
             add={setCity}
           />
+          </View>
 
           <InputField
             title={'Area'}
@@ -333,8 +361,13 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             height={45}
             type={'default'}
             value={placeAdInput.area}
-            onChange={(text)=>{setPlaceAdInput({...placeAdInput, area:text})}}
-            trailing={null}
+            onChange={(text)=>{setPlaceAdInput({...placeAdInput, area:text})
+            setErrors({...errors, area: false});
+            }}
+            trailing={
+              errors.area &&
+              <Text color={'red'}>required field</Text>
+            }
           />
 
           <InputField

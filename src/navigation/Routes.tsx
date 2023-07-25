@@ -19,5 +19,6 @@ export const RouteNames = {
   PaymentScreen:'PaymentScreen',
   SuccessPage:'SuccessPage',
   MotorPlaceAd:'MotorPlaceAd',
-  SaleRentPlaceAd:'SaleRentPlaceAd'
+  SaleRentPlaceAd:'SaleRentPlaceAd',
+  MyJobProfile:'MyJobProfile'
 } as const;

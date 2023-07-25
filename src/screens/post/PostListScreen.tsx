@@ -62,7 +62,7 @@ const PostListScreen: React.FC<Props> = () => {
               ? AppImages.PLACEHOLDER
               : { uri: 'https://admin-jamal.prompttechdemohosting.com/' + item.image }
           }
-          style={{width:60, height:40}}
+          style={{width:60, height:60}}
           resizeMode="contain"
         />
             <Text style={styles.title}>{item.name}</Text>

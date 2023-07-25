@@ -20,4 +20,5 @@ export type RootStackParams = {
   SuccessPage:undefined;
   MotorPlaceAd:undefined;
   SaleRentPlaceAd:undefined;
+  MyJobProfile:undefined;
 };

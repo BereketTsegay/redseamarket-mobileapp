@@ -32,14 +32,20 @@ const SellerInformation: React.FC<Props> = () => {
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
   const {PlaceAdData,loadingPlaceAd,PlaceAdError} = useSelector((state: RootState) => state.PlaceAd);
+  const {profileDetails} = useSelector(
+    (state: RootState) => state.ProfileDetails,
+  );
   const [terms, setTerms] = useState(false)
   const [errors, setErrors] = useState({
     name: false,
     email: false,
     address: false
   });
+
+  console.log(placeAdInput.featured)
   
   useEffect(() => {
+    setPlaceAdInput({...placeAdInput, name:profileDetails?.data.user.name, email:profileDetails?.data.user.email})
   }, []);
 
   const submit = () => {
@@ -96,22 +102,27 @@ const SellerInformation: React.FC<Props> = () => {
           'title',
           'titleinArabic',
           'transmission',
-          'variant_id',
-          'fieldValue'
+          'variant_id'
         ];
       
         keysToAppend.forEach((key) => {
           formData.append(key, placeAdInput[key] ?? '');
         });
-
-        placeAdInput.image.forEach((image) => {
-          formData.append('image', {
-            uri: image,
-            name: 'image.jpg',
-            type: 'image/jpeg',
+          placeAdInput.image.forEach((image) => {
+            formData.append('image[]', {
+              uri: image,
+              name: 'image.png',
+              type: 'image/png',
+            });
           });
-        });
-        // console.log(formData._parts[40], '-------------------------');
+
+          const fieldValueArray = placeAdInput.fieldValue;
+
+          for (let i = 0; i < fieldValueArray.length; i++) {
+            formData.append(`fieldValue[${i}][field_id]`, fieldValueArray[i].field_id);
+            formData.append(`fieldValue[${i}][value]`, fieldValueArray[i].value);
+          }
+        // console.log(formData, '-------------------------');
         dispatch(createAd({requestBody: formData}))
         .then(() => {
           dispatch(reset());
@@ -127,7 +138,7 @@ const SellerInformation: React.FC<Props> = () => {
         ToastAndroid.SHORT,
       );
       console.log(PlaceAdData,'success')
-      navigation.navigate(RouteNames.PaymentScreen)
+      navigation.navigate(RouteNames.SuccessPage)
     } else {
       console.log(PlaceAdData,'failure')
         ToastAndroid.show(
@@ -239,8 +250,8 @@ const SellerInformation: React.FC<Props> = () => {
           <Button
           label={'Create'}
           labelStyle={[styles.buttonLabelStyle,{color:'white'}]}
-          style={{backgroundColor:AppColors.lightBlue,width:'48%',opacity:terms ? 1 : 0.5}}
-          onPress={()=>{terms ? submit() : null}}
+          style={{backgroundColor:AppColors.lightBlue,width:'48%',opacity:terms && placeAdInput.featured == 0 ? 1 : 0.5}}
+          onPress={()=>{terms && placeAdInput.featured == 0 ? submit() : null}}
           />
 
           </View>

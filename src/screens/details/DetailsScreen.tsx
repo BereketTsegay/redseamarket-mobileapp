@@ -106,8 +106,8 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                 <View row centerV style={{justifyContent: 'space-between'}}>
                   <Text style={styles.priceText}>
                     {currencyLists?.currency.currency_code}{' '}
-                    {currencyLists?.currency.value *
-                      dashboardDetails?.ads[0].price}
+                    {(currencyLists?.currency.value *
+                      dashboardDetails?.ads[0].price).toFixed()}
                   </Text>
 
                   <FavoriteComponent

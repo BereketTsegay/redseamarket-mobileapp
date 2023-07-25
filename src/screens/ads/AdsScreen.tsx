@@ -33,6 +33,7 @@ const AdsScreen: React.FC<Props> = () => {
     const {currencyLists} = useSelector(
       (state: RootState) => state.CurrencyList,
     );
+    console.log(adLists)
 
     useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
@@ -60,11 +61,11 @@ const AdsScreen: React.FC<Props> = () => {
     renderItem={({item})=>{
       return(
               <View style={styles.view}>
-                 <Image source={item.ads.image[0].image == null || item.ads.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ads.image[0].image}} 
-                 resizeMode={'cover'} style={{height:70,width:'100%',borderTopLeftRadius:4,borderTopRightRadius:4}}/>
+                 <Image source={item.image == null || item.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.image[0].image}} 
+                 resizeMode={'contain'} style={{height:70,width:'100%',borderTopLeftRadius:4,borderTopRightRadius:4}}/>
                  <View margin-3>
-                 <Text numberOfLines={1} ellipsizeMode='tail' style={styles.priceText}>{currencyLists == null ? 'USD ' + item.price
-                  : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price))}</Text>
+                 <Text numberOfLines={1} ellipsizeMode='tail' style={styles.priceText}>{currencyLists == null ? 'USD ' + item.price.toFixed()
+                  : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price).toFixed())}</Text>
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.titleText}>{item.title}</Text>
                  <Text style={styles.cityText}>{item.area}</Text>
                  </View>

@@ -51,7 +51,7 @@ const SuccessPage: React.FC<Props> = () => {
         label={'Lets go !'}
         labelStyle={[styles.buttonLabelStyle, {color: 'white'}]}
         style={{backgroundColor: AppColors.lightBlue, marginBottom: 40}}
-        onPress={() => navigation.navigate(RouteNames.SuccessPage)}
+        onPress={() => navigation.replace(RouteNames.BottomTabs, {screen: RouteNames.AdsScreen})}
       />
     </View>
   );

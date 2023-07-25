@@ -32,10 +32,12 @@ const styles = StyleSheet.create({
         borderColor:'#707070',
         borderWidth:1,
         marginBottom:20,
-        paddingBottom:20,
+        flexDirection:'row',
+        height:120,
+        paddingRight:20
     },
     priceText:{
-        fontSize:20,
+        fontSize:16,
         color:AppColors.darkBlue,
         fontFamily:AppFonts.POPPINS_SEMIBOLD
     },

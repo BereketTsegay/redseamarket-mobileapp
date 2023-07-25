@@ -27,7 +27,6 @@ export const createAd = createAsyncThunk<
 >('createAd', async ({requestBody}) => {
   if (requestBody != null) {
     const response = await apiInterface.createAd(requestBody);
-    
     if (response.kind == 'success') {
       return {
         PlaceAdData: response.body ?? null,

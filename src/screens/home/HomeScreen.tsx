@@ -82,7 +82,8 @@ const HomeScreen: React.FC<Props> = () => {
         }}
         defaultButtonText={value}
         buttonTextAfterSelection={(selectedItem, index) => {
-          return selectedItem.code;
+          return <Image source={{uri:'https://admin-jamal.prompttechdemohosting.com/' + selectedItem.flag}}
+                   style={{width:25,height:25,right:10}}/>;
         }}
         rowTextForSelection={(item, index) => {
           return item.name + ', ' + item.code;
@@ -104,8 +105,9 @@ const HomeScreen: React.FC<Props> = () => {
   return (
     <View flex backgroundColor="#FFFFFF" paddingB-60>
         <ImageBackground 
-         source={dashboardLists?.data.slider != null ? {uri:'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider.image}: null}
+         source={dashboardLists?.data.slider != null ? {uri:'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider[1].file}: null}
         style={styles.topBackground}
+        resizeMode='contain'
         >
            <Text style={{fontSize:15,fontFamily:AppFonts.POPPINS_SEMIBOLD,color:'white',width:'30%'}}>Red sea Market</Text>
           <Text style={{alignSelf:'center',fontSize:16,fontFamily:AppFonts.POPPINS_BOLD,color:'white'}}>{dashboardLists?.data.slider != null ?dashboardLists?.data.slider.name : ''}</Text>
@@ -183,8 +185,8 @@ const HomeScreen: React.FC<Props> = () => {
                  <Image source={item.ad_image == null ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ad_image?.image}} 
                  resizeMode={'cover'} style={{height:70,width:'100%'}}/>
                  <View margin-3>
-                 <Text numberOfLines={1} ellipsizeMode='tail' style={styles.priceText}>{currencyLists == null ? 'USD ' + item.price
-                  : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price))}</Text>
+                 <Text numberOfLines={1} ellipsizeMode='tail' style={styles.priceText}>{currencyLists == null ? 'USD ' + item.price.toFixed(2)
+                  : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price).toFixed())}</Text>
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.nameText}>{item.title}</Text>
                  <Text style={styles.cityText}>{item.area}</Text>
                  </View>
