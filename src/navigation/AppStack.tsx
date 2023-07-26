@@ -21,6 +21,7 @@ import SaleRentPlaceAd from '../screens/post/SaleRentPlaceAd';
 import { PlaceAdProvider } from '../api/placeAd/PlaceAdContext';
 import MyJobProfile from '../screens/jobs/MyJobProfile';
 import TermsAndConditions from '../screens/terms/TermsAndConditions';
+import MyJobDetails from '../screens/jobs/MyJobDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,6 +54,7 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.SaleRentPlaceAd} component={SaleRentPlaceAd}/>
         <Stack.Screen name={RouteNames.MyJobProfile} component={MyJobProfile}/>
         <Stack.Screen name={RouteNames.TermsAndConditions} component={TermsAndConditions}/>
+        <Stack.Screen name={RouteNames.MyJobDetails} component={MyJobDetails}/>
      
     </Stack.Navigator>
     </PlaceAdProvider>

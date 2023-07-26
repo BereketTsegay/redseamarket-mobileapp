@@ -57,7 +57,7 @@ const ProfileScreen: React.FC<Props> = () => {
 
         <List image={AppImages.HEART} name={'My Ads'} onPress={()=>navigation.navigate(RouteNames.AdsScreen)}/>
 
-        <List image={AppImages.HEART} name={'My job Profile'} onPress={()=>navigation.navigate(RouteNames.MyJobProfile)}/>
+        <List image={AppImages.HEART} name={'My job Profile'} onPress={()=>navigation.navigate(RouteNames.MyJobDetails)}/>
 
         <List image={AppImages.HEART} name={'Favourites'} onPress={()=>navigation.navigate(RouteNames.FavoritesScreen)}/>
         </View>

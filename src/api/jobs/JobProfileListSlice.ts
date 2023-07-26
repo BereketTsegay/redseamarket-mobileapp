@@ -22,7 +22,7 @@ export const fetchJobProfileList = createAsyncThunk<
   const response = await apiInterface.fetchJobProfileList(requestBody);
   if (response.kind == 'success') {
     return {
-        dashboardDetails: response.body ?? null,
+        jobProfileList: response.body ?? null,
     };
   } else {
     throw 'Error fetching customers';
@@ -37,17 +37,17 @@ const JobProfileListSlice = createSlice({
     builder
       .addCase(fetchJobProfileList.pending, state => {
         state.loadingJobProfileList = true;
-        state.dashboardDetailsError = false;
+        state.jobProfileListError = false;
         state.jobProfileList = null;
       })
       .addCase(fetchJobProfileList.fulfilled, (state, action) => {
         state.jobProfileList = null;
         state.jobProfileList = action.payload.jobProfileList;
-        state.dashboardDetailsError = false;
+        state.jobProfileListError = false;
         state.loadingJobProfileList = false;
       })
       .addCase(fetchJobProfileList.rejected, state => {
-        state.dashboardDetailsError = true;
+        state.jobProfileListError = true;
         state.loadingJobProfileList = false;
         state.jobProfileList = null;
       });

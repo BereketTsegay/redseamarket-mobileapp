@@ -21,5 +21,6 @@ export const RouteNames = {
   MotorPlaceAd:'MotorPlaceAd',
   SaleRentPlaceAd:'SaleRentPlaceAd',
   MyJobProfile:'MyJobProfile',
-  TermsAndConditions:'TermsAndConditions'
+  TermsAndConditions:'TermsAndConditions',
+  MyJobDetails:'MyJobDetails'
 } as const;

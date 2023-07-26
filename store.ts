@@ -21,6 +21,7 @@ import ModelListSlice from './src/api/motor/ModelListSlice';
 import VariantListSlice from './src/api/motor/VariantListSlice';
 import CustomFieldSlice from './src/api/customField/CustomFieldSlice';
 import PlaceAdSlice from './src/api/placeAd/PlaceAdSlice';
+import JobProfileListSlice from './src/api/jobs/JobProfileListSlice';
 
 const rootReducer = combineReducers({
   registerCreate: RegisterCreateSlice,
@@ -44,7 +45,8 @@ const rootReducer = combineReducers({
   ModelList: ModelListSlice,
   VariantList: VariantListSlice,
   CustomFieldList: CustomFieldSlice,
-  PlaceAd: PlaceAdSlice
+  PlaceAd: PlaceAdSlice,
+  JobProfileList: JobProfileListSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
