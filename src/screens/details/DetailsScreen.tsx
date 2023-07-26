@@ -49,7 +49,6 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
   useEffect(() => {
     list()
   }, []);
-  console.log(dashboardDetails)
   
   const list = () => {
     let request = JSON.stringify({
