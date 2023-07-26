@@ -10,19 +10,25 @@ import AppStrings from '../../constants/AppStrings';
 import {TouchableOpacity} from 'react-native';
 import styles from '../post/styles';
 import AppImages from '../../constants/AppImages';
-export type SuccessPageNavigationProps = NativeStackNavigationProp<
+import { apiClient } from '../../api/apiClient';
+import AppFonts from '../../constants/AppFonts';
+export type TermsAndConditionsNavigationProps = NativeStackNavigationProp<
   RootStackParams,
-  'SuccessPage'
+  'TermsAndConditions'
 >;
 
-export type SuccessPageRouteProps = RouteProp<RootStackParams, 'SuccessPage'>;
+export type TermsAndConditionsRouteProps = RouteProp<RootStackParams, 'TermsAndConditions'>;
 
 interface Props {}
 
-const SuccessPage: React.FC<Props> = () => {
-  const navigation = useNavigation<SuccessPageNavigationProps>();
-  useEffect(() => {}, []);
-
+const TermsAndConditions: React.FC<Props> = () => {
+  const navigation = useNavigation<TermsAndConditionsNavigationProps>();
+  const [terms, setTerms] = useState('')
+  useEffect(() => {
+    apiClient('app/terms/conditions', 'POST', '')
+    .then(response=>
+        setTerms(response.data.terms[0].terms))
+  }, []);
 
 
   return (
@@ -36,22 +42,17 @@ const SuccessPage: React.FC<Props> = () => {
         </View>
       </TouchableOpacity>
 
-      <Text style={[styles.AdTitle, {top: 30}]}>
-        Ad Request has been Placed
+      <Text style={[styles.AdTitle, {}]}>
+        Terms And Conditions
       </Text>
 
-      <View center flex>
-        <Image source={AppImages.SUCCESS} />
+      <View flex>
+        <Text style={{fontSize:16,fontFamily:AppFonts.POPPINS_REGULAR,textAlign:'justify'}}>{terms}</Text>
       </View>
 
-      <Button
-        label={'Lets go !'}
-        labelStyle={[styles.buttonLabelStyle, {color: 'white'}]}
-        style={{backgroundColor: AppColors.lightBlue, marginBottom: 40}}
-        onPress={() => navigation.replace(RouteNames.BottomTabs, {screen: RouteNames.AdsScreen})}
-      />
+      
     </View>
   );
 };
 
-export default SuccessPage;
+export default TermsAndConditions;

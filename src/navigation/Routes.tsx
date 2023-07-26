@@ -20,5 +20,6 @@ export const RouteNames = {
   SuccessPage:'SuccessPage',
   MotorPlaceAd:'MotorPlaceAd',
   SaleRentPlaceAd:'SaleRentPlaceAd',
-  MyJobProfile:'MyJobProfile'
+  MyJobProfile:'MyJobProfile',
+  TermsAndConditions:'TermsAndConditions'
 } as const;

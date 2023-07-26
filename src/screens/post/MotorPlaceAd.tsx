@@ -193,6 +193,7 @@ const [errors, setErrors] = useState({
             errors.registration_year &&
             <Text color={'red'}>required field</Text>
           }
+          editable={true}
           />
 
 <View>
@@ -242,6 +243,7 @@ const [errors, setErrors] = useState({
               errors.mileage &&
               <Text color={'red'}>required field</Text>
             }
+            editable={true}
           />
 
           <Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Features</Text>

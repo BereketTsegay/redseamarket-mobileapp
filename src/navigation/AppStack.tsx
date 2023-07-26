@@ -20,6 +20,7 @@ import MotorPlaceAd from '../screens/post/MotorPlaceAd';
 import SaleRentPlaceAd from '../screens/post/SaleRentPlaceAd';
 import { PlaceAdProvider } from '../api/placeAd/PlaceAdContext';
 import MyJobProfile from '../screens/jobs/MyJobProfile';
+import TermsAndConditions from '../screens/terms/TermsAndConditions';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.MotorPlaceAd} component={MotorPlaceAd}/>
         <Stack.Screen name={RouteNames.SaleRentPlaceAd} component={SaleRentPlaceAd}/>
         <Stack.Screen name={RouteNames.MyJobProfile} component={MyJobProfile}/>
+        <Stack.Screen name={RouteNames.TermsAndConditions} component={TermsAndConditions}/>
      
     </Stack.Navigator>
     </PlaceAdProvider>

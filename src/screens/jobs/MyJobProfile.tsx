@@ -73,6 +73,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             value={null}
             onChange={null}
             trailing={null}
+            editable={true}
           />
 
 <InputField
@@ -83,6 +84,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             value={null}
             onChange={null}
             trailing={null}
+            editable={true}
           />
 
 <InputField
@@ -93,6 +95,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             value={null}
             onChange={null}
             trailing={null}
+            editable={true}
           />
 
 <InputField
@@ -103,6 +106,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             value={null}
             onChange={null}
             trailing={null}
+            editable={true}
           />
 
 <InputField
@@ -113,6 +117,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             value={null}
             onChange={null}
             trailing={null}
+            editable={true}
           />
 
 <InputField
@@ -123,6 +128,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             value={null}
             onChange={null}
             trailing={null}
+            editable={true}
           />
 
 <InputField
@@ -133,6 +139,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             value={null}
             onChange={null}
             trailing={null}
+            editable={true}
           />
           <View marginB-20>
             <TouchableOpacity onPress={()=>openDocumentFile()}>
@@ -187,6 +194,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             value={null}
             onChange={null}
             trailing={null}
+            editable={true}
           />
     
           <ItemDropdown

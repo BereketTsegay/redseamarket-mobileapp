@@ -27,6 +27,7 @@ import {fetchCustomField} from '../../api/customField/CustomFieldSlice';
 import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 import { PlaceAdRequest } from '../../api/placeAd/PlaceAdRequest';
 import { getWithAuthCall } from '../../api/apiClient';
+import AdsCountrySelect from '../../components/AdsCountrySelect';
 const {TextField} = Incubator;
 export type PlaceAdScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -67,7 +68,6 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
     area: false
   });
 
-  
   useEffect(() => {
     let request = JSON.stringify({
       country: placeAdInput.country,
@@ -174,12 +174,24 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
     });
   };
 
-
+  const clearFieldsExceptCountryAndCommonCountryId = () => {
+    const {common_country_id } = placeAdInput;
+    const newPlaceAdInput = { common_country_id };
+  
+    for (const key in placeAdInput) {
+      if (key !== 'common_country_id') {
+        newPlaceAdInput[key] = typeof placeAdInput[key] === 'number' ? 0 : '';
+      }
+    }
+  
+    setPlaceAdInput(newPlaceAdInput);
+  };
+  
   return (
     <View flex backgroundColor="white" padding-20>
       <View row centerV>
         <TouchableOpacity onPress={() => {navigation.goBack()
-                                           setPlaceAdInput(new PlaceAdRequest())}}>
+                                            clearFieldsExceptCountryAndCommonCountryId()}}>
           <View style={styles.circle}>
             <Image
               source={AppImages.ARROW_LEFT}
@@ -210,6 +222,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
               errors.title &&
               <Text color={'red'}>required field</Text>
             }
+            editable={true}
           />
 
           <InputField
@@ -225,6 +238,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             errors.titleinArabic &&
             <Text color={'red'}>required field</Text>
           }
+          editable={true}
           />
 
           <TextField
@@ -303,6 +317,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             <Text>{placeAdInput.price != 0 && placeAdInput.price + ' USD'}</Text>
               </View>
             }
+            editable={true}
           />
 
           <InputField
@@ -318,6 +333,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
               errors.description &&
               <Text color={'red'}>required field</Text>
             }
+            editable={true}
           />
 
           <InputField
@@ -333,6 +349,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
               errors.descriptioninArabic &&
               <Text color={'red'}>required field</Text>
             }
+            editable={true}
           />
 
 <View>
@@ -368,6 +385,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
               errors.area &&
               <Text color={'red'}>required field</Text>
             }
+            editable={true}
           />
 
           <InputField
@@ -378,6 +396,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             value={placeAdInput.sub_area}
             onChange={(text)=>{setPlaceAdInput({...placeAdInput, sub_area:text})}}
             trailing={null}
+            editable={true}
           />
 
           <InputField
@@ -388,7 +407,10 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             value={placeAdInput.sub_area2}
             onChange={(text)=>{setPlaceAdInput({...placeAdInput, sub_area2:text})}}
             trailing={null}
+            editable={true}
           />
+
+          <AdsCountrySelect countryLists={countryLists?.country}/>
 
           <Checkbox
             label={'Price Negotiable'}

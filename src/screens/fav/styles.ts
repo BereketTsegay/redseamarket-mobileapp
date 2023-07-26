@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
  view:{
     borderRadius:4,
     elevation:4,
-    width:100,
+    width:105,
     margin:5,
     backgroundColor:'white'
  }

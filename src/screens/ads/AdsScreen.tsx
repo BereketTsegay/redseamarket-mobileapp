@@ -6,7 +6,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import styles from '../fav/styles';
 import AppImages from '../../constants/AppImages';
-import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, FlatList, ToastAndroid, TouchableOpacity } from 'react-native';
 import AppColors from '../../constants/AppColors';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,8 @@ import { RootState } from '../../../store';
 import { fetchAdList } from '../../api/ads/AdListSlice';
 import Header from '../../components/Header';
 import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
+import AppFonts from '../../constants/AppFonts';
+import { apiClient } from '../../api/apiClient';
 export type AdsScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'AdsScreen'
@@ -38,18 +40,44 @@ const AdsScreen: React.FC<Props> = () => {
 
     useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
-        dispatch(fetchAdList({requestBody: ''}));
+        list()
       });
   
       return unsubscribe;
     }, [navigation]);
+
+    const list = () => {
+      dispatch(fetchAdList({requestBody: ''}));
+    }
+
+    const AdsDelete = (id) => {
+      let request = JSON.stringify({
+        ads_id: id
+      })
+      apiClient( 'app/customer/ad/delete','POST',request)
+      .then(response=>{
+        if(response.data.status == 'success'){
+          list()
+          ToastAndroid.show(
+            JSON.stringify(response.data.message),
+            ToastAndroid.SHORT,
+          );
+        }
+        else{
+          ToastAndroid.show(
+            JSON.stringify(response.data.message),
+            ToastAndroid.SHORT,
+          );
+        }
+      })
+    }
 
 
   return (
     <View flex backgroundColor='#FFFFFF'>
       <Header/>
 
-        <View paddingH-30 paddingT-10 paddingB-70 flex>
+        <View paddingH-20 paddingT-10 paddingB-70 flex center>
           <Text style={styles.text}>My Ads</Text>
 
           {loadingAdLists ?
@@ -72,6 +100,13 @@ const AdsScreen: React.FC<Props> = () => {
                   : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price).toFixed())}</Text>
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.titleText}>{item.title}</Text>
                  <Text style={styles.cityText}>{item.area}</Text>
+                 <View row centerV style={{justifyContent:'space-between'}}>
+                 <Text style={[styles.titleText,{fontFamily:AppFonts.POPPINS_SEMIBOLD}]}>Status : 
+                 {item.status == 1 ? <Text color={'green'}> Accepted</Text> : item.status == 0 ? <Text color={'grey'}> Pending</Text> : <Text color={'red'}> Rejected</Text>}</Text>
+                 <TouchableOpacity onPress={()=>AdsDelete(item.id)}>
+                 <Image source={AppImages.DELETE} style={{width:18,height:18}}/>
+                 </TouchableOpacity>
+                 </View>
                  </View>
                 </View>
                 </TouchableOpacity>

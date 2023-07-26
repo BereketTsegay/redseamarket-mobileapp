@@ -17,6 +17,7 @@ export class PlaceAdRequest{
     sub_area2: String = '';
     negotiable: Boolean = false;
     featured: Number = 0;
+    adsCountry: AdsCountry[] = [];
 
     //Seller Information
     name: String = '';
@@ -60,4 +61,8 @@ export type Image = {
 export type Field = {
     field_id: string;
     value: any;
+}
+
+export type AdsCountry ={
+    id : Number;
 }

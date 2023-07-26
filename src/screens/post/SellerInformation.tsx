@@ -116,6 +116,10 @@ const SellerInformation: React.FC<Props> = () => {
             });
           });
 
+          placeAdInput.adsCountry.forEach((id) => {
+            formData.append('adsCountry[]', id);
+          });
+
           const fieldValueArray = placeAdInput.fieldValue;
 
           for (let i = 0; i < fieldValueArray.length; i++) {
@@ -137,10 +141,10 @@ const SellerInformation: React.FC<Props> = () => {
         JSON.stringify(PlaceAdData.message),
         ToastAndroid.SHORT,
       );
-      console.log(PlaceAdData,'success')
+      // console.log(PlaceAdData,'success')
       navigation.navigate(RouteNames.SuccessPage)
     } else {
-      console.log(PlaceAdData,'failure')
+      // console.log(PlaceAdData,'failure')
         ToastAndroid.show(
           JSON.stringify(PlaceAdData.message),
           ToastAndroid.SHORT,
@@ -182,6 +186,7 @@ const SellerInformation: React.FC<Props> = () => {
           errors.name &&
           <Text color={'red'}>required field</Text>
         }
+        editable={true}
           />
 
 <InputField
@@ -197,6 +202,7 @@ const SellerInformation: React.FC<Props> = () => {
               errors.email &&
               <Text color={'red'}>required field</Text>
             }
+            editable={true}
           />
 
 <InputField
@@ -207,6 +213,7 @@ const SellerInformation: React.FC<Props> = () => {
           value={placeAdInput.phone}
           onChange={(text)=>{setPlaceAdInput({...placeAdInput, phone:text})}}
           trailing={null}
+          editable={true}
           />
 
 <InputField
@@ -222,6 +229,7 @@ const SellerInformation: React.FC<Props> = () => {
           errors.address &&
           <Text color={'red'}>required field</Text>
         }
+        editable={true}
           />
           
           <Checkbox
@@ -233,13 +241,19 @@ const SellerInformation: React.FC<Props> = () => {
           color={'grey'}
           containerStyle={{marginBottom:20}}/>
 
+<View row marginB-20>
 <Checkbox
-          label={'Accept Terms & Conditions'}
-          labelStyle={[styles.fieldText,{color:'#006EFF'}]}
+          // label={'Accept Terms & Conditions'}
+          // labelStyle={[styles.fieldText,{color:'#006EFF'}]}
           value={terms}
           color={'grey'}
-          containerStyle={{marginBottom:20}}
           onValueChange={(value)=>setTerms(value)}/>
+          <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.TermsAndConditions)}>
+          <Text style={[styles.fieldText,{left:15}]}>Accept
+          <Text color={'#006EFF'}> Terms & Conditions</Text>
+          </Text>
+          </TouchableOpacity>
+          </View>
 
           <View row style={{justifyContent:'space-between'}}>
           <Button

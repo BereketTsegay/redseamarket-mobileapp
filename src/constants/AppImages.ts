@@ -27,6 +27,7 @@ const AppImages = {
     SUCCESS: require('../images/success.png'),
     UPLOAD: require('../images/upload.png'),
     DELETE: require('../images/delete.png'),
+    CALENDAR: require('../images/calendar.png'),
   };
   
   export default AppImages;

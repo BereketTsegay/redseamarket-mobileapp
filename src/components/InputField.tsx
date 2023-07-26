@@ -3,7 +3,7 @@ import { Incubator } from 'react-native-ui-lib';
 import AppStyles from '../constants/AppStyles';
 const {TextField} = Incubator
 
-const InputField = ({title,multiline,height,type,value,onChange,trailing}) => {
+const InputField = ({title,multiline,height,type,value,onChange,trailing,editable}) => {
     return(
       <TextField
           placeholder={title}
@@ -18,6 +18,7 @@ const InputField = ({title,multiline,height,type,value,onChange,trailing}) => {
           value={value}
           onChangeText={onChange}
           trailingAccessory={trailing}
+          editable={editable}
           />
     )
   }

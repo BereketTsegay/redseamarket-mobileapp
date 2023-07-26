@@ -75,8 +75,8 @@ const HomeScreen: React.FC<Props> = () => {
   //   return true;
   //   }
 
-    const handleCountrySelect = (countryId: number) => {
-      setPlaceAdInput({...placeAdInput, common_country_id:countryId})
+    const handleCountrySelect = (item) => {
+      setPlaceAdInput({...placeAdInput, common_country_id:item.id})
       setShowCountryModal(false);
     };
 

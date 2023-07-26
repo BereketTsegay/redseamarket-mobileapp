@@ -78,7 +78,7 @@ const ProfileScreen: React.FC<Props> = () => {
        <Text style={styles.subHeading}>Others</Text>
        <List image={AppImages.HEART} name={'Support'} onPress={null}/>
 
-        <List image={AppImages.HEART} name={'Report an issue'} onPress={null}/>
+        <List image={AppImages.HEART} name={'Terms & Conditions'} onPress={()=>navigation.navigate(RouteNames.TermsAndConditions)}/>
 
         <List image={AppImages.HEART} name={'Call Us'} onPress={null}/>
 

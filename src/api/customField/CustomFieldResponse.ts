@@ -32,4 +32,10 @@ export type Field = {
     created_at:            Date;
     updated_at:            Date;
     position:              string;
+    field_option:          Option[]
+}
+
+export type Option = {
+    id: number;
+    value: string;
 }

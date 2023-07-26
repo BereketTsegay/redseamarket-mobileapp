@@ -136,6 +136,7 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
               errors.size &&
               <Text color={'red'}>required field</Text>
             }
+            editable={true}
           />
 
           <InputField
@@ -151,6 +152,7 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
               errors.room &&
               <Text color={'red'}>required field</Text>
             }
+            editable={true}
           />
 
 <View row marginB-20>

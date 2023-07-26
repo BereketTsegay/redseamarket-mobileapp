@@ -20,7 +20,7 @@ const CountrySelectionModal: React.FC<Props> = ({ isVisible, countryLists, onSel
         <View style={{backgroundColor:'white',paddingHorizontal:20,paddingTop:40,paddingBottom:20,borderRadius:20}}>
         <SelectDropdown
             data={countryLists}
-            onSelect={(selectedItem) => onSelectCountry(selectedItem.id)}
+            onSelect={(selectedItem) => onSelectCountry(selectedItem)}
             defaultButtonText="Please select a Country"
             buttonTextAfterSelection={(selectedItem) => selectedItem.name}
             rowTextForSelection={(item) => item.name}
