@@ -18,6 +18,8 @@ import AppColors from '../../constants/AppColors';
 import ItemDropdown from '../../components/ItemDropdown';
 import InputField from '../../components/InputField';
 import styles from './styles';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 const {TextField} = Incubator;
 export type MyJobProfileNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -33,6 +35,13 @@ interface Props {}
 
 const MyJobProfile: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<MyJobProfileNavigationProps>();
+  const {id} = route.params;
+  const { jobProfileList} = useSelector(
+    (state: RootState) => state.JobProfileList,
+  );
+  const {countryLists} = useSelector(
+    (state: RootState) => state.CountryList,
+  );
 
   const openDocumentFile = async () => {
     try {
@@ -66,7 +75,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
           <InputField
-            title={'Job Title'}
+            title={jobProfileList?.data == null ? 'Job Title' : jobProfileList.data.title}
             multiline={false}
             height={45}
             type={'default'}
@@ -77,7 +86,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           />
 
 <InputField
-            title={'Add work experience (optional)'}
+            title={jobProfileList?.data == null ? 'Add work experience (optional)' : jobProfileList.data.work_experience}
             multiline={false}
             height={45}
             type={'numeric'}
@@ -99,7 +108,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           />
 
 <InputField
-            title={'Add Education'}
+            title={jobProfileList?.data == null ? 'Add Education' : jobProfileList.data.education}
             multiline={false}
             height={45}
             type={'numeric'}
@@ -110,7 +119,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           />
 
 <InputField
-            title={'Add Certifications'}
+            title={jobProfileList?.data == null ? 'Add Certifications' : jobProfileList.data.certificate}
             multiline={false}
             height={45}
             type={'numeric'}
@@ -121,7 +130,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           />
 
 <InputField
-            title={'Add Language Known'}
+            title={jobProfileList?.data == null ? 'Add Language Known' : jobProfileList.data.language}
             multiline={false}
             height={45}
             type={'numeric'}
@@ -132,7 +141,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           />
 
 <InputField
-            title={'Add Skills'}
+            title={jobProfileList?.data == null ? 'Add Skills' : jobProfileList.data.skils}
             multiline={false}
             height={45}
             type={'numeric'}
@@ -182,12 +191,12 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
       
           <ItemDropdown
             value={'Select Country'}
-            data={null}
+            data={countryLists}
             add={null}
           />
 
 <InputField
-            title={'Overview'}
+            title={jobProfileList?.data == null ? 'Overview' : jobProfileList.data.overview}
             multiline={true}
             height={100}
             type={'numeric'}
@@ -199,13 +208,13 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
     
           <ItemDropdown
             value={'Select State'}
-            data={null}
+            data={jobProfileList?.data == null ? null : jobProfileList.data.state_id}
             add={null}
           />
 
 <ItemDropdown
             value={'Select City'}
-            data={null}
+            data={jobProfileList?.data == null ? null : jobProfileList.data.city_id}
             add={null}
           />
 

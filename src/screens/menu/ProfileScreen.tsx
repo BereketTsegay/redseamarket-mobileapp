@@ -37,7 +37,6 @@ const ProfileScreen: React.FC<Props> = () => {
     dispatch(fetchJobProfileList({ requestBody: '' }));
   }, []);
 
-  console.log(jobProfileList)
   const Logout = async () => {
     await AsyncStorage.removeItem(AppStrings.ACCESS_TOKEN);
     navigation.replace(RouteNames.WelcomeScreen)
@@ -71,7 +70,7 @@ const ProfileScreen: React.FC<Props> = () => {
             jobProfileList?.data ?
             navigation.navigate(RouteNames.MyJobDetails)
             :
-            navigation.navigate(RouteNames.MyJobProfile)
+            navigation.navigate(RouteNames.MyJobProfile,{id:null})
           }} />
 
           <List image={AppImages.HEART} name={'Favourites'} onPress={() => navigation.navigate(RouteNames.FavoritesScreen)} />
