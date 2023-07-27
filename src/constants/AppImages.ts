@@ -28,6 +28,13 @@ const AppImages = {
     UPLOAD: require('../images/upload.png'),
     DELETE: require('../images/delete.png'),
     CALENDAR: require('../images/calendar.png'),
+    CALL: require('../images/call.png'),
+    CITY: require('../images/city.png'),
+    ISSUE: require('../images/issue.png'),
+    LANG: require('../images/lang.png'),
+    MYADS: require('../images/myads.png'),
+    PROFILE: require('../images/profile.png'),
+    SUPPORT: require('../images/support.png'),
   };
   
   export default AppImages;

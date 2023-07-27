@@ -15,6 +15,7 @@ import {
   Dashboard,
   Details_Ad,
 } from './home/DashBoardResponse';
+import { JobSaveResponse } from './jobs/JobProfileSaveSlice';
 import { JobResponse } from './jobs/JobResponse';
 import {LoginResponse} from './login/LoginCreateSlice';
 import { Motor } from './motor/MotorResponse';
@@ -486,6 +487,29 @@ export const fetchJobProfileList = async (
 ): Promise<NetworkResponse<JobResponse | null>> => {
   const response = await apiClient(
     'app/get/jobprofile',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+
+//API FOR CREATING JOB PROFILE
+export const createJobProfile = async (
+  requestBody: any,
+): Promise<NetworkResponse<JobSaveResponse | null>> => {
+  const response = await ApiFormData(
+    'app/save/jobprofile',
     'POST',
     requestBody,
   );

@@ -23,6 +23,7 @@ import MyJobProfile from '../screens/jobs/MyJobProfile';
 import TermsAndConditions from '../screens/terms/TermsAndConditions';
 import MyJobDetails from '../screens/jobs/MyJobDetails';
 import { CommonProvider } from '../api/commonContext';
+import { JobProvider } from '../api/jobs/JobContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -77,7 +78,7 @@ const AdPost = () => {
 
 const JobProfileAdd = () => {
   return(
-    <PlaceAdProvider>
+    <JobProvider>
     <Stack.Navigator
     screenOptions={{
       headerShown: false
@@ -85,7 +86,7 @@ const JobProfileAdd = () => {
      <Stack.Screen name={RouteNames.MyJobProfile} component={MyJobProfile}/>
      <Stack.Screen name={RouteNames.MyJobDetails} component={MyJobDetails}/>
   </Stack.Navigator>
-  </PlaceAdProvider>
+  </JobProvider>
   )
 }
 

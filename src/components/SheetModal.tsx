@@ -4,26 +4,34 @@ import {
   Dimensions,
   PanResponder,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import AppColors from '../constants/AppColors';
 import { Button, Checkbox, Image, Text, View } from 'react-native-ui-lib';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import InputField from './InputField';
 import AppStyles from '../constants/AppStyles';
 import { RouteNames } from '../navigation';
 import { useNavigation } from '@react-navigation/native';
 import AppImages from '../constants/AppImages';
+import moment from 'moment';
 
 const {height: windowHeight} = Dimensions.get('window');
 
 type Props = {
   closeSheet : any;
-  value? : any;
-  tip? : any
+  set: any
 }
 
-const SheetModal = ({closeSheet, value,tip}: Props) => {
+const SheetModal = ({closeSheet, set}: Props) => {
     const navigation = useNavigation();
   const bottomSheetRef = useRef(null);
+  const [fromDateVisible, setFromVisible] = useState(false)
+  const [toDateVisible, setToVisible] = useState(false)
+  const [currentlyWorking, setCurrentlyWorking] = useState(false);
+  const [company_name, setCompanyName] = useState('')
+  const [fromDate, setFrom] = useState('')
+  const [toDate, setTo] = useState('')
   const translateY = useRef(new Animated.Value(windowHeight)).current;
 
   useEffect(() => {
@@ -71,6 +79,16 @@ const SheetModal = ({closeSheet, value,tip}: Props) => {
     }),
   ).current;
 
+  const FromDateConfirm = (date) => {
+    setFromVisible(false);
+    setFrom(moment(date).format('DD-MM-YYYY'))
+  };
+
+  const ToDateConfirm = (date) => {
+    setToVisible(false);
+    setTo(moment(date).format('DD-MM-YYYY'))
+  };
+
   return (
     <Animated.View
       style={[
@@ -84,56 +102,75 @@ const SheetModal = ({closeSheet, value,tip}: Props) => {
        <InputField
             title={'Company name'}
             height={40}
-            type={'numeric'}
-            value={null}
-            onChange={null}
-            editable={true}
+            value={company_name}
+            onChange={(text)=>setCompanyName(text)}
           />
 
 <Checkbox
                   label={'Currently working in this company'}
                   labelStyle={AppStyles.fieldText}
-                //   value={placeAdInput.textValue}
+                  value={currentlyWorking}
+                  onValueChange={(value) => {
+                    setCurrentlyWorking(value);
+                    if (value) {
+                      setTo('Present'); 
+                    }
+                  }}
                   color={'grey'}
-                //   onValueChange={value =>
-                //     updateFieldValue(item.field.id, value)
-                //   }
                 />
 
-                <View row style={{justifyContent:'space-between'}}>
+              <View marginT-20>
+                <TouchableOpacity onPress={()=>setFromVisible(true)}>
                 <InputField
                   title={"from date"}
-                  multiline={false}
                   height={45}
-                  type={'default'}
-                  editable={true}
-                  trailing={
-                    <View>
-                    <Image source={AppImages.CALENDAR}/>
-                    </View>
-                  }
-                />
-
-<InputField
-                  title={'to date'}
-                  multiline={false}
-                  height={45}
-                  type={'default'}
-                  value={date}
-                  onChange={null}
+                  value={fromDate}
+            onChange={null}
                   editable={false}
                   trailing={
                     <View>
+                       <DateTimePickerModal
+                  isVisible={fromDateVisible}
+                  mode="date"
+                  onConfirm={FromDateConfirm}
+                  onCancel={() => setFromVisible(false)}
+                />
                     <Image source={AppImages.CALENDAR}/>
                     </View>
                   }
                 />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={()=>setToVisible(!currentlyWorking)}>
+<InputField
+                  title={'to date'}
+                  height={45}
+                  value={toDate}
+                  onChange={null}
+                  editable={false}
+                  trailing={
+                    
+                      !currentlyWorking && (
+                        <View>
+                       <DateTimePickerModal
+                  isVisible={toDateVisible}
+                  mode="date"
+                  onConfirm={ToDateConfirm}
+                  onCancel={() => setToVisible(false)}
+                />
+                      
+                    <Image source={AppImages.CALENDAR}/>
+                    </View>
+                  )}
+                />
+                </TouchableOpacity>
                 </View>
 
 <Button
             label={'Save'}
-            style={{backgroundColor: AppColors.lightBlue,marginTop:20}}
-            onPress={() => navigation.navigate(RouteNames.SellerInformation)}
+            style={{backgroundColor: AppColors.lightBlue}}
+            onPress={()=>{set(company_name,fromDate,toDate)
+              closeBottomSheet()}}
           />
     </Animated.View>
   );
@@ -145,12 +182,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
     backgroundColor: 'white',
-    borderTopEndRadius: 20,
-    borderTopStartRadius: 20,
+    borderTopEndRadius: 30,
+    borderTopStartRadius: 30,
     alignSelf:'center',
     padding:20,
-    borderColor:'grey',
-    borderWidth:1
+    // borderColor:'grey',
+    // borderWidth:1,
+    elevation:20
   },
 });
 

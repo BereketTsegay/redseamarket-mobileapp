@@ -45,8 +45,8 @@ const ProfileScreen: React.FC<Props> = () => {
   const List = ({ image, name, onPress }) => {
     return (
       <TouchableOpacity onPress={onPress}>
-        <View row paddingV-5 style={{ justifyContent: 'space-between' }}>
-          <Image source={image} />
+        <View row paddingV-5 centerV style={{ justifyContent: 'space-between' }}>
+          <Image source={image} style={{width:20,height:20}}/>
           <View flex left marginL-20>
             <Text style={styles.title}>{name}</Text>
           </View>
@@ -62,9 +62,9 @@ const ProfileScreen: React.FC<Props> = () => {
       <View flex >
         <View margin-20>
           <Text style={styles.subHeading}>My Account</Text>
-          <List image={AppImages.HEART} name={'Profile'} onPress={null} />
+          <List image={AppImages.PROFILE} name={'Profile'} onPress={null} />
 
-          <List image={AppImages.HEART} name={'My Ads'} onPress={() => navigation.navigate(RouteNames.AdsScreen)} />
+          <List image={AppImages.MYADS} name={'My Ads'} onPress={() => navigation.navigate(RouteNames.AdsScreen)} />
 
           <List image={AppImages.HEART} name={'My job Profile'} onPress={() => {
             jobProfileList?.data ?
@@ -80,9 +80,9 @@ const ProfileScreen: React.FC<Props> = () => {
 
         <View margin-20>
           <Text style={styles.subHeading}>Settings</Text>
-          <List image={AppImages.HEART} name={'City'} onPress={null} />
+          <List image={AppImages.CITY} name={'City'} onPress={null} />
 
-          <List image={AppImages.HEART} name={'Language'} onPress={null} />
+          <List image={AppImages.LANG} name={'Language'} onPress={null} />
         </View>
 
 
@@ -90,11 +90,11 @@ const ProfileScreen: React.FC<Props> = () => {
 
         <View margin-20>
           <Text style={styles.subHeading}>Others</Text>
-          <List image={AppImages.HEART} name={'Support'} onPress={null} />
+          <List image={AppImages.SUPPORT} name={'Support'} onPress={null} />
 
           <List image={AppImages.HEART} name={'Terms & Conditions'} onPress={() => navigation.navigate(RouteNames.TermsAndConditions)} />
 
-          <List image={AppImages.HEART} name={'Call Us'} onPress={null} />
+          <List image={AppImages.CALL} name={'Call Us'} onPress={null} />
 
           <List image={AppImages.HEART} name={'Logout'} onPress={Logout} />
         </View>

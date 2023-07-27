@@ -19,8 +19,6 @@ import AppImages from '../../constants/AppImages';
 import styles from './styles';
 import AppColors from '../../constants/AppColors';
 import InputField from '../../components/InputField';
-import ItemDropdown from '../../components/ItemDropdown';
-import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {PlaceAdContext} from '../../api/placeAd/PlaceAdContext';

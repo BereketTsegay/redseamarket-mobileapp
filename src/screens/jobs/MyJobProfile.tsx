@@ -11,16 +11,23 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {FlatList, ImageBackground, Modal, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import {FlatList, ImageBackground, Modal, ScrollView, TextInput, ToastAndroid, TouchableOpacity} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import AppImages from '../../constants/AppImages';
 import AppColors from '../../constants/AppColors';
 import ItemDropdown from '../../components/ItemDropdown';
 import InputField from '../../components/InputField';
 import styles from './styles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import SheetModal from '../../components/SheetModal';
+import { JobContext } from '../../api/jobs/JobContext';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { fetchStateList } from '../../api/country/StateListSlice';
+import { fetchCityList } from '../../api/country/CityListSlice';
+import { createJobProfile, reset } from '../../api/jobs/JobProfileSaveSlice';
+import { JobRequest } from '../../api/jobs/JobRequest';
+import moment from 'moment';
 const {TextField} = Incubator;
 export type MyJobProfileNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -39,12 +46,26 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
   const [fileSizeError, setFileSizeError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<any | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false)
-  const { jobProfileList} = useSelector(
-    (state: RootState) => state.JobProfileList,
-  );
-  const {countryLists} = useSelector(
-    (state: RootState) => state.CountryList,
-  );
+  const {jobInput, setJobInput} = useContext(JobContext)
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const { jobSaveData,loadingSavedJob,jobSaveError} = useSelector((state: RootState) => state.JobProfileSave);
+  const {countryLists} = useSelector((state: RootState) => state.CountryList);
+  const {stateLists} = useSelector((state: RootState) => state.StateList);
+  const {cityLists} = useSelector((state: RootState) => state.CityList);
+
+  useEffect(() => {
+    let request = JSON.stringify({
+      country: jobInput.country_id,
+    });
+    dispatch(fetchStateList({requestBody: request}));
+  }, [jobInput.country_id]);
+
+  useEffect(() => {
+    let request = JSON.stringify({
+      state: jobInput.state_id,
+    });
+    dispatch(fetchCityList({requestBody: request}));
+  }, [jobInput.state_id]);
 
 
   const openDocumentFile = async () => {
@@ -59,6 +80,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
        } else {
          setFileSizeError(null);
          setSelectedFile(file[0].name);
+         setJobInput({...jobInput, cv_file:file[0].uri})
        }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -70,6 +92,91 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
   const closeSheet = () => {
     setSheetOpen(false)
   }
+
+  const setCountry = (value: any) => {
+    setJobInput({...jobInput, country_id: value});
+  };
+
+  const setState = (value: any) => {
+    setJobInput({...jobInput, state_id: value});
+  };
+  const setCity = (value: any) => {
+    setJobInput({...jobInput, city_id: value});
+  };
+
+  const WorkExperience = (name: any,from: any,to: any) => {
+    setJobInput({
+      ...jobInput,
+      company: [
+        ...jobInput.company,
+        {from_date: from, to_date: to, company: name},
+      ],
+    });
+  }
+
+  const deleteCompany = (index: number) => {
+    const updatedCompanies = jobInput.company.filter(
+      (_, idx) => idx !== index
+    );
+    setJobInput({
+      ...jobInput,
+      company: updatedCompanies,
+    });
+  };
+
+  const submit = () => {
+        const formData = new FormData();
+      
+        const keysToAppend = [
+          'education',
+          'certificate',
+          'language',
+          'skils',
+          'overview',
+          'country_id',
+          'state_id',
+          'city_id',
+          'work_experience',
+          'title',
+        ];
+      
+        keysToAppend.forEach((key) => {
+          formData.append(key, jobInput[key] ?? '');
+        });
+            formData.append('cv_file', {
+              uri: jobInput.cv_file,
+              name: 'document.pdf',
+              type: 'application/pdf',
+            });
+
+          for (let i = 0; i < jobInput.company.length; i++) {
+            formData.append(`company[${i}][from_date]`, moment(jobInput.company[i].from_date, "DD-MM-YYYY").format('YYYY-MM'));
+            formData.append(`company[${i}][to_date]`, jobInput.company[i].to_date == 'Present' ? jobInput.company[i].to_date : moment(jobInput.company[i].to_date, "DD-MM-YYYY").format('YYYY-MM'));
+            formData.append(`company[${i}][company]`, jobInput.company[i].company);
+          }
+        // console.log(formData, '-------------------------');
+        dispatch(createJobProfile({requestBody: formData}))
+        .then(() => {
+          dispatch(reset());
+          setJobInput(new JobRequest())
+        })
+        .catch((err: any) => console.log(err));
+    }
+
+
+  if (jobSaveData != null) {
+    console.log(jobSaveData)
+    if (!loadingSavedJob && !jobSaveError && jobSaveData.status == 'success') {
+      navigation.replace('JobProfile',{screen:RouteNames.MyJobDetails})
+    } else {
+      console.log(jobSaveData,'failure')
+        ToastAndroid.show(
+          JSON.stringify(jobSaveData.errors[0]),
+          ToastAndroid.SHORT,
+        );
+      }
+     
+    }
 
   return (
     <View flex backgroundColor="white" padding-20>
@@ -89,25 +196,19 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
           <InputField
-            title={jobProfileList?.data == null ? 'Job Title' : jobProfileList.data.title}
-            multiline={false}
+            title={'Job Title'}
             height={45}
             type={'default'}
-            value={null}
-            onChange={null}
-            trailing={null}
-            editable={true}
+            value={jobInput.title}
+            onChange={(text)=>setJobInput({...jobInput, title: text})}
           />
 
 <InputField
-            title={jobProfileList?.data == null ? 'Add work experience (optional)' : jobProfileList.data.work_experience}
-            multiline={false}
+            title={'Add work experience (optional)'}
             height={45}
             type={'numeric'}
-            value={null}
-            onChange={null}
-            trailing={null}
-            editable={true}
+            value={jobInput.work_experience}
+            onChange={(text)=>setJobInput({...jobInput, work_experience: text})}
           />
 
         <TouchableOpacity onPress={()=>setSheetOpen(!sheetOpen)}>
@@ -119,48 +220,43 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           </View>
           </TouchableOpacity>
 
+          {jobInput.company.map((companyData, index) => (
+        <View key={index} paddingV-10>
+          <Text>Company: {companyData.company}</Text>
+          <Text>From: {companyData.from_date}</Text>
+          <Text>To: {companyData.to_date}</Text>
+          <TouchableOpacity onPress={() => deleteCompany(index)}>
+            <Text style={{ color: 'red' }}>Delete</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
+
 <InputField
-            title={jobProfileList?.data == null ? 'Add Education' : jobProfileList.data.education}
-            multiline={false}
+            title={'Add Education'}
             height={45}
-            type={'numeric'}
-            value={null}
-            onChange={null}
-            trailing={null}
-            editable={true}
+            value={jobInput.education}
+            onChange={(text)=>setJobInput({...jobInput, education: text})}
           />
 
 <InputField
-            title={jobProfileList?.data == null ? 'Add Certifications' : jobProfileList.data.certificate}
-            multiline={false}
+            title={'Add Certifications'}
             height={45}
-            type={'numeric'}
-            value={null}
-            onChange={null}
-            trailing={null}
-            editable={true}
+            value={jobInput.certificate}
+            onChange={(text)=>setJobInput({...jobInput, certificate: text})}
           />
 
 <InputField
-            title={jobProfileList?.data == null ? 'Add Language Known' : jobProfileList.data.language}
-            multiline={false}
+            title={'Add Language Known'}
             height={45}
-            type={'numeric'}
-            value={null}
-            onChange={null}
-            trailing={null}
-            editable={true}
+            value={jobInput.language}
+            onChange={(text)=>setJobInput({...jobInput, language: text})}
           />
 
 <InputField
-            title={jobProfileList?.data == null ? 'Add Skills' : jobProfileList.data.skils}
-            multiline={false}
+            title={'Add Skills'}
             height={45}
-            type={'numeric'}
-            value={null}
-            onChange={null}
-            trailing={null}
-            editable={true}
+            value={jobInput.skils}
+            onChange={(text)=>setJobInput({...jobInput, skils: text})}
           />
           <View marginB-20>
             <TouchableOpacity onPress={()=>openDocumentFile()}>
@@ -188,7 +284,8 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             {selectedFile && (
             <View row style={{borderColor:'grey',borderWidth:1,padding:5,width:'50%',borderRadius:5}}>
             <Text>{selectedFile}</Text>
-            <TouchableOpacity onPress={()=>setSelectedFile(null)}>
+            <TouchableOpacity onPress={()=>{setSelectedFile(null)
+                                            setJobInput({...jobInput, cv_file:null})}}>
             <Image source={AppImages.DELETE} style={{left:10, backgroundColor: 'white' }} />
             </TouchableOpacity>
           </View>
@@ -199,42 +296,39 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
       
           <ItemDropdown
             value={'Select Country'}
-            data={countryLists}
-            add={null}
+            data={countryLists?.country}
+            add={setCountry}
           />
 
 <InputField
-            title={jobProfileList?.data == null ? 'Overview' : jobProfileList.data.overview}
-            multiline={true}
+            title={'Overview'}
             height={100}
-            type={'numeric'}
-            value={null}
-            onChange={null}
-            trailing={null}
-            editable={true}
+            value={jobInput.overview}
+            onChange={(text)=>setJobInput({...jobInput, overview: text})}
           />
     
           <ItemDropdown
             value={'Select State'}
-            data={jobProfileList?.data == null ? null : jobProfileList.data.state_id}
-            add={null}
+            data={stateLists?.state}
+            add={setState}
           />
 
 <ItemDropdown
             value={'Select City'}
-            data={jobProfileList?.data == null ? null : jobProfileList.data.city_id}
-            add={null}
+            data={cityLists?.city}
+            add={setCity}
           />
 
           <Button
             label={'Submit'}
             style={{backgroundColor: AppColors.lightBlue}}
+            onPress={submit}
           />
         </View>
         </View>
       </ScrollView>
 
-      {sheetOpen && <SheetModal closeSheet={closeSheet}/>}
+      {sheetOpen && <SheetModal closeSheet={closeSheet} set={WorkExperience}/>}
     </View>
   );
 };
