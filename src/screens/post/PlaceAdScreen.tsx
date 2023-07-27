@@ -175,11 +175,11 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
   };
 
   const clearFieldsExceptCountryAndCommonCountryId = () => {
-    const {common_country_id } = placeAdInput;
-    const newPlaceAdInput = { common_country_id };
+    const { category, subcategory } = placeAdInput;
+    const newPlaceAdInput = { category, subcategory };
   
     for (const key in placeAdInput) {
-      if (key !== 'common_country_id') {
+      if (key !== 'category' && key !== 'subcategory') {
         newPlaceAdInput[key] = typeof placeAdInput[key] === 'number' ? 0 : '';
       }
     }

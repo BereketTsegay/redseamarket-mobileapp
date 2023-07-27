@@ -14,6 +14,7 @@ import { createAd, reset } from '../../api/placeAd/PlaceAdSlice';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
+import { PlaceAdRequest } from '../../api/placeAd/PlaceAdRequest';
 const {TextField} = Incubator;
 export type SellerInformationNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -130,6 +131,7 @@ const SellerInformation: React.FC<Props> = () => {
         dispatch(createAd({requestBody: formData}))
         .then(() => {
           dispatch(reset());
+          setPlaceAdInput(new PlaceAdRequest())
         })
         .catch((err: any) => console.log(err));
     }

@@ -11,7 +11,7 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {FlatList, ImageBackground, ScrollView, TouchableOpacity} from 'react-native';
+import {FlatList, ImageBackground, Modal, ScrollView, TextInput, TouchableOpacity} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import AppImages from '../../constants/AppImages';
 import AppColors from '../../constants/AppColors';
@@ -20,6 +20,7 @@ import InputField from '../../components/InputField';
 import styles from './styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import SheetModal from '../../components/SheetModal';
 const {TextField} = Incubator;
 export type MyJobProfileNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -35,7 +36,9 @@ interface Props {}
 
 const MyJobProfile: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<MyJobProfileNavigationProps>();
-  const {id} = route.params;
+  const [fileSizeError, setFileSizeError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<any | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false)
   const { jobProfileList} = useSelector(
     (state: RootState) => state.JobProfileList,
   );
@@ -43,12 +46,20 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
     (state: RootState) => state.CountryList,
   );
 
+
   const openDocumentFile = async () => {
     try {
-      const imgs = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images],
+      const file = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
         allowMultiSelection: true,
       });
+       const maxSizeInBytes = 500 * 1024; // 500kb in bytes
+       if (file.some((item) => item.size > maxSizeInBytes)) {
+         setFileSizeError('File size exceeds 500kb limit');
+       } else {
+         setFileSizeError(null);
+         setSelectedFile(file[0].name);
+       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         throw err;
@@ -56,6 +67,9 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
     }
   };
 
+  const closeSheet = () => {
+    setSheetOpen(false)
+  }
 
   return (
     <View flex backgroundColor="white" padding-20>
@@ -96,16 +110,14 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             editable={true}
           />
 
-<InputField
-            title={'Add Company'}
-            multiline={false}
-            height={45}
-            type={'numeric'}
-            value={null}
-            onChange={null}
-            trailing={null}
-            editable={true}
-          />
+        <TouchableOpacity onPress={()=>setSheetOpen(!sheetOpen)}>
+          <View centerV style={styles.companyView}>
+            <Text style={styles.fieldText}>Add Company</Text>
+            <View style={styles.addCircle}>
+            <Image source={AppImages.ADD} tintColor={AppColors.lightBlue} style={{width:12,height:12}}/>
+            </View>
+          </View>
+          </TouchableOpacity>
 
 <InputField
             title={jobProfileList?.data == null ? 'Add Education' : jobProfileList.data.education}
@@ -161,6 +173,9 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
                 {borderStyle: 'dashed', justifyContent: 'space-between'},
               ]}>
               <Text style={styles.fieldText}>Upload Resume</Text>
+              {fileSizeError && (
+          <Text style={{ color: 'red', fontSize: 8 }}>{fileSizeError}</Text>
+        )}
               <Image
                 source={AppImages.UPLOAD}
                 tintColor={AppColors.lightBlue}
@@ -170,21 +185,14 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             <Text style={{color: 'red', fontSize: 8}}>
               *Maximum 500kb file size are allowed
             </Text>
-            {/* {placeAdInput.image.length != 0 &&
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View row>
-           {placeAdInput.image.map((file,index)=>(
-            <TouchableOpacity 
-            onPress={()=>deleteImageAtIndex(index)} 
-            key={index}>
-            <ImageBackground source={{uri:file}} style={{width:60,height:60,marginHorizontal:5}}>
-              <Image source={AppImages.DELETE} style={{alignSelf:'flex-end',backgroundColor:'white'}}/>
-              </ImageBackground>
-              </TouchableOpacity>
-              ))}
-              </View>
-              
-              </ScrollView>} */}
+            {selectedFile && (
+            <View row style={{borderColor:'grey',borderWidth:1,padding:5,width:'50%',borderRadius:5}}>
+            <Text>{selectedFile}</Text>
+            <TouchableOpacity onPress={()=>setSelectedFile(null)}>
+            <Image source={AppImages.DELETE} style={{left:10, backgroundColor: 'white' }} />
+            </TouchableOpacity>
+          </View>
+      )}
           </View>
           
           <View>
@@ -225,6 +233,8 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
         </View>
         </View>
       </ScrollView>
+
+      {sheetOpen && <SheetModal closeSheet={closeSheet}/>}
     </View>
   );
 };

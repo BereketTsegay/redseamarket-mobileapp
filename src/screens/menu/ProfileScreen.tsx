@@ -68,9 +68,9 @@ const ProfileScreen: React.FC<Props> = () => {
 
           <List image={AppImages.HEART} name={'My job Profile'} onPress={() => {
             jobProfileList?.data ?
-            navigation.navigate(RouteNames.MyJobDetails)
+            navigation.navigate('JobProfile',{screen:RouteNames.MyJobDetails})
             :
-            navigation.navigate(RouteNames.MyJobProfile,{id:null})
+            navigation.navigate('JobProfile',{screen:RouteNames.MyJobProfile})
           }} />
 
           <List image={AppImages.HEART} name={'Favourites'} onPress={() => navigation.navigate(RouteNames.FavoritesScreen)} />

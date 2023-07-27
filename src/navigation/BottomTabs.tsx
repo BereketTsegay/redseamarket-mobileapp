@@ -43,7 +43,7 @@ const BottomTabs: React.FC<Props> = () => {
 
   const handleCenterButtonClick = () => {
     // Perform navigation to another screen here
-    navigation.navigate(RouteNames.PostListScreen);
+    navigation.navigate('PostScreen');
   };
   
   const _renderIcon = (routeName, selectedTab) => {

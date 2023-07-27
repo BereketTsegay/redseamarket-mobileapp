@@ -13,7 +13,7 @@ import { fetchFavList } from '../../api/favorites/FavListSlice';
 import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import AppColors from '../../constants/AppColors';
 import Header from '../../components/Header';
-import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
+import { CommonContext } from '../../api/commonContext';
 export type FavoritesScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'FavoritesScreen'
@@ -29,7 +29,7 @@ interface Props {}
 const FavoritesScreen: React.FC<Props> = () => {
   const navigation = useNavigation<FavoritesScreenNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
+  const {commonInput, setCommonInput} = useContext(CommonContext)
   const {favLists,loadingFavLists} = useSelector(
     (state: RootState) => state.FavList)
     const {currencyLists} = useSelector(
@@ -61,7 +61,7 @@ const FavoritesScreen: React.FC<Props> = () => {
     renderItem={({item})=>{
       return(
         <TouchableOpacity onPress={()=>{
-            navigation.navigate(RouteNames.DetailsScreen,{adId:item.ads_id,countryId:placeAdInput.common_country_id})
+            navigation.navigate(RouteNames.DetailsScreen,{adId:item.ads_id,countryId:commonInput.common_country_id})
           }}>
               <View style={styles.view}>
                  <Image source={item.ads.image[0].image == null || item.ads.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ads.image[0].image}} 

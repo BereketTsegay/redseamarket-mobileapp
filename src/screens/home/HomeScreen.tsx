@@ -17,7 +17,7 @@ import AppFonts from '../../constants/AppFonts';
 import { fetchCountryList } from '../../api/country/CountryListSlice';
 import { fetchCurrencyList } from '../../api/currency/CurrencyListSlice';
 import CountrySelectionModal from '../../components/CountrySelectionModal';
-import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
+import { CommonContext } from '../../api/commonContext';
 const {TextField} = Incubator;
 export type HomeScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -34,7 +34,7 @@ interface Props {}
 const HomeScreen: React.FC<Props> = () => {
   const navigation = useNavigation<HomeScreenNavigationProps>();
   const [lang, setLang] = useState([{code:'English',name:'UK', id:1}]);
-  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
+  const {commonInput, setCommonInput} = useContext(CommonContext)
   const [showCountryModal, setShowCountryModal] = useState(true);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {dashboardLists,loadingDashBoardList} = useSelector(
@@ -51,24 +51,24 @@ const HomeScreen: React.FC<Props> = () => {
 
   useEffect(() => {
     let request = JSON.stringify({
-      country: placeAdInput.common_country_id
+      country: commonInput.common_country_id
     })
     dispatch(fetchDashBoardList({requestBody: request}));
-  }, [placeAdInput.common_country_id]);
+  }, [commonInput.common_country_id]);
 
   useEffect(() => {
     let request = JSON.stringify({
-      country: placeAdInput.common_country_id
+      country: commonInput.common_country_id
     })
     dispatch(fetchCurrencyList({requestBody: request}));
-  }, [placeAdInput.common_country_id]);
+  }, [commonInput.common_country_id]);
 
   useEffect(() => {
     dispatch(fetchCountryList({requestBody: ''}));
   }, []);
 
   // function isValidate(): boolean {
-  //   if(placeAdInput.common_country_id == null){
+  //   if(commonInput.common_country_id == null){
   //     Alert.alert('Please Select a Country')
   //     return false;
   //   }
@@ -76,7 +76,7 @@ const HomeScreen: React.FC<Props> = () => {
   //   }
 
     const handleCountrySelect = (item) => {
-      setPlaceAdInput({...placeAdInput, common_country_id:item.id})
+      setCommonInput({...commonInput, common_country_id:item.id})
       setShowCountryModal(false);
     };
 
@@ -85,7 +85,7 @@ const HomeScreen: React.FC<Props> = () => {
       <SelectDropdown
         data={data}
         onSelect={(selectedItem, index) => {
-          setPlaceAdInput({...placeAdInput, common_country_id:selectedItem.id})
+          setCommonInput({...commonInput, common_country_id:selectedItem.id})
         }}
         defaultButtonText={value}
         buttonTextAfterSelection={(selectedItem, index) => {
@@ -150,7 +150,7 @@ const HomeScreen: React.FC<Props> = () => {
     return (
       <View center key={index} style={{ flex: 1, margin: 10 }}>
          <TouchableOpacity onPress={()=>{
-              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,countryId:placeAdInput.common_country_id})
+              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,countryId:commonInput.common_country_id})
             }}>
         <Image
           source={
@@ -180,7 +180,7 @@ const HomeScreen: React.FC<Props> = () => {
           <View row centerV style={{justifyContent:'space-between'}}>
           <Text style={styles.categoryText}>Popular in {item.name}</Text>
           <TouchableOpacity onPress={()=>{
-              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,countryId:placeAdInput.common_country_id})
+              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,countryId:commonInput.common_country_id})
             }}>
           <Image source={AppImages.ARROW_RIGHT} style={{height:10,width:15}} tintColor={'black'}/>
           </TouchableOpacity>
@@ -189,7 +189,7 @@ const HomeScreen: React.FC<Props> = () => {
             <View row marginV-20>
           {item.ads.map((item,index)=>(
             <TouchableOpacity onPress={()=>{
-              navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:placeAdInput.common_country_id})
+              navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:commonInput.common_country_id})
             }}>
               <View backgroundColor='white' key={index} marginR-20 style={{elevation:4,width:100}}>
                  <Image source={item.ad_image == null ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ad_image?.image}} 

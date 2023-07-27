@@ -150,7 +150,7 @@ const MyJobDetails: React.FC<Props> = () => {
           </View>
           </ScrollView>
 
-          <Button label={'Edit'} style={styles.button} onPress={()=>navigation.navigate(RouteNames.MyJobProfile,{id:jobProfileList?.data.id})}/>
+          <Button label={'Edit'} style={styles.button} onPress={()=>navigation.navigate('JobProfile',{screen: RouteNames.MyJobProfile})}/>
         </View>
 }
       </View>

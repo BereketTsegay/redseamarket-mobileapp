@@ -22,6 +22,7 @@ import { PlaceAdProvider } from '../api/placeAd/PlaceAdContext';
 import MyJobProfile from '../screens/jobs/MyJobProfile';
 import TermsAndConditions from '../screens/terms/TermsAndConditions';
 import MyJobDetails from '../screens/jobs/MyJobDetails';
+import { CommonProvider } from '../api/commonContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +31,7 @@ const Stack = createNativeStackNavigator();
 const AppStack = () => {
 
   return (
-    <PlaceAdProvider>
+    <CommonProvider>
     <Stack.Navigator
       screenOptions={{
         headerShown: false
@@ -40,25 +41,52 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.RegisterScreen} component={RegisterScreen}/>
         <Stack.Screen name={RouteNames.OtpVerificationScreen} component={OtpVerificationScreen}/>
         <Stack.Screen name={RouteNames.BottomTabs} component={BottomTabs}/>
-        <Stack.Screen name={RouteNames.PostListScreen} component={PostListScreen}/>
         <Stack.Screen name={RouteNames.DetailsScreen} component={DetailsScreen}/>
         <Stack.Screen name={RouteNames.CategoryListScreen} component={CategoryListScreen}/>
         <Stack.Screen name={RouteNames.FilterScreen} component={FilterScreen}/>
-        <Stack.Screen name={RouteNames.PostSecondScreen} component={PostSecondScreen}/>
-        <Stack.Screen name={RouteNames.PlaceAdScreen} component={PlaceAdScreen}/>
-        <Stack.Screen name={RouteNames.CustomPlaceAd} component={CustomPlaceAd}/>
-        <Stack.Screen name={RouteNames.SellerInformation} component={SellerInformation}/>
         <Stack.Screen name={RouteNames.PaymentScreen} component={PaymentScreen}/>
         <Stack.Screen name={RouteNames.SuccessPage} component={SuccessPage}/>
-        <Stack.Screen name={RouteNames.MotorPlaceAd} component={MotorPlaceAd}/>
-        <Stack.Screen name={RouteNames.SaleRentPlaceAd} component={SaleRentPlaceAd}/>
-        <Stack.Screen name={RouteNames.MyJobProfile} component={MyJobProfile}/>
+        <Stack.Screen name={'JobProfile'} component={JobProfileAdd}/>
         <Stack.Screen name={RouteNames.TermsAndConditions} component={TermsAndConditions}/>
-        <Stack.Screen name={RouteNames.MyJobDetails} component={MyJobDetails}/>
+        <Stack.Screen name={'PostScreen'} component={AdPost}/>
      
     </Stack.Navigator>
-    </PlaceAdProvider>
+    </CommonProvider>
   );
 };
+
+const AdPost = () => {
+  return(
+    <PlaceAdProvider>
+    <Stack.Navigator
+    screenOptions={{
+      headerShown: false
+    }}>
+      <Stack.Screen name={RouteNames.PostListScreen} component={PostListScreen}/>
+      <Stack.Screen name={RouteNames.PostSecondScreen} component={PostSecondScreen}/>
+      <Stack.Screen name={RouteNames.PlaceAdScreen} component={PlaceAdScreen}/>
+      <Stack.Screen name={RouteNames.CustomPlaceAd} component={CustomPlaceAd}/>
+      <Stack.Screen name={RouteNames.SellerInformation} component={SellerInformation}/>
+      <Stack.Screen name={RouteNames.MotorPlaceAd} component={MotorPlaceAd}/>
+      <Stack.Screen name={RouteNames.SaleRentPlaceAd} component={SaleRentPlaceAd}/>
+   
+  </Stack.Navigator>
+  </PlaceAdProvider>
+  )
+}
+
+const JobProfileAdd = () => {
+  return(
+    <PlaceAdProvider>
+    <Stack.Navigator
+    screenOptions={{
+      headerShown: false
+    }}>
+     <Stack.Screen name={RouteNames.MyJobProfile} component={MyJobProfile}/>
+     <Stack.Screen name={RouteNames.MyJobDetails} component={MyJobDetails}/>
+  </Stack.Navigator>
+  </PlaceAdProvider>
+  )
+}
 
 export default AppStack;

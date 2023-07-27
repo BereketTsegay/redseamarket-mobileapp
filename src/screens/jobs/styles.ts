@@ -105,6 +105,22 @@ const styles =StyleSheet .create({
         position:'absolute',
         bottom:20,
         marginHorizontal:20
+      },
+      companyView:{
+        flexDirection:'row',
+        marginBottom:20,
+        paddingHorizontal:15,
+        paddingVertical:10,
+        borderWidth:1, 
+        borderColor:AppColors.lightBlue, 
+        borderRadius:8,
+        justifyContent:'space-between'
+      },
+      addCircle:{
+        borderWidth:1,
+        borderColor:AppColors.lightBlue,
+        padding:4,
+        borderRadius:15
       }
 })
 

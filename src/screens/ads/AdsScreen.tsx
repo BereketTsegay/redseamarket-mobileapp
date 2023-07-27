@@ -13,9 +13,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { fetchAdList } from '../../api/ads/AdListSlice';
 import Header from '../../components/Header';
-import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 import AppFonts from '../../constants/AppFonts';
 import { apiClient } from '../../api/apiClient';
+import { CommonContext } from '../../api/commonContext';
 export type AdsScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'AdsScreen'
@@ -31,7 +31,7 @@ interface Props {}
 const AdsScreen: React.FC<Props> = () => {
   const navigation = useNavigation<AdsScreenNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
+  const {commonInput, setCommonInput} = useContext(CommonContext)
   const {adLists, loadingAdLists} = useSelector(
     (state: RootState) => state.AdList)
     const {currencyLists} = useSelector(
@@ -90,7 +90,7 @@ const AdsScreen: React.FC<Props> = () => {
     renderItem={({item})=>{
       return(
         <TouchableOpacity onPress={()=>{
-          navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:placeAdInput.common_country_id})
+          navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:commonInput.common_country_id})
         }}>
               <View style={styles.view}>
                  <Image source={item.image == null || item.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.image[0].image}} 
