@@ -1,4 +1,4 @@
-export class JobRequest{
+export class JobApplyRequest{
     jobprofile_id:any = null;
     title:String = '';
     education: String = '';
@@ -10,13 +10,5 @@ export class JobRequest{
     country_id:Number = 0;
     state_id:Number = 0;
     city_id:Number = 0;
-    company: CompanyField[] = [];
     work_experience: Number = 0;
-}
-
-
-export type CompanyField = {
-    from_date: string;
-    to_date: string;
-    company: string;
 }

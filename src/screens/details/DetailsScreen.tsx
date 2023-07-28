@@ -173,6 +173,14 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
               <Text style={styles.motorText1}>{dashboardDetails?.ads[0].updated_on}</Text>
             </View>
 
+            {dashboardDetails?.ads[0].category.name == "Jobs" &&
+             <Button
+             label={dashboardDetails?.ads[0].isApply ?'Job already applied' : 'Apply this Job'}
+             style={{backgroundColor: AppColors.lightBlue,marginBottom:20,width:'70%',alignSelf:'center'}}
+             onPress={()=>{dashboardDetails?.ads[0].isApply ? null :
+                          navigation.navigate('Apply_Job')}}
+           />}
+
                 <Text style={styles.subHeading}>Description</Text>
                 <Text
                   style={[

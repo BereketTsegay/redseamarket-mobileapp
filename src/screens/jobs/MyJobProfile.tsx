@@ -13,6 +13,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {FlatList, ImageBackground, Modal, ScrollView, TextInput, ToastAndroid, TouchableOpacity} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
+import RNFS from 'react-native-fs';
 import AppImages from '../../constants/AppImages';
 import AppColors from '../../constants/AppColors';
 import ItemDropdown from '../../components/ItemDropdown';
@@ -28,6 +29,7 @@ import { fetchCityList } from '../../api/country/CityListSlice';
 import { createJobProfile, reset } from '../../api/jobs/JobProfileSaveSlice';
 import { JobRequest } from '../../api/jobs/JobRequest';
 import moment from 'moment';
+import { UpdateReset, updateJobProfile } from '../../api/jobs/JobProfileUpdateSlice';
 const {TextField} = Incubator;
 export type MyJobProfileNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -49,10 +51,12 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
   const {jobInput, setJobInput} = useContext(JobContext)
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const { jobSaveData,loadingSavedJob,jobSaveError} = useSelector((state: RootState) => state.JobProfileSave);
+  const { jobUpdateData,loadingUpdateJob, jobUpdateError} = useSelector((state: RootState) => state.JobProfileUpdate);
   const {countryLists} = useSelector((state: RootState) => state.CountryList);
   const {stateLists} = useSelector((state: RootState) => state.StateList);
   const {cityLists} = useSelector((state: RootState) => state.CityList);
-
+  const { jobProfileList} = useSelector((state: RootState) => state.JobProfileList);
+  // console.log(jobInput.cv_file,jobInput.jobprofile_id)
   useEffect(() => {
     let request = JSON.stringify({
       country: jobInput.country_id,
@@ -66,6 +70,25 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
     });
     dispatch(fetchCityList({requestBody: request}));
   }, [jobInput.state_id]);
+
+  useEffect(() => {
+    if(jobInput.jobprofile_id != null){
+      setValues();
+    }
+    else{
+      null;
+    }
+    
+  }, []);
+
+
+  const setValues = async () => {
+    const item = jobProfileList?.data
+    setJobInput({...jobInput, jobprofile_id: item?.id,title:item?.title, work_experience: item?.work_experience, company: item?.company, education: item?.education,
+                 certificate: item?.certificate, language: item?.language, skils: item?.skils, cv_file: item?.cv_file, country_id: item?.country_id,
+                overview: item?.overview, state_id: item?.state_id, city_id: item?.city_id })
+                setSelectedFile(item?.cv_file)
+  }
 
 
   const openDocumentFile = async () => {
@@ -104,7 +127,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
     setJobInput({...jobInput, city_id: value});
   };
 
-  const WorkExperience = (name: any,from: any,to: any) => {
+  const addCompany = (name: any,from: any,to: any) => {
     setJobInput({
       ...jobInput,
       company: [
@@ -126,6 +149,9 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
 
   const submit = () => {
         const formData = new FormData();
+        if(jobInput.jobprofile_id != null){
+          formData.append('jobprofile_id', jobInput.jobprofile_id)
+        }
       
         const keysToAppend = [
           'education',
@@ -143,11 +169,19 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
         keysToAppend.forEach((key) => {
           formData.append(key, jobInput[key] ?? '');
         });
-            formData.append('cv_file', {
-              uri: jobInput.cv_file,
-              name: 'document.pdf',
-              type: 'application/pdf',
+
+        if (jobInput.cv_file) {
+          fetch("https://admin-jamal.prompttechdemohosting.com/" + jobInput.cv_file)
+            .then((response) => response.blob())
+            .then((blob) => {
+              formData.append('cv_file', blob, 'document.pdf');
+            })
+            .catch((error) => {
+              console.error('Error fetching the file:', error);
             });
+        } else {
+          formData.append('cv_file', '');
+        }
 
           for (let i = 0; i < jobInput.company.length; i++) {
             formData.append(`company[${i}][from_date]`, moment(jobInput.company[i].from_date, "DD-MM-YYYY").format('YYYY-MM'));
@@ -155,28 +189,57 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
             formData.append(`company[${i}][company]`, jobInput.company[i].company);
           }
         // console.log(formData, '-------------------------');
+        if(jobInput.jobprofile_id == null){
         dispatch(createJobProfile({requestBody: formData}))
         .then(() => {
           dispatch(reset());
           setJobInput(new JobRequest())
         })
         .catch((err: any) => console.log(err));
+      }
+      else{
+        dispatch(updateJobProfile({requestBody: formData}))
+        .then(() => {
+          dispatch(UpdateReset());
+          // setJobInput(new JobRequest())
+        })
+        .catch((err: any) => console.log(err));
+      }
     }
 
-
   if (jobSaveData != null) {
-    console.log(jobSaveData)
+    // console.log(jobSaveData)
     if (!loadingSavedJob && !jobSaveError && jobSaveData.status == 'success') {
+      ToastAndroid.show(
+        JSON.stringify('Profile Added Successfully'),
+        ToastAndroid.SHORT,
+      );
       navigation.replace('JobProfile',{screen:RouteNames.MyJobDetails})
     } else {
-      console.log(jobSaveData,'failure')
+      // console.log(jobSaveData,'failure')
         ToastAndroid.show(
-          JSON.stringify(jobSaveData.errors[0]),
+          JSON.stringify('error'),
           ToastAndroid.SHORT,
         );
       }
-     
     }
+
+    if (jobUpdateData != null) {
+      console.log(jobUpdateData,'______-')
+      if (!loadingUpdateJob && !jobUpdateError && jobUpdateData.status == 'success') {
+        ToastAndroid.show(
+          JSON.stringify('Profile Updated Successfully'),
+          ToastAndroid.SHORT,
+        );
+        navigation.replace('JobProfile',{screen:RouteNames.MyJobDetails})
+      } else {
+        console.log(jobSaveData,'failure')
+          ToastAndroid.show(
+            JSON.stringify('error'),
+            ToastAndroid.SHORT,
+          );
+        }
+      }
 
   return (
     <View flex backgroundColor="white" padding-20>
@@ -220,7 +283,8 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           </View>
           </TouchableOpacity>
 
-          {jobInput.company.map((companyData, index) => (
+    {jobInput.company != null &&
+          jobInput.company.map((companyData, index) => (
         <View key={index} paddingV-10>
           <Text>Company: {companyData.company}</Text>
           <Text>From: {companyData.from_date}</Text>
@@ -328,7 +392,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
         </View>
       </ScrollView>
 
-      {sheetOpen && <SheetModal closeSheet={closeSheet} set={WorkExperience}/>}
+      {sheetOpen && <SheetModal closeSheet={closeSheet} set={addCompany}/>}
     </View>
   );
 };

@@ -53,7 +53,11 @@ const PostListScreen: React.FC<Props> = () => {
         {dashboardLists?.data.categories.map((item,index) => (
           <TouchableOpacity
             onPress={() => {setPlaceAdInput({...placeAdInput, category:item.id})
-              navigation.navigate(RouteNames.PostSecondScreen,{Id:item.id,name:item.name})}}
+            if(item.name == 'Jobs'){
+              navigation.navigate(RouteNames.JobSearch,{Id:item.id,name:item.name})
+            }
+            else{
+              navigation.navigate(RouteNames.PostSecondScreen,{Id:item.id,name:item.name})}}}
             key={index}
             style={styles.itemContainer}>
             <Image

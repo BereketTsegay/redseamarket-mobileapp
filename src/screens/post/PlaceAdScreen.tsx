@@ -65,7 +65,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
     country: false,
     state: false,
     city: false,
-    area: false
+    area: false,
   });
 
   useEffect(() => {

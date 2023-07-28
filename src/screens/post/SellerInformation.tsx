@@ -40,7 +40,8 @@ const SellerInformation: React.FC<Props> = () => {
   const [errors, setErrors] = useState({
     name: false,
     email: false,
-    address: false
+    address: false,
+    phone: false
   });
 
   console.log(placeAdInput.featured)
@@ -50,13 +51,14 @@ const SellerInformation: React.FC<Props> = () => {
   }, []);
 
   const submit = () => {
-    const hasErrors = !placeAdInput.name || !placeAdInput.email || !placeAdInput.address;
+    const hasErrors = !placeAdInput.name || !placeAdInput.email || !placeAdInput.address || !placeAdInput.phone;
 
     if (hasErrors) {
       setErrors({
         name: !placeAdInput.name,
         email: !placeAdInput.email,
-        address: !placeAdInput.address
+        address: !placeAdInput.address,
+        phone: !placeAdInput.phone
       });
       return;
     }
@@ -213,8 +215,13 @@ const SellerInformation: React.FC<Props> = () => {
           height={45}
           type={'numeric'}
           value={placeAdInput.phone}
-          onChange={(text)=>{setPlaceAdInput({...placeAdInput, phone:text})}}
-          trailing={null}
+          onChange={(text)=>{setPlaceAdInput({...placeAdInput, phone:text}) 
+          setErrors({...errors, phone: false});
+        }}
+        trailing={
+          errors.phone &&
+          <Text color={'red'}>required field</Text>
+        }
           editable={true}
           />
 

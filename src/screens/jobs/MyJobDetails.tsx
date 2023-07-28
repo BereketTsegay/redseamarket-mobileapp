@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button, Image, Text, View } from 'react-native-ui-lib';
 import { RootStackParams, RouteNames } from '../../navigation';
 import { RouteProp } from '@react-navigation/native';
@@ -15,6 +15,7 @@ import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { fetchJobProfileList } from '../../api/jobs/JobProfileListSlice';
+import { JobContext } from '../../api/jobs/JobContext';
 export type MyJobDetailsNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'MyJobDetails'
@@ -30,6 +31,7 @@ interface Props { }
 const MyJobDetails: React.FC<Props> = () => {
   const navigation = useNavigation<MyJobDetailsNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {jobInput, setJobInput} = useContext(JobContext)
   const { jobProfileList, loadingJobProfileList} = useSelector(
     (state: RootState) => state.JobProfileList,
   );
@@ -150,7 +152,8 @@ const MyJobDetails: React.FC<Props> = () => {
           </View>
           </ScrollView>
 
-          <Button label={'Edit'} style={styles.button} onPress={()=>navigation.navigate('JobProfile',{screen: RouteNames.MyJobProfile})}/>
+          <Button label={'Edit'} style={styles.button} onPress={()=>{setJobInput({...jobInput, jobprofile_id: jobProfileList?.data.id})
+            navigation.navigate('JobProfile',{screen: RouteNames.MyJobProfile})}}/>
         </View>
 }
       </View>

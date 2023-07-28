@@ -23,4 +23,6 @@ export type RootStackParams = {
   MyJobProfile:undefined;
   TermsAndConditions:undefined;
   MyJobDetails:undefined;
+  JobSearch: undefined;
+  JobApply: undefined;
 };

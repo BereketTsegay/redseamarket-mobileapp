@@ -24,6 +24,8 @@ import TermsAndConditions from '../screens/terms/TermsAndConditions';
 import MyJobDetails from '../screens/jobs/MyJobDetails';
 import { CommonProvider } from '../api/commonContext';
 import { JobProvider } from '../api/jobs/JobContext';
+import JobSearch from '../screens/jobs/JobSearch';
+import JobApply from '../screens/jobs/JobApply';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +52,7 @@ const AppStack = () => {
         <Stack.Screen name={'JobProfile'} component={JobProfileAdd}/>
         <Stack.Screen name={RouteNames.TermsAndConditions} component={TermsAndConditions}/>
         <Stack.Screen name={'PostScreen'} component={AdPost}/>
+        <Stack.Screen name={'Apply_Job'} component={Apply_Job}/>
      
     </Stack.Navigator>
     </CommonProvider>
@@ -64,6 +67,7 @@ const AdPost = () => {
       headerShown: false
     }}>
       <Stack.Screen name={RouteNames.PostListScreen} component={PostListScreen}/>
+      <Stack.Screen name={RouteNames.JobSearch} component={JobSearch}/>
       <Stack.Screen name={RouteNames.PostSecondScreen} component={PostSecondScreen}/>
       <Stack.Screen name={RouteNames.PlaceAdScreen} component={PlaceAdScreen}/>
       <Stack.Screen name={RouteNames.CustomPlaceAd} component={CustomPlaceAd}/>
@@ -87,6 +91,17 @@ const JobProfileAdd = () => {
      <Stack.Screen name={RouteNames.MyJobDetails} component={MyJobDetails}/>
   </Stack.Navigator>
   </JobProvider>
+  )
+}
+
+const Apply_Job = () => {
+  return(
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false
+    }}>
+     <Stack.Screen name={RouteNames.JobApply} component={JobApply}/>
+  </Stack.Navigator>
   )
 }
 

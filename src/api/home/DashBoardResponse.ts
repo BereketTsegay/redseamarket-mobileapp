@@ -147,6 +147,7 @@ export type Details_Ad = {
     longitude:            string;
     view_count:           number;
     status:               number;
+    isApply:               number;
     notification_status:  string;
     created_at:           Date;
     updated_at:           Date;

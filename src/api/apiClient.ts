@@ -49,21 +49,22 @@ export const ApiFormData = async (
   method: string,
   requestBody: any,
 ) => {
-  const response = await axios(
-    BASE_URL + endPoint,
-    {
-      method: method,
-      data: requestBody,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
-        Authorization:
-          'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
-      },
+try {
+  const response = await axios(BASE_URL + endPoint, {
+    method: method,
+    data: requestBody,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data',
+      Authorization: 'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
     },
-  );
+  });
   return response;
-};
+} catch (error) {
+  console.error('Error in API call:', error);
+  throw error; // Rethrow the error or handle it as needed.
+}
+}
 
 export const getWithAuthCall = async (
   endPoint: string

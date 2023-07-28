@@ -16,6 +16,7 @@ import {
   Details_Ad,
 } from './home/DashBoardResponse';
 import { JobSaveResponse } from './jobs/JobProfileSaveSlice';
+import { JobUpdateResponse } from './jobs/JobProfileUpdateSlice';
 import { JobResponse } from './jobs/JobResponse';
 import {LoginResponse} from './login/LoginCreateSlice';
 import { Motor } from './motor/MotorResponse';
@@ -510,6 +511,28 @@ export const createJobProfile = async (
 ): Promise<NetworkResponse<JobSaveResponse | null>> => {
   const response = await ApiFormData(
     'app/save/jobprofile',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR UPDATING JOB PROFILE
+export const updateJobProfile = async (
+  requestBody: any,
+): Promise<NetworkResponse<JobUpdateResponse | null>> => {
+  const response = await ApiFormData(
+    'app/update/jobprofile',
     'POST',
     requestBody,
   );

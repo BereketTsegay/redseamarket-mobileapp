@@ -22,6 +22,7 @@
     "react-native": "0.72.1",
     "react-native-curved-bottom-bar": "^3.2.6",
     "react-native-document-picker": "^9.0.1",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.12.0",
     "react-native-modal-datetime-picker": "^17.0.0",
     "react-native-otp-textinput": "^1.0.1",
