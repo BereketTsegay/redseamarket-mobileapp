@@ -77,7 +77,7 @@ const AdsScreen: React.FC<Props> = () => {
     <View flex backgroundColor='#FFFFFF'>
       <Header/>
 
-        <View paddingH-20 paddingT-10 paddingB-70 flex center>
+        <View paddingH-20 paddingT-10 paddingB-70 flex>
           <Text style={styles.text}>My Ads</Text>
 
           {loadingAdLists ?

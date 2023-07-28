@@ -10,6 +10,7 @@ import {
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import DocumentPicker from 'react-native-document-picker';
 import {useNavigation} from '@react-navigation/native';
 import {FlatList, ImageBackground, Modal, ScrollView, TextInput, ToastAndroid, TouchableOpacity} from 'react-native';
 import AppImages from '../../constants/AppImages';
@@ -31,6 +32,28 @@ interface Props {}
 
 const JobApply: React.FC<Props> = ({}) => {
   const navigation = useNavigation<JobApplyNavigationProps>();
+  const [fileSizeError, setFileSizeError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<any | null>(null);
+
+  const openDocumentFile = async () => {
+    try {
+      const file = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
+        allowMultiSelection: true,
+      });
+       const maxSizeInBytes = 500 * 1024; // 500kb in bytes
+       if (file.some((item) => item.size > maxSizeInBytes)) {
+         setFileSizeError('File size exceeds 500kb limit');
+       } else {
+         setFileSizeError(null);
+         setSelectedFile(file[0].name);
+       }
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        throw err;
+      }
+    }
+  };
 
   return (
     <View flex backgroundColor="white" padding-20>
@@ -96,6 +119,39 @@ const JobApply: React.FC<Props> = ({}) => {
             value={null}
             onChange={null}
           />
+
+<View marginB-20>
+            <TouchableOpacity onPress={()=>openDocumentFile()}>
+            <View
+              paddingH-15
+              centerV
+              row
+              style={[
+                styles.fieldStyle,
+                {borderStyle: 'dashed', justifyContent: 'space-between'},
+              ]}>
+              <Text style={styles.fieldText}>Upload Resume</Text>
+              {fileSizeError && (
+          <Text style={{ color: 'red', fontSize: 8 }}>{fileSizeError}</Text>
+        )}
+              <Image
+                source={AppImages.UPLOAD}
+                tintColor={AppColors.lightBlue}
+              />
+            </View>
+            </TouchableOpacity>
+            <Text style={{color: 'red', fontSize: 8}}>
+              *Maximum 500kb file size are allowed
+            </Text>
+            {selectedFile && (
+            <View row style={{borderColor:'grey',borderWidth:1,padding:5,width:'50%',borderRadius:5}}>
+            <Text>{selectedFile}</Text>
+            <TouchableOpacity onPress={()=>{setSelectedFile(null)}}>
+            <Image source={AppImages.DELETE} style={{left:10, backgroundColor: 'white' }} />
+            </TouchableOpacity>
+          </View>
+      )}
+          </View>
 
 
           

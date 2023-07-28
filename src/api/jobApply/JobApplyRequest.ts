@@ -1,14 +1,10 @@
 export class JobApplyRequest{
-    jobprofile_id:any = null;
-    title:String = '';
-    education: String = '';
-    certificate: String = '';
-    language: String = '';
-    skils:String = '';
-    cv_file:any = null;
-    overview:String = '';
-    country_id:Number = 0;
-    state_id:Number = 0;
-    city_id:Number = 0;
-    work_experience: Number = 0;
+    ads_id:any = null;
+    document:any = null;
+    total_experience: Number = 0;
+    current_ctc: Number = 0;
+    expect_ctc: Number = 0;
+    notice_period: Number = 0;
+    relevent_field:any = null;
+    current_company:String = '';
 }
