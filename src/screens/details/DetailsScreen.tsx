@@ -67,12 +67,9 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
   }
 
   const openMail = mail => {
-    Linking.canOpenURL(`mailto:${mail}`).then(supported => {
-      if (supported) {
-        Linking.openURL(`mailto:${mail}`);
-      } else {
-        Alert.alert('No email app found on the device');
-      }
+    const mailtoLink = `mailto:${mail}`;
+    Linking.openURL(mailtoLink).catch(() => {
+      Alert.alert('No email app found on the device');
     });
   };
 
@@ -122,7 +119,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                   <Text style={styles.priceText}>
                     {currencyLists?.currency.currency_code}{' '}
                     {(currencyLists?.currency.value *
-                      dashboardDetails?.ads[0].price).toFixed()}
+                      dashboardDetails?.ads[0].price).toFixed().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   </Text>
 
                   <FavoriteComponent

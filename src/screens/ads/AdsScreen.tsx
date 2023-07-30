@@ -97,7 +97,7 @@ const AdsScreen: React.FC<Props> = () => {
                  resizeMode={'contain'} style={{height:70,width:'100%',borderTopLeftRadius:4,borderTopRightRadius:4}}/>
                  <View margin-3>
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.priceText}>{currencyLists == null ? 'USD ' + item.price.toFixed()
-                  : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price).toFixed())}</Text>
+                  : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price).toFixed().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))}</Text>
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.titleText}>{item.title}</Text>
                  <Text style={styles.cityText}>{item.area}</Text>
                  <View row centerV style={{justifyContent:'space-between'}}>

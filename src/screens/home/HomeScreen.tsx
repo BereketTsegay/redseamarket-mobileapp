@@ -36,6 +36,8 @@ const HomeScreen: React.FC<Props> = () => {
   const [lang, setLang] = useState([{code:'English',name:'UK', id:1}]);
   const {commonInput, setCommonInput} = useContext(CommonContext)
   const [showCountryModal, setShowCountryModal] = useState(true);
+  const [selectedCountry, setSelectedCountry] = useState<any>(null);
+  const [selectedCountryFlag, setSelectedCountryFlag] = useState<string>('Country');
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {dashboardLists,loadingDashBoardList} = useSelector(
     (state: RootState) => state.DashBoardList,
@@ -47,7 +49,11 @@ const HomeScreen: React.FC<Props> = () => {
     (state: RootState) => state.CurrencyList,
   );
   
-  
+  useEffect(() => {
+    if (selectedCountry) {
+      setCommonInput({ ...commonInput, common_country_id: selectedCountry });
+    }
+  }, [selectedCountry]);
 
   useEffect(() => {
     let request = JSON.stringify({
@@ -76,7 +82,8 @@ const HomeScreen: React.FC<Props> = () => {
   //   }
 
     const handleCountrySelect = (item) => {
-      setCommonInput({...commonInput, common_country_id:item.id})
+      setSelectedCountry(item.id);
+      setSelectedCountryFlag(item.flag);
       setShowCountryModal(false);
     };
 
@@ -85,9 +92,12 @@ const HomeScreen: React.FC<Props> = () => {
       <SelectDropdown
         data={data}
         onSelect={(selectedItem, index) => {
-          setCommonInput({...commonInput, common_country_id:selectedItem.id})
+          setSelectedCountry(selectedItem.id);
+          setSelectedCountryFlag(selectedItem.flag);
         }}
-        defaultButtonText={value}
+        defaultButtonText={selectedCountryFlag ? <React.Fragment>
+          <Image source={{ uri: 'https://admin-jamal.prompttechdemohosting.com/' + selectedCountryFlag}} style={{ width: 25, height: 25, right: 10 }} />
+        </React.Fragment> : value} 
         buttonTextAfterSelection={(selectedItem, index) => {
           return <Image source={{uri:'https://admin-jamal.prompttechdemohosting.com/' + selectedItem.flag}}
                    style={{width:25,height:25,right:10}}/>;
@@ -120,7 +130,7 @@ const HomeScreen: React.FC<Props> = () => {
           <Text style={{alignSelf:'center',fontSize:16,fontFamily:AppFonts.POPPINS_BOLD,color:'white'}}>{dashboardLists?.data.slider != null ?dashboardLists?.data.slider.name : ''}</Text>
     <View center style={styles.rowContainer}>
      
-     {Dropdown('AE',countryLists?.country)}
+     {Dropdown('Country',countryLists?.country)}
       <TextField
         fieldStyle={styles.textFieldStyle}
         style={{fontSize:12}}
@@ -128,7 +138,7 @@ const HomeScreen: React.FC<Props> = () => {
         paddingH-2
         placeholder={'What are you looking for ?'}
         keyboardType="default"
-        leadingAccessory={<Image source={AppImages.SEARCH} />}
+        leadingAccessory={<Image source={AppImages.SEARCH} style={{width:18,height:18,right:5}}/>}
       />
      {Dropdown('language',lang)}
     </View>
@@ -196,7 +206,7 @@ const HomeScreen: React.FC<Props> = () => {
                  resizeMode={'cover'} style={{height:70,width:'100%'}}/>
                  <View margin-3>
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.priceText}>{currencyLists == null ? 'USD ' + item.price.toFixed(2)
-                  : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price).toFixed())}</Text>
+                  : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price).toFixed().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))}</Text>
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.nameText}>{item.title}</Text>
                  <Text style={styles.cityText}>{item.area}</Text>
                  </View>

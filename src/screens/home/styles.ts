@@ -34,11 +34,12 @@ const styles = StyleSheet.create({
       },
       dropdown1RowTxtStyle: { color: '#444', textAlign: 'right' },
       textFieldStyle: {
+        flex:1,
         borderWidth: 1,
         borderColor: 'white',
         backgroundColor: 'white',
         borderRadius: 40,
-        marginHorizontal: 5,
+        paddingHorizontal:10
       },
       categoryText:{
         fontSize:14,

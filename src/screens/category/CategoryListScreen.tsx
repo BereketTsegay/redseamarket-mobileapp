@@ -94,7 +94,7 @@ const CategoryListScreen: React.FC<Props> = ({ route }) => {
                       />
                     </View>
                     <View marginH-20 style={{width:'55%'}}>
-                      <Text style={styles.priceText}>{currencyLists?.currency.currency_code} {(currencyLists?.currency.value * item.price).toFixed()}</Text>
+                      <Text style={styles.priceText}>{currencyLists?.currency.currency_code} {(currencyLists?.currency.value * item.price).toFixed().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
                       <Text style={[styles.locationText, { fontSize: 14 }]} numberOfLines={1} ellipsizeMode='tail'>{item.title}</Text>
                       <Text style={styles.titleText} numberOfLines={1} ellipsizeMode='tail'>{item.description}</Text>
                       <Text style={[styles.locationText]}>{item.country_name}</Text>
