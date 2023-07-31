@@ -36,6 +36,13 @@ const styles = StyleSheet.create({
         height:120,
         paddingRight:20
     },
+    view1:{
+        borderRadius:20,
+        borderColor:'#707070',
+        borderWidth:1,
+        marginBottom:20,
+        padding:10
+    },
     priceText:{
         fontSize:16,
         color:AppColors.darkBlue,
@@ -66,6 +73,32 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         borderBottomColor:'#00000029',
         borderBottomWidth:1,
+    },
+    featuredView:{
+        paddingHorizontal:8,
+        height:15,
+        backgroundColor:'#4394FF',
+        borderRadius:6
+    },
+    featuredText:{
+        fontSize:7,
+        fontFamily:AppFonts.POPPINS_REGULAR,
+        color:'white'
+    },
+    rowView:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center'
+    },
+    jobText:{
+        color:AppColors.darkBlue,
+        fontSize:18,
+        fontFamily:AppFonts.POPPINS_SEMIBOLD
+    },
+    jobText1:{
+        color:'black',
+        fontSize:14,
+        fontFamily:AppFonts.POPPINS_REGULAR
     }
 })
 

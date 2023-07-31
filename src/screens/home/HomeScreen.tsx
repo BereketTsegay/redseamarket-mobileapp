@@ -160,8 +160,12 @@ const HomeScreen: React.FC<Props> = () => {
     return (
       <View center key={index} style={{ flex: 1, margin: 10 }}>
          <TouchableOpacity onPress={()=>{
-              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,countryId:commonInput.common_country_id})
-            }}>
+           if(item.name == 'Jobs'){
+            navigation.navigate(RouteNames.JobSearch,{Id:item.id,name:item.name})
+          }
+          else{
+              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:item.id,name: item.name,countryId:commonInput.common_country_id})
+         }}}>
         <Image
           source={
             item.image == null

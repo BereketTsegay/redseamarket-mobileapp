@@ -85,7 +85,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
   const setValues = async () => {
     const item = jobProfileList?.data
     setJobInput({...jobInput, jobprofile_id: item?.id,title:item?.title, work_experience: item?.work_experience, company: item?.company, education: item?.education,
-                 certificate: item?.certificate, language: item?.language, skils: item?.skils, cv_file: item?.cv_file, country_id: item?.country_id,
+                 certificate: item?.certificate, language: item?.language, skils: item?.skils, cv_file: null, country_id: item?.country_id,
                 overview: item?.overview, state_id: item?.state_id, city_id: item?.city_id })
                 setSelectedFile(item?.cv_file)
   }
@@ -171,14 +171,11 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
         });
 
         if (jobInput.cv_file) {
-          fetch("https://admin-jamal.prompttechdemohosting.com/" + jobInput.cv_file)
-            .then((response) => response.blob())
-            .then((blob) => {
-              formData.append('cv_file', blob, 'document.pdf');
-            })
-            .catch((error) => {
-              console.error('Error fetching the file:', error);
-            });
+          formData.append('cv_file', {
+            uri: jobInput.cv_file,
+            name: 'document.pdf',
+            type: 'application/pdf',
+          });
         } else {
           formData.append('cv_file', '');
         }
@@ -359,9 +356,10 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           <View>
       
           <ItemDropdown
-            value={'Select Country'}
+            value={jobInput.country_id}
             data={countryLists?.country}
             add={setCountry}
+            dropdownType="Country"
           />
 
 <InputField
@@ -372,15 +370,17 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           />
     
           <ItemDropdown
-            value={'Select State'}
+            value={jobInput.state_id}
             data={stateLists?.state}
             add={setState}
+            dropdownType="State"
           />
 
 <ItemDropdown
-            value={'Select City'}
+            value={jobInput.city_id}
             data={cityLists?.city}
             add={setCity}
+            dropdownType="City"
           />
 
           <Button

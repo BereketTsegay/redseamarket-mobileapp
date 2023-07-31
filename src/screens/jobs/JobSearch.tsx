@@ -41,14 +41,14 @@ const JobSearch: React.FC<Props> = ({route}) => {
         <View flex center>
           <Text style={styles.heading}>{name}</Text>
           <Text style={styles.subHeading}>
-            Choose the category that your ad fits into.
+            Choose the category that you want.
           </Text>
         </View>
       </View>
 
       <View>
         <TouchableOpacity onPress={()=>{
-              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:Id,countryId:commonInput.common_country_id})
+              navigation.navigate(RouteNames.CategoryListScreen,{cat_Id:Id,name:name, countryId:commonInput.common_country_id})
             }}>
           <View marginH-30 marginV-20>
             <Text style={{fontSize: 14, fontFamily: AppFonts.POPPINS_SEMIBOLD}}>

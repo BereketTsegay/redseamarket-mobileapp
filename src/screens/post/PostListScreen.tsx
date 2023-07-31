@@ -10,6 +10,7 @@ import styles from './styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
+import { getWithAuthCall } from '../../api/apiClient';
 export type PostListScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'PostListScreen'
@@ -28,7 +29,13 @@ const PostListScreen: React.FC<Props> = () => {
   const {dashboardLists,loadingDashBoardList} = useSelector(
     (state: RootState) => state.DashBoardList,
   );
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getWithAuthCall('app/featured')
+    .then(response=>
+      setPlaceAdInput({...placeAdInput, featured:response.data.data})
+      )
+      
+  }, []);
 
   return (
     <View flex backgroundColor="white" padding-20>
@@ -53,11 +60,7 @@ const PostListScreen: React.FC<Props> = () => {
         {dashboardLists?.data.categories.map((item,index) => (
           <TouchableOpacity
             onPress={() => {setPlaceAdInput({...placeAdInput, category:item.id})
-            if(item.name == 'Jobs'){
-              navigation.navigate(RouteNames.JobSearch,{Id:item.id,name:item.name})
-            }
-            else{
-              navigation.navigate(RouteNames.PostSecondScreen,{Id:item.id,name:item.name})}}}
+              navigation.navigate(RouteNames.PostSecondScreen,{Id:item.id,name:item.name})}}
             key={index}
             style={styles.itemContainer}>
             <Image

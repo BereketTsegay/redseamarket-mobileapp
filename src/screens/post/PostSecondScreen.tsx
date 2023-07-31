@@ -29,7 +29,7 @@ interface Props {}
 const PostSecondScreen: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<PostSecondScreenNavigationProps>();
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext);
-  const {Id, name} = route.params;
+  const {Id, name, country_id} = route.params;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {subCategoryLists, loadingSubCategoryLists} = useSelector(
     (state: RootState) => state.SubCategoryList,
@@ -48,7 +48,7 @@ const PostSecondScreen: React.FC<Props> = ({route}) => {
       navigation.navigate(RouteNames.PlaceAdScreen, {
         cat_id: Id,
         sub_id: item.id,
-        name: name,
+        name: name
       });
     }
   };
@@ -92,7 +92,7 @@ const PostSecondScreen: React.FC<Props> = ({route}) => {
                 navigation.navigate(RouteNames.PlaceAdScreen, {
                   cat_id: Id,
                   sub_id: childItem.id,
-                  name: name,
+                  name: name
                 });
               }}
               key={childItem.id}>

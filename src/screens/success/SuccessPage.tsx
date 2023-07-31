@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Button, Image, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
+import {CommonActions, RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
@@ -23,7 +23,14 @@ const SuccessPage: React.FC<Props> = () => {
   const navigation = useNavigation<SuccessPageNavigationProps>();
   useEffect(() => {}, []);
 
-
+  function resetStackAndNavigate(navigation, routeName) {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: routeName }],
+      })
+    );
+  }
 
   return (
     <View flex backgroundColor="#FFFFFF" padding-20>
@@ -48,7 +55,8 @@ const SuccessPage: React.FC<Props> = () => {
         label={'Lets go !'}
         labelStyle={[styles.buttonLabelStyle, {color: 'white'}]}
         style={{backgroundColor: AppColors.lightBlue, marginBottom: 40}}
-        onPress={() => navigation.replace(RouteNames.BottomTabs, {screen: RouteNames.AdsScreen})}
+        onPress={() =>{ navigation.replace(RouteNames.BottomTabs, {screen: RouteNames.AdsScreen})
+        resetStackAndNavigate(navigation, 'PostListScreen');}}
       />
     </View>
   );

@@ -44,7 +44,7 @@ const SellerInformation: React.FC<Props> = () => {
     phone: false
   });
 
-  console.log(placeAdInput.featured)
+  // console.log(placeAdInput)
   
   useEffect(() => {
     setPlaceAdInput({...placeAdInput, name:profileDetails?.data.user.name, email:profileDetails?.data.user.email})
@@ -111,6 +111,8 @@ const SellerInformation: React.FC<Props> = () => {
         keysToAppend.forEach((key) => {
           formData.append(key, placeAdInput[key] ?? '');
         });
+
+        if(placeAdInput.image.length != 0){
           placeAdInput.image.forEach((image) => {
             formData.append('image[]', {
               uri: image,
@@ -118,10 +120,13 @@ const SellerInformation: React.FC<Props> = () => {
               type: 'image/png',
             });
           });
-
+        }
+         
+        if(placeAdInput.adsCountry.length != 0){
           placeAdInput.adsCountry.forEach((id) => {
             formData.append('adsCountry[]', id);
           });
+        }
 
           const fieldValueArray = placeAdInput.fieldValue;
 

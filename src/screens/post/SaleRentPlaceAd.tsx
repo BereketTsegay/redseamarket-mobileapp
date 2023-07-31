@@ -172,7 +172,7 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
           <View>
           {  errors.building &&
               <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-          <ItemDropdown value={'Building Type'} data={data} add={setBuilding}/>
+          <ItemDropdown value={'Building Type'} data={data} add={setBuilding} dropdownType={'Building Type'}/>
           </View>
 
           <Checkbox

@@ -7,12 +7,23 @@ import AppStyles from '../constants/AppStyles';
 import AppColors from '../constants/AppColors';
 import { PlaceAdContext } from '../api/placeAd/PlaceAdContext';
 
-const AdsCountrySelect = ({countryLists,add}) => {
+const AdsCountrySelect = ({countryLists,Id}) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [dropdownOptions, setDropdownOptions] = useState(countryLists);
     const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
 
-    useEffect(() => {
+
+      useEffect(() => {
+        const initiallySelectedCountry = countryLists.find(
+          (country) => country.id === Id
+        );
+        if (initiallySelectedCountry) {
+          setSelectedItems([initiallySelectedCountry]);
+          setDropdownOptions(dropdownOptions.filter((option) => option !== initiallySelectedCountry));
+        }
+      }, [Id]);
+
+      useEffect(() => {
         setPlaceAdInput({
           ...placeAdInput,
           adsCountry: selectedItems.map((item) => item.id),

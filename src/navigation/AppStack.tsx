@@ -52,6 +52,7 @@ const AppStack = () => {
         <Stack.Screen name={'JobProfile'} component={JobProfileAdd}/>
         <Stack.Screen name={RouteNames.TermsAndConditions} component={TermsAndConditions}/>
         <Stack.Screen name={'PostScreen'} component={AdPost}/>
+        <Stack.Screen name={RouteNames.JobSearch} component={JobSearch}/>
         <Stack.Screen name={'Apply_Job'} component={Apply_Job}/>
      
     </Stack.Navigator>
@@ -62,12 +63,11 @@ const AppStack = () => {
 const AdPost = () => {
   return(
     <PlaceAdProvider>
-    <Stack.Navigator
+    <Stack.Navigator initialRouteName={RouteNames.PostListScreen}
     screenOptions={{
       headerShown: false
     }}>
       <Stack.Screen name={RouteNames.PostListScreen} component={PostListScreen}/>
-      <Stack.Screen name={RouteNames.JobSearch} component={JobSearch}/>
       <Stack.Screen name={RouteNames.PostSecondScreen} component={PostSecondScreen}/>
       <Stack.Screen name={RouteNames.PlaceAdScreen} component={PlaceAdScreen}/>
       <Stack.Screen name={RouteNames.CustomPlaceAd} component={CustomPlaceAd}/>

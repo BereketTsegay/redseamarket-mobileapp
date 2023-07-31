@@ -169,16 +169,16 @@ const [errors, setErrors] = useState({
         <View>
           {  errors.make_id &&
               <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-<ItemDropdown value={'Make'} data={makeList?.make} add={setMake}/>
+<ItemDropdown value={'Make'} data={makeList?.make} add={setMake} dropdownType={'Make'}/>
 </View>
 
 <View>
           {  errors.model_id &&
               <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-<ItemDropdown value={'Model'} data={modelList?.model} add={setModel}/>
+<ItemDropdown value={'Model'} data={modelList?.model} add={setModel} dropdownType={'Model'}/>
 </View>
 
-<ItemDropdown value={'Variant'} data={variantList?.variant} add={setVariant}/>
+<ItemDropdown value={'Variant'} data={variantList?.variant} add={setVariant} dropdownType={'Variant'}/>
 
 <InputField
           title={'Registered Year'}
@@ -199,7 +199,7 @@ const [errors, setErrors] = useState({
 <View>
           {  errors.fuel &&
               <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-<ItemDropdown value={'Fuel Type'} data={fuelOption} add={setFuel}/>
+<ItemDropdown value={'Fuel Type'} data={fuelOption} add={setFuel} dropdownType={'Fuel Type'}/>
 </View>
 
 <View row marginB-20>

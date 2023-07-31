@@ -28,6 +28,7 @@ import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 import { PlaceAdRequest } from '../../api/placeAd/PlaceAdRequest';
 import { getWithAuthCall } from '../../api/apiClient';
 import AdsCountrySelect from '../../components/AdsCountrySelect';
+import { CommonContext } from '../../api/commonContext';
 const {TextField} = Incubator;
 export type PlaceAdScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -46,6 +47,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
   const {cat_id, sub_id, name} = route.params;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
+  const {commonInput, setCommonInput} = useContext(CommonContext)
   const [priceValue, setPriceValue] = useState('')
   const {countryLists} = useSelector((state: RootState) => state.CountryList);
   const {stateLists} = useSelector((state: RootState) => state.StateList);
@@ -67,6 +69,11 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
     city: false,
     area: false,
   });
+  useEffect(() => {
+    if (commonInput.common_country_id && !placeAdInput.country) {
+      setPlaceAdInput({ ...placeAdInput, country: commonInput.common_country_id });
+    }
+  }, [commonInput.common_country_id, placeAdInput.country]);
 
   useEffect(() => {
     let request = JSON.stringify({
@@ -88,14 +95,6 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
       subcategory: sub_id,
     });
     dispatch(fetchCustomField({requestBody: request}));
-  }, []);
-
-  useEffect(() => {
-    getWithAuthCall('app/featured')
-    .then(response=>
-      setPlaceAdInput({...placeAdInput, featured:response.data.data})
-      )
-      
   }, []);
 
   const setCountry = value => {
@@ -292,15 +291,16 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
           {  errors.country &&
               <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
           <ItemDropdown
-            value={'Select Country'}
+            value={placeAdInput.country}
             data={countryLists?.country}
             add={setCountry}
+            dropdownType={'Country'}
           />
           
           </View>
 
           <InputField
-            title={'Price'}
+            title={name == 'Jobs' ? 'Salary' : 'Price'}
             multiline={false}
             height={45}
             type={'numeric'}
@@ -359,6 +359,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             value={'Select State'}
             data={stateLists?.state}
             add={setState}
+            dropdownType={'State'}
           />
           </View>
 
@@ -369,6 +370,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             value={'Select City'}
             data={cityLists?.city}
             add={setCity}
+            dropdownType={'City'}
           />
           </View>
 
@@ -410,7 +412,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
             editable={true}
           />
 
-          <AdsCountrySelect countryLists={countryLists?.country}/>
+          <AdsCountrySelect countryLists={countryLists?.country} Id={commonInput.common_country_id}/>
 
           <Checkbox
             label={'Price Negotiable'}

@@ -5,14 +5,20 @@ import AppImages from '../constants/AppImages';
 import SelectDropdown from 'react-native-select-dropdown';
 
 
-const ItemDropdown = ({value,data,add}) => {
+const ItemDropdown = ({value,data,add,dropdownType}) => {
+  const selectedItem = data ? data.find((item) => item.id === value) : null;
+  const defaultButtonText =
+    selectedItem && selectedItem.name
+      ? selectedItem.name
+      : `Select ${dropdownType}`;
+
     return (
       <SelectDropdown
         data={data}
         onSelect={(selectedItem, index) => {
           add(selectedItem.id);
         }}
-        defaultButtonText={value}
+        defaultButtonText={defaultButtonText}
         buttonTextAfterSelection={(selectedItem, index) => {
           return selectedItem.name;
         }}
