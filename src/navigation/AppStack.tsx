@@ -26,6 +26,7 @@ import { CommonProvider } from '../api/commonContext';
 import { JobProvider } from '../api/jobs/JobContext';
 import JobSearch from '../screens/jobs/JobSearch';
 import JobApply from '../screens/jobs/JobApply';
+import { JobApplyProvider } from '../api/jobApply/JobApplyContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -94,14 +95,19 @@ const JobProfileAdd = () => {
   )
 }
 
-const Apply_Job = () => {
+const Apply_Job = ({route}) => {
+  const {id} = route.params;
   return(
+    <JobApplyProvider>
   <Stack.Navigator
     screenOptions={{
       headerShown: false
     }}>
-     <Stack.Screen name={RouteNames.JobApply} component={JobApply}/>
+   <Stack.Screen name={RouteNames.JobApply}>
+          {(props) => <JobApply {...props} id={id} />}
+        </Stack.Screen>
   </Stack.Navigator>
+  </JobApplyProvider>
   )
 }
 

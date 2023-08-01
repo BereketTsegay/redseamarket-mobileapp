@@ -15,6 +15,7 @@ import {
   Dashboard,
   Details_Ad,
 } from './home/DashBoardResponse';
+import { JobApplyResponse } from './jobApply/JobApplySlice';
 import { JobSaveResponse } from './jobs/JobProfileSaveSlice';
 import { JobUpdateResponse } from './jobs/JobProfileUpdateSlice';
 import { JobResponse } from './jobs/JobResponse';
@@ -533,6 +534,28 @@ export const updateJobProfile = async (
 ): Promise<NetworkResponse<JobUpdateResponse | null>> => {
   const response = await ApiFormData(
     'app/update/jobprofile',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR CREATING JOB PROFILE
+export const applyJob = async (
+  requestBody: any,
+): Promise<NetworkResponse<JobApplyResponse | null>> => {
+  const response = await ApiFormData(
+    'app/apply/job',
     'POST',
     requestBody,
   );

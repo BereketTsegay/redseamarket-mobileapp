@@ -147,7 +147,10 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
                       </View>
 
                       <View marginB-10 style={styles.rowView}>
+                        <View row center>
+                          <Image source={AppImages.LOCATION} style={{height:15,width:15}}/>
                         <Text>{item.state_name + ',' + item.country_name}</Text>
+                        </View>
                         <Text>{item.created_on}</Text>
                       </View>
                     </View>
@@ -213,9 +216,10 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
                             ellipsizeMode="tail">
                             {item.description}
                           </Text>
-                          <Text style={[styles.locationText]}>
-                            {item.country_name}
-                          </Text>
+                          <View row centerV>
+                          <Image source={AppImages.LOCATION} style={{height:15,width:15}}/>
+                        <Text>{item.country_name}</Text>
+                        </View>
                         </View>
                       </View>
                     </TouchableOpacity>

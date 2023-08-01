@@ -24,6 +24,7 @@ import PlaceAdSlice from './src/api/placeAd/PlaceAdSlice';
 import JobProfileListSlice from './src/api/jobs/JobProfileListSlice';
 import JobProfileSaveSlice from './src/api/jobs/JobProfileSaveSlice';
 import JobProfileUpdateSlice from './src/api/jobs/JobProfileUpdateSlice';
+import JobApplySlice from './src/api/jobApply/JobApplySlice';
 
 const rootReducer = combineReducers({
   registerCreate: RegisterCreateSlice,
@@ -50,7 +51,8 @@ const rootReducer = combineReducers({
   PlaceAd: PlaceAdSlice,
   JobProfileList: JobProfileListSlice,
   JobProfileSave: JobProfileSaveSlice,
-  JobProfileUpdate: JobProfileUpdateSlice
+  JobProfileUpdate: JobProfileUpdateSlice,
+  JobApply: JobApplySlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

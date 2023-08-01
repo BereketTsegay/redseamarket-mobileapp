@@ -35,6 +35,7 @@ const AppImages = {
     MYADS: require('../images/myads.png'),
     PROFILE: require('../images/profile.png'),
     SUPPORT: require('../images/support.png'),
+    LOCATION: require('../images/location.png'),
   };
   
   export default AppImages;

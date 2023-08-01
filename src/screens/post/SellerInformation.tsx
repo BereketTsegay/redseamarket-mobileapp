@@ -15,6 +15,7 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { PlaceAdRequest } from '../../api/placeAd/PlaceAdRequest';
+import MapComponent from '../../components/MapComponent';
 const {TextField} = Incubator;
 export type SellerInformationNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -50,6 +51,10 @@ const SellerInformation: React.FC<Props> = () => {
     setPlaceAdInput({...placeAdInput, name:profileDetails?.data.user.name, email:profileDetails?.data.user.email})
   }, []);
 
+  const locationSet = (value) => {
+    setPlaceAdInput({...placeAdInput, latitude:value.latitude, longitude:value.longitude})
+  }
+ 
   const submit = () => {
     const hasErrors = !placeAdInput.name || !placeAdInput.email || !placeAdInput.address || !placeAdInput.phone;
 
@@ -151,7 +156,7 @@ const SellerInformation: React.FC<Props> = () => {
         ToastAndroid.SHORT,
       );
       // console.log(PlaceAdData,'success')
-      navigation.navigate(RouteNames.SuccessPage)
+      navigation.navigate(RouteNames.SuccessPage,{status:'PostAd'})
     } else {
       // console.log(PlaceAdData,'failure')
         ToastAndroid.show(
@@ -254,6 +259,11 @@ const SellerInformation: React.FC<Props> = () => {
         
           color={'grey'}
           containerStyle={{marginBottom:20}}/>
+
+          <View marginB-20>
+            <Text style={styles.fieldText} marginB-5>Location</Text>
+            <MapComponent onPress={locationSet}/>
+          </View>
 
 <View row marginB-20>
 <Checkbox

@@ -25,6 +25,7 @@ import CustomDetails from './CustomDetails';
 import AppColors from '../../constants/AppColors';
 import FavoriteComponent from '../../components/FavoriteComponent';
 import moment from 'moment';
+import MapComponent from '../../components/MapComponent';
 export type DetailsScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'DetailsScreen'
@@ -175,7 +176,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
              label={dashboardDetails?.ads[0].isApply ?'Job already applied' : 'Apply this Job'}
              style={{backgroundColor: AppColors.lightBlue,marginBottom:20,width:'70%',alignSelf:'center'}}
              onPress={()=>{dashboardDetails?.ads[0].isApply ? null :
-                          navigation.navigate('Apply_Job')}}
+                          navigation.navigate('Apply_Job',{id:dashboardDetails.ads[0].id})}}
            />}
 
                 <Text style={styles.subHeading}>Description</Text>
@@ -197,6 +198,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                   {dashboardDetails?.ads[0].city_name},{' '}
                   {dashboardDetails?.ads[0].country_name}
                 </Text>
+                <MapComponent latitudes={dashboardDetails?.ads[0].latitude} longitudes={dashboardDetails?.ads[0].longitude}/>
               </View>
             </ScrollView>
 

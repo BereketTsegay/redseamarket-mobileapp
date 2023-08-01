@@ -222,7 +222,6 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
     }
 
     if (jobUpdateData != null) {
-      console.log(jobUpdateData,'______-')
       if (!loadingUpdateJob && !jobUpdateError && jobUpdateData.status == 'success') {
         ToastAndroid.show(
           JSON.stringify('Profile Updated Successfully'),
@@ -230,7 +229,6 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
         );
         navigation.replace('JobProfile',{screen:RouteNames.MyJobDetails})
       } else {
-        console.log(jobSaveData,'failure')
           ToastAndroid.show(
             JSON.stringify('error'),
             ToastAndroid.SHORT,
@@ -282,10 +280,9 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
 
     {jobInput.company != null &&
           jobInput.company.map((companyData, index) => (
-        <View key={index} paddingV-10>
-          <Text>Company: {companyData.company}</Text>
-          <Text>From: {companyData.from_date}</Text>
-          <Text>To: {companyData.to_date}</Text>
+        <View key={index} paddingB-10>
+          <Text style={styles.fieldText}>{companyData.company}</Text>
+          <Text style={styles.fieldText}>{companyData.from_date} - {companyData.to_date}</Text>
           <TouchableOpacity onPress={() => deleteCompany(index)}>
             <Text style={{ color: 'red' }}>Delete</Text>
           </TouchableOpacity>

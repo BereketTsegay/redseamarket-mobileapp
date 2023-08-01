@@ -10,7 +10,6 @@ import { createFavorite, reset } from "../api/favorites/FavCreateSlice";
 import styles from "../screens/details/styles";
 
 const FavoriteComponent = ({id,status,done}) => {
-    console.log(status)
     const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
     const {FavData,loadingFav,FavError} = useSelector(
       (state: RootState) => state.FavCreate,
