@@ -60,7 +60,9 @@ const JobSearch: React.FC<Props> = ({route}) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.PostSecondScreen,{Id:Id,name:name})}>
+        <TouchableOpacity onPress={()=>{
+              navigation.navigate(RouteNames.HiringListScreen,{cat_Id:Id,name:name, countryId:commonInput.common_country_id})
+            }}>
           <View marginH-30 marginV-20>
             <Text style={{fontSize: 14, fontFamily: AppFonts.POPPINS_SEMIBOLD}}>
               Hire people
