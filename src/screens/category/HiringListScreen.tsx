@@ -10,10 +10,9 @@ import AppImages from '../../constants/AppImages';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchCategoryList} from '../../api/category/CategoryListSlice';
 import AppColors from '../../constants/AppColors';
-import CarouselView from '../../components/CarouselView';
 import FavoriteComponent from '../../components/FavoriteComponent';
+import { fetchHiringJobList } from '../../api/jobs/HiringJobSlice';
 
 type HiringListScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -31,8 +30,8 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<HiringListScreenNavigationProps>();
   const {cat_Id, name, countryId} = route.params;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const {categoryLists, loadingCategoryLists} = useSelector(
-    (state: RootState) => state.CategoryList,
+  const {hiringJobList, loadingHiringJobList, hiringJobListError} = useSelector(
+    (state: RootState) => state.HiringJob,
   );
   const {currencyLists} = useSelector((state: RootState) => state.CurrencyList);
 
@@ -41,11 +40,7 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
   }, []);
 
   const list = () => {
-    let request = JSON.stringify({
-      category: cat_Id,
-      country: countryId,
-    });
-    dispatch(fetchCategoryList({requestBody: request}));
+    dispatch(fetchHiringJobList({requestBody: ''}));
   };
 
   const favDone = () => {
@@ -64,7 +59,7 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
           </View>
         </TouchableOpacity>
         <Text flex center style={[styles.text, {fontSize: 14}]}>
-          {categoryLists?.length} Results
+          {hiringJobList?.data.length} Results
         </Text>
       </View>
 
@@ -77,11 +72,11 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
         <Text style={styles.text}>Sort</Text>
       </View>
       <View flex paddingH-20>
-        {loadingCategoryLists ? (
+        {loadingHiringJobList ? (
           <ActivityIndicator color={AppColors.blue} size={20} />
         ) : (
           <FlatList
-            data={categoryLists}
+            data={hiringJobList?.data}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               return (
@@ -94,7 +89,7 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
                        });
                      }}>
                     <View style={styles.view1}>
-                      <View style={styles.rowView}>
+                      {/* <View style={styles.rowView}>
                         <View>
                         {item.featured_flag == 1 &&
                         <View center style={styles.featuredView}>
@@ -106,51 +101,27 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
                           status={item.isFavourite}
                           done={favDone}
                         />
-                      </View>
+                      </View> */}
 
                       <View style={styles.rowView}>
                         <Image
-                          source={
-                            item.image == null ||
-                            item.image.length == 0 ||
-                            item.image[0].image == null
-                              ? AppImages.PLACEHOLDER
-                              : {
-                                  uri:
-                                    'https://admin-jamal.prompttechdemohosting.com/' +
-                                    item.image[0].image,
-                                }
-                          }
+                          source={AppImages.PLACEHOLDER}
                           style={{width: 70, height: 70, borderRadius:40}}
                         />
                         <View flex left marginH-20>
-                          {/* <Text style={styles.jobText}>TCS Solutions</Text> */}
+                          <Text style={styles.jobText}>{item.user.name}</Text>
                           <Text style={[styles.jobText, {color: 'black'}]}>
                             {item.title}
                           </Text>
-                          <Text style={styles.jobText1}>
-                            Salary - {currencyLists?.currency.currency_code}{' '}
-                            {(currencyLists?.currency.value * item.price)
-                              .toFixed()
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                          </Text>
+                          <Text style={styles.jobText1}>Experience {item.work_experience} years</Text>
                         </View>
                       </View>
 
                       <View marginV-10>
                         <Text style={styles.text}>Description</Text>
                         <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.text, {opacity: 0.75}]}>
-                          {item.description}
+                          {item.overview}
                         </Text>
-                      </View>
-
-                      <View marginB-10 style={styles.rowView}>
-                        <View row center>
-                          <Image source={AppImages.LOCATION} style={{height:15,width:15}}/>
-                        <Text>{item.state_name + ',' + item.country_name}</Text>
-                        </View>
-                        <Text>{item.created_on}</Text>
                       </View>
                     </View>
                     </TouchableOpacity>

@@ -26,4 +26,5 @@ export type RootStackParams = {
   JobSearch: undefined;
   JobApply: undefined;
   HiringListScreen: undefined;
+  EditProfile: undefined;
 };

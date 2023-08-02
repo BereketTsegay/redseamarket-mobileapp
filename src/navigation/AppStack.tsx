@@ -28,6 +28,7 @@ import JobSearch from '../screens/jobs/JobSearch';
 import JobApply from '../screens/jobs/JobApply';
 import { JobApplyProvider } from '../api/jobApply/JobApplyContext';
 import HiringListScreen from '../screens/category/HiringListScreen';
+import EditProfile from '../screens/menu/EditProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,6 +58,7 @@ const AppStack = () => {
         <Stack.Screen name={'PostScreen'} component={AdPost}/>
         <Stack.Screen name={RouteNames.JobSearch} component={JobSearch}/>
         <Stack.Screen name={'Apply_Job'} component={Apply_Job}/>
+        <Stack.Screen name={RouteNames.EditProfile} component={EditProfile}/>
      
     </Stack.Navigator>
     </CommonProvider>

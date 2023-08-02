@@ -12,7 +12,7 @@ const Header = () => {
       );
     return(
         <View row paddingH-30 paddingV-20 centerV style={styles.container}>
-        <Image source={AppImages.PLACEHOLDER} style={styles.image}/>
+        <Image source={profileDetails?.data.user.image ? {uri:'https://admin-jamal.prompttechdemohosting.com/'+profileDetails?.data.user.image} : AppImages.PLACEHOLDER} style={styles.image}/>
       <View paddingL-20>
         <Text style={styles.nameText}>{profileDetails?.data.user.name}</Text>
         <Text style={styles.emailText}>{profileDetails?.data.user.email}</Text>

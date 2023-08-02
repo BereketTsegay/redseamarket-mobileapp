@@ -16,14 +16,15 @@ export type User = {
     id:                  number;
     name:                string;
     email:               string;
-    phone:               null;
-    nationality_id:      null;
-    email_verified_at:   null;
+    phone:               number;
+    nationality_id:      number;
+    email_verified_at:   number;
     type:                number;
     status:              number;
     email_verified_flag: number;
     delete_status:       number;
     created_at:          Date;
     updated_at:          Date;
-    wallet:              null;
+    wallet:              number;
+    image:               string;
 }

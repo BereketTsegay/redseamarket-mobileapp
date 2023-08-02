@@ -19,7 +19,7 @@ export type Data = {
     city_id:         number;
     created_at:      Date;
     updated_at:      Date;
-    company:         Company[];
+    company?:         Company[];
 }
 
 export type Company = {

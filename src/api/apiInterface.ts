@@ -16,6 +16,7 @@ import {
   Details_Ad,
 } from './home/DashBoardResponse';
 import { JobApplyResponse } from './jobApply/JobApplySlice';
+import { HiringJobResponse } from './jobs/HiringJobSlice';
 import { JobSaveResponse } from './jobs/JobProfileSaveSlice';
 import { JobUpdateResponse } from './jobs/JobProfileUpdateSlice';
 import { JobResponse } from './jobs/JobResponse';
@@ -24,6 +25,7 @@ import { Motor } from './motor/MotorResponse';
 import {ResendOtpResponse} from './otp/OtpResendSlice';
 import {OtpResponse} from './otp/OtpVerificationSlice';
 import { PlaceAdResponse } from './placeAd/PlaceAdSlice';
+import { EditResponse } from './profile/ProfileEditSlice';
 import { ProfileResponse } from './profile/ProfileResponse';
 import {RegisterResponse} from './register/RegisterCreateSlice';
 import { SubCategoryResponse } from './subCategories/SubCategoryResponse';
@@ -556,6 +558,50 @@ export const applyJob = async (
 ): Promise<NetworkResponse<JobApplyResponse | null>> => {
   const response = await ApiFormData(
     'app/apply/job',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR LISTING HIRING JOB LIST
+export const fetchHiringJobList = async (
+  requestBody: any,
+): Promise<NetworkResponse<HiringJobResponse | null>> => {
+  const response = await apiClient(
+    'app/get/jobprofile/list',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR UPDATING PROFILE
+export const UpdateProfile = async (
+  requestBody: any,
+): Promise<NetworkResponse<EditResponse | null>> => {
+  const response = await ApiFormData(
+    'app/customer/update/profile',
     'POST',
     requestBody,
   );

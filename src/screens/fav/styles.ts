@@ -11,8 +11,6 @@ const styles = StyleSheet.create({
     height:50,
     width:50,
     borderRadius:25,
-    borderWidth:2,
-    borderColor:AppColors.lightBlue
  },
  nameText:{
     fontSize:14,
