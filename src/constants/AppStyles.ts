@@ -35,6 +35,29 @@ const AppStyles = StyleSheet.create({
         fontFamily:AppFonts.POPPINS_LIGHT
         
       },
+      text:{
+        fontSize:14,
+        fontFamily:AppFonts.POPPINS_BOLD,
+        color:'black'
+      },
+      text1:{
+        fontSize:12,
+        fontFamily:AppFonts.POPPINS_REGULAR,
+        color:'black'
+      },
+      text2:{
+        fontSize:16,
+        fontFamily:AppFonts.POPPINS_BOLD,
+        color:'green'
+      },
+      warnText:{
+        color:'red',
+        fontFamily:AppFonts.POPPINS_LIGHT,
+        fontSize:10,
+        bottom:20,
+        alignSelf:'flex-end',
+        width:'85%'
+      }
       
   });
 

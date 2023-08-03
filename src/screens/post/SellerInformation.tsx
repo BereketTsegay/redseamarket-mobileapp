@@ -16,6 +16,7 @@ import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { PlaceAdRequest } from '../../api/placeAd/PlaceAdRequest';
 import MapComponent from '../../components/MapComponent';
+import PaymentType from '../../components/PaymentType';
 const {TextField} = Incubator;
 export type SellerInformationNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -110,7 +111,8 @@ const SellerInformation: React.FC<Props> = () => {
           'title',
           'titleinArabic',
           'transmission',
-          'variant_id'
+          'variant_id',
+          'paymentMethod'
         ];
       
         keysToAppend.forEach((key) => {
@@ -139,13 +141,13 @@ const SellerInformation: React.FC<Props> = () => {
             formData.append(`fieldValue[${i}][field_id]`, fieldValueArray[i].field_id);
             formData.append(`fieldValue[${i}][value]`, fieldValueArray[i].value);
           }
-        // console.log(formData, '-------------------------');
-        dispatch(createAd({requestBody: formData}))
-        .then(() => {
-          dispatch(reset());
-          setPlaceAdInput(new PlaceAdRequest())
-        })
-        .catch((err: any) => console.log(err));
+        console.log(formData, '-------------------------');
+        // dispatch(createAd({requestBody: formData}))
+        // .then(() => {
+        //   dispatch(reset());
+        //   setPlaceAdInput(new PlaceAdRequest())
+        // })
+        // .catch((err: any) => console.log(err));
     }
   }
 
@@ -279,11 +281,16 @@ const SellerInformation: React.FC<Props> = () => {
           </TouchableOpacity>
           </View>
 
+          {terms && placeAdInput.featured != 0 &&
+         <PaymentType/>}
+
           <View row style={{justifyContent:'space-between'}}>
           <Button
           label={'Back'}
           labelStyle={styles.buttonLabelStyle}
-          style={{backgroundColor:'white',borderColor:AppColors.lightBlue,borderWidth:1,width:'48%'}}/>
+          style={{backgroundColor:'white',borderColor:AppColors.lightBlue,borderWidth:1,width:'48%'}}
+          onPress={submit}/>
+          
 
           <Button
           label={'Create'}

@@ -50,6 +50,10 @@ export class PlaceAdRequest{
      parking: Boolean = false;
      fieldValue: Field[] = [];
 
+     //payment method
+     paymentMethod: String = '';
+     paymentId: Number = 0;
+
      
 }
 

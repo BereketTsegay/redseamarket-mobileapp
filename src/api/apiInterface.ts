@@ -10,6 +10,7 @@ import {CurrencyResponse} from './currency/CurrencyResponse';
 import { CustomField } from './customField/CustomFieldResponse';
 import {FavResponse} from './favorites/FavCreateSlice';
 import {FavList} from './favorites/FavListResponse';
+import { FeaturedResponse } from './featured/FeaturedResponse';
 import {
   DashBoardDetails,
   Dashboard,
@@ -602,6 +603,28 @@ export const UpdateProfile = async (
 ): Promise<NetworkResponse<EditResponse | null>> => {
   const response = await ApiFormData(
     'app/customer/update/profile',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR FETCHING FEATURED AMOUNT
+export const fetchFeaturedAmount = async (
+  requestBody: any,
+): Promise<NetworkResponse<FeaturedResponse | null>> => {
+  const response = await apiClient(
+    'app/subcategory/featured/amount',
     'POST',
     requestBody,
   );
