@@ -36,6 +36,7 @@ const AppImages = {
     PROFILE: require('../images/profile.png'),
     SUPPORT: require('../images/support.png'),
     LOCATION: require('../images/location.png'),
+    CARD: require('../images/card.png'),
   };
   
   export default AppImages;

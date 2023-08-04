@@ -46,17 +46,45 @@ const SellerInformation: React.FC<Props> = () => {
     phone: false
   });
 
-  // console.log(placeAdInput)
   
   useEffect(() => {
-    setPlaceAdInput({...placeAdInput, name:profileDetails?.data.user.name, email:profileDetails?.data.user.email})
+    setPlaceAdInput({...placeAdInput, name:profileDetails?.data.user.name, 
+      email:profileDetails?.data.user.email, 
+      phone:profileDetails?.data.user.phone})
   }, []);
 
   const locationSet = (value) => {
     setPlaceAdInput({...placeAdInput, latitude:value.latitude, longitude:value.longitude})
   }
+
+  const afterPayment = (id) => {
+    setPlaceAdInput({...placeAdInput, paymentId:id})
+    submit(id)
+  }
+
+  const Create = () => {
+  if(placeAdInput.featured == 1){
+    if(placeAdInput.paymentMethod == 'account'){
+      submit('')
+    }
+    else{
+    null
+    }
+  }
+  else if (placeAdInput.featured == 2 && placeAdInput.featuredSelect ==true){
+    if(placeAdInput.paymentMethod == 'account'){
+      submit('')
+    }
+    else{
+    null
+    }
+  }
+  else{
+    submit('')
+  }
+  }
  
-  const submit = () => {
+  const submit = (pay_id) => {
     const hasErrors = !placeAdInput.name || !placeAdInput.email || !placeAdInput.address || !placeAdInput.phone;
 
     if (hasErrors) {
@@ -118,6 +146,7 @@ const SellerInformation: React.FC<Props> = () => {
         keysToAppend.forEach((key) => {
           formData.append(key, placeAdInput[key] ?? '');
         });
+        formData.append('paymentId', pay_id);
 
         if(placeAdInput.image.length != 0){
           placeAdInput.image.forEach((image) => {
@@ -142,12 +171,12 @@ const SellerInformation: React.FC<Props> = () => {
             formData.append(`fieldValue[${i}][value]`, fieldValueArray[i].value);
           }
         console.log(formData, '-------------------------');
-        // dispatch(createAd({requestBody: formData}))
-        // .then(() => {
-        //   dispatch(reset());
-        //   setPlaceAdInput(new PlaceAdRequest())
-        // })
-        // .catch((err: any) => console.log(err));
+        dispatch(createAd({requestBody: formData}))
+        .then(() => {
+          dispatch(reset());
+          setPlaceAdInput(new PlaceAdRequest())
+        })
+        .catch((err: any) => console.log(err));
     }
   }
 
@@ -281,25 +310,33 @@ const SellerInformation: React.FC<Props> = () => {
           </TouchableOpacity>
           </View>
 
-          {terms && placeAdInput.featured != 0 &&
-         <PaymentType/>}
+          {(terms && placeAdInput.featured == 1)?
+         <PaymentType value={afterPayment}/>
+        : (terms && placeAdInput.featured == 2 && placeAdInput.featuredSelect == true) ?
+         <PaymentType value={afterPayment}/>
+        : <View/>}
 
+        {placeAdInput.paymentMethod != 'stripe' &&
           <View row style={{justifyContent:'space-between'}}>
           <Button
           label={'Back'}
           labelStyle={styles.buttonLabelStyle}
           style={{backgroundColor:'white',borderColor:AppColors.lightBlue,borderWidth:1,width:'48%'}}
-          onPress={submit}/>
+          onPress={()=>submit('')}/>
           
 
           <Button
           label={'Create'}
           labelStyle={[styles.buttonLabelStyle,{color:'white'}]}
-          style={{backgroundColor:AppColors.lightBlue,width:'48%',opacity:terms && placeAdInput.featured == 0 ? 1 : 0.5}}
-          onPress={()=>{terms && placeAdInput.featured == 0 ? submit() : null}}
+          style={{backgroundColor:AppColors.lightBlue,width:'48%',
+          opacity:(terms && placeAdInput.featured == 0) ? 1 : 
+          (terms && placeAdInput.featured == 2 && placeAdInput.featuredSelect == false) ? 1 :
+          (terms && placeAdInput.featured == 2 && placeAdInput.featuredSelect == true && placeAdInput.paymentMethod == 'account') ? 1 : 
+          0.5}}
+          onPress={()=>{terms && Create()}}
           />
 
-          </View>
+          </View>}
 
           
                 </View>

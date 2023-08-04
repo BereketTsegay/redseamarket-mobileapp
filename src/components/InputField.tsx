@@ -7,21 +7,23 @@ type Props = {
   title : any;
   multiline? : any;
   height? : any;
+  width? : any,
   type? : any;
   value: any;
   onChange: any;
   trailing? : any;
-  editable? : any
+  editable? : any;
+  lead? : any
 }
 
-const InputField = ({title,multiline,height,type,value,onChange,trailing,editable}: Props) => {
+const InputField = ({title,multiline,height,width,type,value,onChange,trailing,editable, lead}: Props) => {
     return(
       <TextField
           placeholder={title}
           placeholderTextColor={"#000000"}
           color={"#000000"}
           style={AppStyles.fieldText}
-          fieldStyle={[AppStyles.fieldStyle,{height:height}]}
+          fieldStyle={[AppStyles.fieldStyle,{height:height, width:width}]}
           paddingH-15
           marginB-20
           multiline={multiline}
@@ -30,6 +32,7 @@ const InputField = ({title,multiline,height,type,value,onChange,trailing,editabl
           onChangeText={onChange}
           trailingAccessory={trailing}
           editable={editable}
+          leadingAccessory={lead}
           />
     )
   }

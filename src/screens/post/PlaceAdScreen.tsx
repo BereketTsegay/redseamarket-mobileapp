@@ -427,9 +427,10 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
           <Checkbox
             label={'Featured'}
             labelStyle={styles.fieldText}
-            value={false}
+            value={placeAdInput.featuredSelect}
             color={'grey'}
             containerStyle={{marginBottom: 20}}
+            onValueChange={(value)=>setPlaceAdInput({...placeAdInput, featuredSelect:value})}
           />}
 
           <Button

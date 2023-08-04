@@ -29,6 +29,7 @@ import { PlaceAdResponse } from './placeAd/PlaceAdSlice';
 import { EditResponse } from './profile/ProfileEditSlice';
 import { ProfileResponse } from './profile/ProfileResponse';
 import {RegisterResponse} from './register/RegisterCreateSlice';
+import { PaymentResponse } from './stripe/StripePaymentSlice';
 import { SubCategoryResponse } from './subCategories/SubCategoryResponse';
 
 type ResponseKind = 'success' | 'failure';
@@ -625,6 +626,28 @@ export const fetchFeaturedAmount = async (
 ): Promise<NetworkResponse<FeaturedResponse | null>> => {
   const response = await apiClient(
     'app/subcategory/featured/amount',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR CREATING PAYMENT
+export const createPayment = async (
+  requestBody: any,
+): Promise<NetworkResponse<PaymentResponse | null>> => {
+  const response = await ApiFormData(
+    'app/customer/stripe/payment',
     'POST',
     requestBody,
   );

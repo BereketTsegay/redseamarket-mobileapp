@@ -57,7 +57,13 @@ const AppStyles = StyleSheet.create({
         bottom:20,
         alignSelf:'flex-end',
         width:'85%'
-      }
+      },
+      title: {
+        fontSize: 18,
+        fontFamily: AppFonts.POPPINS_SEMIBOLD,
+        color: 'black',
+        marginBottom:10
+      },
       
   });
 

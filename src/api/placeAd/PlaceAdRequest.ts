@@ -52,7 +52,10 @@ export class PlaceAdRequest{
 
      //payment method
      paymentMethod: String = '';
-     paymentId: Number = 0;
+     paymentId: String = '';
+
+
+     featuredSelect: boolean = false;
 
      
 }
