@@ -171,8 +171,22 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
               <Text style={styles.motorText1}>{dashboardDetails?.ads[0].updated_on}</Text>
             </View>
 
-            {dashboardDetails?.ads[0].category.name == "Jobs" &&
-             <Button
+            {dashboardDetails?.ads[0].category.name == "Jobs" && dashboardDetails.ads[0].featured_flag ==1 && dashboardDetails.ads[0].payment &&
+             dashboardDetails.ads[0].payment.payment_type == 1 && dashboardDetails.lastpay == 0 &&
+            <Button
+            label={'Upload Payment Document (USD ' + dashboardDetails.ads[0].payment.amount + ')'}
+            style={{backgroundColor: AppColors.lightBlue,marginBottom:20,width:'100%',alignSelf:'center'}}
+            onPress={()=>{}}
+          />}
+
+{dashboardDetails?.ads[0].category.name == "Jobs" && dashboardDetails.lastpay == 1 && dashboardDetails.ads[0].status == 0 &&
+<View center>
+           <Text style={{color:'red'}}>Ad pending for Verification</Text>
+           </View>
+          }
+          
+          {dashboardDetails?.ads[0].category.name == "Jobs" && dashboardDetails.ads[0].status == 1 &&
+            <Button
              label={dashboardDetails?.ads[0].isApply ?'Job already applied' : 'Apply this Job'}
              style={{backgroundColor: AppColors.lightBlue,marginBottom:20,width:'70%',alignSelf:'center'}}
              onPress={()=>{dashboardDetails?.ads[0].isApply ? null :

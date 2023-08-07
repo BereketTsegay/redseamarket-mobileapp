@@ -140,7 +140,7 @@ const HomeScreen: React.FC<Props> = () => {
         keyboardType="default"
         leadingAccessory={<Image source={AppImages.SEARCH} style={{width:18,height:18,right:5}}/>}
       />
-     {Dropdown('language',lang)}
+     {/* {Dropdown('language',lang)} */}
     </View>
     </ImageBackground>
     <CountrySelectionModal
