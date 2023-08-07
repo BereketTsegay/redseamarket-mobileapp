@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { fetchJobProfileList } from '../../api/jobs/JobProfileListSlice';
 import { JobContext } from '../../api/jobs/JobContext';
+import PdfModal from '../../components/PdfModal';
 export type MyJobDetailsNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'MyJobDetails'
@@ -30,6 +31,7 @@ interface Props { }
 
 const MyJobDetails: React.FC<Props> = () => {
   const navigation = useNavigation<MyJobDetailsNavigationProps>();
+  const [showPdf, setShowPdf] = useState(false);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {jobInput, setJobInput} = useContext(JobContext)
   const { jobProfileList, loadingJobProfileList} = useSelector(
@@ -42,6 +44,14 @@ const MyJobDetails: React.FC<Props> = () => {
   const list = () => {
     dispatch(fetchJobProfileList({ requestBody: '' }));
   }
+
+  const handleViewResume = () => {
+    setShowPdf(true);
+  };
+
+  const handleClosePdf = () => {
+    setShowPdf(false);
+  };
 
 
   return (
@@ -139,9 +149,11 @@ const MyJobDetails: React.FC<Props> = () => {
           
           <View row centerV style={{justifyContent:'space-between'}} marginV-10>
           <Text style={styles.subHeading}>Resume</Text>
+          <TouchableOpacity onPress={handleViewResume}>
           <View  style={styles.cvView}>
           <Text>{jobProfileList?.data.cv_file}</Text>
           </View>
+          </TouchableOpacity>
           </View>
 
           <View style={styles.overView}>
@@ -158,7 +170,14 @@ const MyJobDetails: React.FC<Props> = () => {
 }
       </View>
 
-
+      {showPdf && (
+          <PdfModal
+          visible={showPdf}
+          pdfUrl={'https://admin-jamal.prompttechdemohosting.com/' + jobProfileList?.data.cv_file}
+          onClose={handleClosePdf}
+          jobStatus={false}
+        />
+      )}
     </ImageBackground>
 
   );

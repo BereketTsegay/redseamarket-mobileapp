@@ -16,6 +16,7 @@ import Header from '../../components/Header';
 import AppFonts from '../../constants/AppFonts';
 import { apiClient } from '../../api/apiClient';
 import { CommonContext } from '../../api/commonContext';
+import PdfModal from '../../components/PdfModal';
 export type AdsScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'AdsScreen'
@@ -31,6 +32,8 @@ interface Props {}
 const AdsScreen: React.FC<Props> = () => {
   const navigation = useNavigation<AdsScreenNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const [request_Document, setDocument] = useState([])
+  const [showPdf, setShowPdf] = useState(false);
   const {commonInput, setCommonInput} = useContext(CommonContext)
   const {adLists, loadingAdLists} = useSelector(
     (state: RootState) => state.AdList)
@@ -72,6 +75,21 @@ const AdsScreen: React.FC<Props> = () => {
       })
     }
 
+    const Documents = (ad_id) => {
+      let request = JSON.stringify({
+        ads_id: ad_id
+      })
+      apiClient('app/customer/get/ad-cvdocuments', 'POST', request)
+      .then(response=>{
+        setDocument(response.data.data)
+        setShowPdf(true)
+      })
+    }
+
+  
+    const handleClosePdf = () => {
+      setShowPdf(false);
+    };
 
   return (
     <View flex backgroundColor='#FFFFFF'>
@@ -107,12 +125,26 @@ const AdsScreen: React.FC<Props> = () => {
                  <Image source={AppImages.DELETE} style={{width:18,height:18}}/>
                  </TouchableOpacity>
                  </View>
+
+                 {(item.category.name == 'Jobs' && item.status == 1) &&
+                 <TouchableOpacity onPress={()=>Documents(item.id)}>
+                  <Text style={[styles.titleText,{color:'#007bff'}]}>View Request Documents</Text>
+                 </TouchableOpacity>}
                  </View>
                 </View>
                 </TouchableOpacity>
       )
     }}/>}
         </View>
+
+        {showPdf && (
+          <PdfModal
+          visible={showPdf}
+          pdfUrl={request_Document}
+          onClose={handleClosePdf}
+          jobStatus={true}
+        />
+      )}
         </View>
     
   );

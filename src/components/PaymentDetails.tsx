@@ -75,7 +75,7 @@ const PaymentDetails = ({amount, value}) => {
       formData.append('cvv', cvv);
       formData.append('amount', amount);
 
-      console.log(formData, '-------------------------');
+      // console.log(formData, '-------------------------');
       dispatch(createPayment({requestBody: formData}))
         .then(() => {
           dispatch(reset());
@@ -86,7 +86,7 @@ const PaymentDetails = ({amount, value}) => {
 
   useEffect(() => {
     if (paymentData != null) {
-      console.log(paymentData);
+      // console.log(paymentData);
       if (!loadingPayment && !paymentError && paymentData.status) {
         value(paymentData.payment_id);
         ToastAndroid.show(

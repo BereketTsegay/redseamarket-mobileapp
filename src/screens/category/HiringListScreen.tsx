@@ -78,15 +78,12 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
           <FlatList
             data={hiringJobList?.data}
             showsVerticalScrollIndicator={false}
-            renderItem={({item}) => {
+            renderItem={({item,index}) => {
               return (
                 <>
                      <TouchableOpacity
                      onPress={() => {
-                       navigation.navigate(RouteNames.DetailsScreen, {
-                         adId: item.id,
-                         countryId: countryId,
-                       });
+                       navigation.navigate(RouteNames.HiringJobDetails,{index:index});
                      }}>
                     <View style={styles.view1}>
                       {/* <View style={styles.rowView}>
@@ -105,7 +102,7 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
 
                       <View style={styles.rowView}>
                         <Image
-                          source={AppImages.PLACEHOLDER}
+                          source={item.user.image ? {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.user.image} : AppImages.PLACEHOLDER}
                           style={{width: 70, height: 70, borderRadius:40}}
                         />
                         <View flex left marginH-20>

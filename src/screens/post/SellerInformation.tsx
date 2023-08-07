@@ -170,7 +170,7 @@ const SellerInformation: React.FC<Props> = () => {
             formData.append(`fieldValue[${i}][field_id]`, fieldValueArray[i].field_id);
             formData.append(`fieldValue[${i}][value]`, fieldValueArray[i].value);
           }
-        console.log(formData, '-------------------------');
+        // console.log(formData, '-------------------------');
         dispatch(createAd({requestBody: formData}))
         .then(() => {
           dispatch(reset());
