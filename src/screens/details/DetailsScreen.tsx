@@ -173,7 +173,7 @@ const DetailsScreen: React.FC<Props> = ({ route }) => {
                   <Text style={styles.motorText1}>{dashboardDetails?.ads[0].updated_on}</Text>
                 </View>
 
-                {dashboardDetails?.ads[0].category.name == "Jobs" && dashboardDetails.ads[0].featured_flag == 1 && dashboardDetails.ads[0].payment &&
+                {dashboardDetails?.ads[0].category.name == "Jobs" && dashboardDetails.ads[0].status == 0 && dashboardDetails.ads[0].featured_flag == 1 && dashboardDetails.ads[0].payment &&
                   dashboardDetails.ads[0].payment.payment_type == 1 && dashboardDetails.lastpay == 0 &&
                   <Button
                     label={'Upload Payment Document (USD ' + dashboardDetails.ads[0].payment.amount + ')'}
@@ -251,7 +251,9 @@ const DetailsScreen: React.FC<Props> = ({ route }) => {
 
           <DirectPaymentModal
         isVisible={showPaymentModal}
-        onRequestClose={() => setShowPaymentModal(false)}
+        ad_id={dashboardDetails?.ads[0].id}
+        onRequestClose={() => {setShowPaymentModal(false)
+        list()}}
       />
         </View>
       )}

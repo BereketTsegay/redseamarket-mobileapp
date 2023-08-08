@@ -8,6 +8,7 @@ import {
 import {Country} from './country/countryResponse';
 import {CurrencyResponse} from './currency/CurrencyResponse';
 import { CustomField } from './customField/CustomFieldResponse';
+import { DirectPaymentResponse } from './directPayment/DirectPaymentSlice';
 import {FavResponse} from './favorites/FavCreateSlice';
 import {FavList} from './favorites/FavListResponse';
 import { FeaturedResponse } from './featured/FeaturedResponse';
@@ -560,6 +561,28 @@ export const applyJob = async (
 ): Promise<NetworkResponse<JobApplyResponse | null>> => {
   const response = await ApiFormData(
     'app/apply/job',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR UPLOADING PAYMENT DOCUMENT
+export const UploadPaymentDocument = async (
+  requestBody: any,
+): Promise<NetworkResponse<DirectPaymentResponse | null>> => {
+  const response = await ApiFormData(
+    'app/customer/uploade/payment_slip',
     'POST',
     requestBody,
   );

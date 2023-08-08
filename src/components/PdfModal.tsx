@@ -53,7 +53,12 @@ const PdfModal = ({ visible, pdfUrl, onClose, jobStatus}: Props) => {
         <View flex marginV-30 marginH-20>
             <Text style={{fontSize:20, fontFamily:AppFonts.POPPINS_SEMIBOLD}}>Documents</Text>
        <ScrollView >
-       {pdfUrl.map((item, index) => (
+        {pdfUrl.length == 0 ?
+        <View center>
+          <Text>No documents requested</Text>
+        </View>
+        :
+       pdfUrl.map((item, index) => (
          <View key={index} marginV-10>
            <Pdf
            trustAllCerts={false}

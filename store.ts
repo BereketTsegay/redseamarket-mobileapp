@@ -29,6 +29,7 @@ import HiringJobSlice from './src/api/jobs/HiringJobSlice';
 import ProfileEditSlice from './src/api/profile/ProfileEditSlice';
 import FeaturedAmountSlice from './src/api/featured/FeaturedAmountSlice';
 import StripePaymentSlice from './src/api/stripe/StripePaymentSlice';
+import DirectPaymentSlice from './src/api/directPayment/DirectPaymentSlice';
 
 const rootReducer = combineReducers({
   registerCreate: RegisterCreateSlice,
@@ -60,7 +61,8 @@ const rootReducer = combineReducers({
   HiringJob: HiringJobSlice,
   ProfileEdit: ProfileEditSlice,
   FeaturedAmount: FeaturedAmountSlice,
-  StripePayment: StripePaymentSlice
+  StripePayment: StripePaymentSlice,
+  DirectPayment: DirectPaymentSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
