@@ -1,6 +1,6 @@
 // CountrySelectionModal.tsx
 import React, { useState } from 'react';
-import {Modal, FlatList, TouchableOpacity, Image, ToastAndroid} from 'react-native';
+import {Modal, FlatList, TouchableOpacity, Image, ToastAndroid, ScrollView, ImageBackground} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import InputField from './InputField';
 import AppStyles from '../constants/AppStyles';
@@ -19,25 +19,32 @@ interface Props {
 }
 
 const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose }) => {
-  const [image, setImage] = useState('')
-  const [transactionId, setTransactionId] = useState(null)
+  const [images, setImages] = useState([]);
+  const [transactionId, setTransactionId] = useState<string | null>(null);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {directPaymentData, loadingDirectPayment, directPaymentError} = useSelector(
     (state: RootState) => state.DirectPayment,
   );
   const [errors, setErrors] = useState({
     transactionId: false,
-    image: false,
+    images: false,
   });
 
-  const openDocumentFile = async () => {
+  const openDocumentFiles = async () => {
     try {
-      const file = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf && DocumentPicker.types.images],
-        allowMultiSelection: true,
+      const files = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+        // allowMultiSelection: true,
       });
-      setImage(file[0].uri)
-      setErrors({...errors, image: false});
+
+      const selectedImages = files.map(file => ({
+        uri: file.uri,
+        type: file.type,
+        name: file.name,
+      }));
+     
+      setImages([...images, ...selectedImages]);
+      setErrors({ ...errors, images: false });
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         throw err;
@@ -45,37 +52,46 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
     }
   };
 
-  const Upload = () => {
-    // const hasErrors = !transactionId || !image;
+  const removeImage = (indexToRemove: number) => {
+    const updatedImages = [...images];
+  
+    updatedImages.splice(indexToRemove, 1);
+    setImages(updatedImages);
+  };
 
-    // if (hasErrors) {
-    //   setErrors({
-    //     transactionId: !transactionId,
-    //     image: !image
-    //   });
-    //   return;
-    // }
-    // else{
-    //   const formData = new FormData();
-    //   formData.append('id', ad_id);
-    //   formData.append('transaction_id', transactionId);
-    //   if (image) {
-    //     formData.append('payment_slip', {
-    //       uri: image,
-    //       name: 'document.pdf',
-    //       type: 'application/pdf',
-    //     });
-    //   } else {
-    //     formData.append('payment_slip', '');
-    //   }
-    //   console.log(formData, '-------------------------');
-    //   dispatch(UploadPaymentDocument({requestBody: formData}))
-    //   .then(() => {
-    //     dispatch(reset());
+  const Upload = () => {
+    const hasErrors = !transactionId || !images;
+
+    if (hasErrors) {
+      setErrors({
+        transactionId: !transactionId,
+        images: !images
+      });
+      return;
+    }
+    else{
+      const formData = new FormData();
+      formData.append('id', ad_id);
+      formData.append('transaction_id', transactionId);
+      if(images.length != 0){
+        images.forEach((image) => {
+          formData.append('payment_slip[]', {
+            uri: image.uri,
+            name: image.name,
+            type: image.type,
+          });
+        });
+      }
+      console.log(formData, '-------------------------');
+      dispatch(UploadPaymentDocument({requestBody: formData}))
+      .then(() => {
+        dispatch(reset());
+        setImages([]);
+        setTransactionId('')
         onRequestClose()
-    //   })
-    //   .catch((err: any) => console.log(err));
-    // }
+      })
+      .catch((err: any) => console.log(err));
+    }
   };
 
   if (directPaymentData != null) {
@@ -115,7 +131,7 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
           />
 
 <View marginB-20>
-            <TouchableOpacity onPress={openDocumentFile}>
+            <TouchableOpacity onPress={openDocumentFiles}>
             <View
               paddingH-15
               centerV
@@ -126,7 +142,7 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
               ]}>
               <Text style={AppStyles.fieldText}>Upload Document(image/pdf)</Text>
               {
-              errors.image &&
+              errors.images &&
               <Text color={'red'}>**</Text>
             }
               
@@ -136,15 +152,21 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
               />
             </View>
             </TouchableOpacity>
-          
-            {image && (
-            <View row style={{borderColor:'grey',borderWidth:1,padding:5,width:'50%',borderRadius:5}}>
-            <Text>{image}</Text>
-            <TouchableOpacity onPress={()=>{setImage('')}}>
-            <Image source={AppImages.DELETE} style={{left:10, backgroundColor: 'white' }} />
-            </TouchableOpacity>
-          </View>
-      )}
+
+            {images.length != 0 &&
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View row>
+           {images.map((file,index)=>(
+            <TouchableOpacity 
+            onPress={()=>removeImage(index)} 
+            key={index}>
+            <ImageBackground source={{uri:file.uri}} style={{width:60,height:60,marginHorizontal:5}}>
+              <Image source={AppImages.DELETE} style={{alignSelf:'flex-end',backgroundColor:'white'}}/>
+              </ImageBackground>
+              </TouchableOpacity>
+              ))}
+              </View>
+              </ScrollView>}
           </View>
 
 <Button

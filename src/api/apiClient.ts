@@ -1,6 +1,7 @@
 import axios, {AxiosRequestConfig} from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../constants/AppStrings';
+import { ToastAndroid } from 'react-native';
 
 const BASE_URL = "https://admin-jamal.prompttechdemohosting.com/api/"
 
@@ -23,13 +24,14 @@ export const apiClient = async (
     },
   );
   return response;
-};
+} 
 
 export const SimpleApiClient = async (
   endPoint: string,
   method: string,
   requestBody: any,
 ) => {
+  try{
   const response = await axios(
     BASE_URL + endPoint,
     {
@@ -42,7 +44,14 @@ export const SimpleApiClient = async (
     },
   );
   return response;
-};
+} catch (error) {
+  ToastAndroid.show(
+    JSON.stringify('Error in API call:' + error),
+    ToastAndroid.SHORT,
+  );
+  throw error; // Rethrow the error or handle it as needed.
+}
+}
 
 export const ApiFormData = async (
   endPoint: string,
@@ -61,7 +70,10 @@ try {
   });
   return response;
 } catch (error) {
-  console.error('Error in API call:', error);
+  ToastAndroid.show(
+    JSON.stringify('Error in API call:' + error),
+    ToastAndroid.SHORT,
+  );
   throw error; // Rethrow the error or handle it as needed.
 }
 }
@@ -81,4 +93,4 @@ export const getWithAuthCall = async (
     },
   );
   return response;
-};
+}

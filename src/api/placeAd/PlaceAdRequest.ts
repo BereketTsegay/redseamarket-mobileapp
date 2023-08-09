@@ -37,10 +37,10 @@ export class PlaceAdRequest{
      transmission: String = '';
      condition: String = '';
      mileage: Number = 0;
-     aircondition: Number = 0;
-     gps: Number = 0;
-     security: Number = 0;
-     tire: Number = 0;
+     aircondition: Boolean = false;
+     gps: Boolean = false;
+     security: Boolean = false;
+     tire: Boolean = false;
 
      //Sale or Rent Information
      size: String = '';
