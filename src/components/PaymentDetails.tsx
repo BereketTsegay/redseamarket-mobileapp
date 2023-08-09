@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   Button,
   Image,
@@ -25,10 +25,10 @@ const PaymentDetails = ({amount, value}) => {
   const {paymentData, loadingPayment, paymentError} = useSelector(
     (state: RootState) => state.StripePayment,
   );
-  const [cardNumber, setCardNumber] = useState(null);
-  const [month, setMonth] = useState(null);
-  const [year, setYear] = useState(null);
-  const [cvv, setCVV] = useState(null);
+  const [cardNumber, setCardNumber] = useState('');
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
+  const [cvv, setCVV] = useState('');
   const [errors, setErrors] = useState({
     name: false,
     email: false,
@@ -38,6 +38,21 @@ const PaymentDetails = ({amount, value}) => {
     year: false,
     cvv: false,
   });
+
+  const setCardNumberFormatted = (text) => {
+    const cleanedText = text.replace(/\D/g, '');
+  
+    const truncatedText = cleanedText.slice(0, 16);
+    let formattedText = '';
+    for (let i = 0; i < truncatedText.length; i += 4) {
+      formattedText += truncatedText.slice(i, i + 4) + ' ';
+    }
+  
+    formattedText = formattedText.trim();
+  
+    setCardNumber(formattedText);
+    setErrors({...errors, cardNumber: false});
+  };
 
   const Proceed = () => {
     const hasErrors =
@@ -149,10 +164,7 @@ const PaymentDetails = ({amount, value}) => {
         height={45}
         type={'numeric'}
         value={cardNumber}
-        onChange={text => {
-          setCardNumber(text);
-          setErrors({...errors, cardNumber: false});
-        }}
+        onChange={setCardNumberFormatted}
         trailing={errors.cardNumber && <Text color={'red'}>**</Text>}
         lead={<Image source={AppImages.CARD} marginR-10 />}
       />
@@ -165,7 +177,7 @@ const PaymentDetails = ({amount, value}) => {
           type={'numeric'}
           value={month}
           onChange={text => {
-            setMonth(text);
+            setMonth(text.slice(0, 2));
             setErrors({...errors, month: false});
           }}
           trailing={errors.month && <Text color={'red'}>**</Text>}
@@ -178,7 +190,7 @@ const PaymentDetails = ({amount, value}) => {
           type={'numeric'}
           value={year}
           onChange={text => {
-            setYear(text);
+            setYear(text.slice(0, 2));
             setErrors({...errors, year: false});
           }}
           trailing={errors.year && <Text color={'red'}>**</Text>}
@@ -191,7 +203,7 @@ const PaymentDetails = ({amount, value}) => {
           type={'numeric'}
           value={cvv}
           onChange={text => {
-            setCVV(text);
+            setCVV(text.slice(0,3));
             setErrors({...errors, cvv: false});
           }}
           trailing={errors.cvv && <Text color={'red'}>**</Text>}

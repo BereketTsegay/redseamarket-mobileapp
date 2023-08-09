@@ -33,7 +33,7 @@ const WelcomeScreen: React.FC<Props> = () => {
     const Token = await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN);
     setToken(Token);
   }
-  console.log(token)
+  
 
   return (
    <ImageBackground

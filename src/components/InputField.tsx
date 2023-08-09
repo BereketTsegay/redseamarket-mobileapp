@@ -4,6 +4,7 @@ import AppStyles from '../constants/AppStyles';
 const {TextField} = Incubator
 
 type Props = {
+  ref?: any;
   title : any;
   multiline? : any;
   height? : any;
@@ -16,9 +17,10 @@ type Props = {
   lead? : any
 }
 
-const InputField = ({title,multiline,height,width,type,value,onChange,trailing,editable, lead}: Props) => {
+const InputField = ({ref, title,multiline,height,width,type,value,onChange,trailing,editable, lead}: Props) => {
     return(
       <TextField
+      ref={ref}
           placeholder={title}
           placeholderTextColor={"#000000"}
           color={"#000000"}
