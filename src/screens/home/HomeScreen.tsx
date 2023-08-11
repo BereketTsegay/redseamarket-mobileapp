@@ -18,6 +18,7 @@ import { fetchCountryList } from '../../api/country/CountryListSlice';
 import { fetchCurrencyList } from '../../api/currency/CurrencyListSlice';
 import CountrySelectionModal from '../../components/CountrySelectionModal';
 import { CommonContext } from '../../api/commonContext';
+import HomeScreenSlider from '../../components/HomeScreenSlider';
 const { TextField } = Incubator;
 export type HomeScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -92,15 +93,16 @@ const HomeScreen: React.FC<Props> = () => {
   return (
     <View flex backgroundColor="#FFFFFF" paddingB-60>
       <ImageBackground
-        source={dashboardLists?.data.slider != null ? { uri: 'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider[1].file } : null}
+      source={AppImages.BGIMAGE}
+        // source={dashboardLists?.data.slider != null ? { uri: 'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider[1].file } : null}
         style={styles.topBackground}
-        resizeMode='contain'
+        resizeMode='stretch'
       >
         <Text style={{ fontSize: 15, fontFamily: AppFonts.POPPINS_SEMIBOLD, color: 'white', width: '30%' }}>Red sea Market</Text>
-        <Text style={{ alignSelf: 'center', fontSize: 16, fontFamily: AppFonts.POPPINS_BOLD, color: 'white' }}>{dashboardLists?.data.slider != null ? dashboardLists?.data.slider.name : ''}</Text>
+      
+      <HomeScreenSlider data={dashboardLists?.data.slider}/>
+
         <View center style={styles.rowContainer}>
-
-
           <SelectDropdown
             data={countryLists?.country || []}
             onSelect={(selectedItem, index) => {
@@ -119,7 +121,7 @@ const HomeScreen: React.FC<Props> = () => {
             rowTextForSelection={(item, index) => {
               return item.name + ', ' + item.code;
             }}
-            buttonStyle={styles.dropdown1BtnStyle}
+            buttonStyle={[styles.dropdown1BtnStyle,{elevation:10}]}
             buttonTextStyle={styles.dropdown1BtnTxtStyle}
             renderDropdownIcon={isOpened => {
               return <Image source={AppImages.ARROW_DOWN} />;
@@ -130,12 +132,11 @@ const HomeScreen: React.FC<Props> = () => {
             rowTextStyle={styles.dropdown1RowTxtStyle}
           />
           <TextField
-            fieldStyle={styles.textFieldStyle}
-            style={{ fontSize: 12 }}
+            fieldStyle={[styles.textFieldStyle,{elevation:10}]}
+            style={styles.text}
             paddingV-5
             paddingH-2
             placeholder={'What are you looking for ?'}
-            keyboardType="default"
             leadingAccessory={<Image source={AppImages.SEARCH} style={{ width: 18, height: 18, right: 5 }} />}
           />
           <SelectDropdown
@@ -143,15 +144,15 @@ const HomeScreen: React.FC<Props> = () => {
             onSelect={(selectedItem, index) => {
               console.log(selectedItem)
             }}
-            defaultButtonText={'Language'}
+            defaultButtonText={'UK'}
             buttonTextAfterSelection={(selectedItem, index) => {
               return selectedItem.name
             }}
             rowTextForSelection={(item, index) => {
               return item.name + ', ' + item.code;
             }}
-            buttonStyle={styles.dropdown1BtnStyle}
-            buttonTextStyle={styles.dropdown1BtnTxtStyle}
+            buttonStyle={[styles.dropdown1BtnStyle,{elevation:10}]}
+            buttonTextStyle={styles.text}
             renderDropdownIcon={isOpened => {
               return <Image source={AppImages.ARROW_DOWN} />;
             }}
@@ -169,11 +170,11 @@ const HomeScreen: React.FC<Props> = () => {
         onRequestClose={() => setShowCountryModal(false)}
       />
 
-      <View padding-20>
+      <View padding-20 marginT-10>
         <Text style={styles.categoryText}>Category</Text>
         <FlatList
           data={dashboardLists?.data.categories}
-          numColumns={4}
+          horizontal={true}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => {
             return (
@@ -186,6 +187,7 @@ const HomeScreen: React.FC<Props> = () => {
                     navigation.navigate(RouteNames.CategoryListScreen, { cat_Id: item.id, name: item.name, countryId: commonInput.common_country_id })
                   }
                 }}>
+                  <View center>
                   <Image
                     source={
                       item.image == null
@@ -195,6 +197,8 @@ const HomeScreen: React.FC<Props> = () => {
                     style={{ width: 55, height: 35 }}
                     resizeMode="contain"
                   />
+                  <Text style={styles.categoryTitle}>{item.name}</Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             );

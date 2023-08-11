@@ -1,20 +1,22 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import AppFonts from "../../constants/AppFonts";
 import AppColors from "../../constants/AppColors";
+const screenWidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   topBackground:{
-    backgroundColor:AppColors.darkBlue,
-    height:200,
     justifyContent:'space-between',
     paddingHorizontal:10,
-    paddingTop:20
+    paddingTop:20,
+    width: screenWidth,
+    height:270,
   },
     rowContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         width:'100%',
+        top:8
       },
       dropdown1BtnStyle: {
         backgroundColor: 'white',
@@ -22,7 +24,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'white',
         height: 40,
-        width:'23%',
+        width:'25%',
         
       },
       dropdown1BtnTxtStyle: { color: '#444', textAlign: 'right' },
@@ -61,6 +63,16 @@ const styles = StyleSheet.create({
         fontSize:8,
         color:'#000000',
         fontFamily:AppFonts.POPPINS_EXTRA_LIGHT
+      },
+      text:{
+        fontSize:12,
+        fontFamily:AppFonts.POPPINS_EXTRA_LIGHT,
+        color:AppColors.darkBlue
+      },
+      categoryTitle:{
+        fontSize:12,
+        color:'#000000',
+        fontFamily:AppFonts.POPPINS_REGULAR
       }
   });
 
