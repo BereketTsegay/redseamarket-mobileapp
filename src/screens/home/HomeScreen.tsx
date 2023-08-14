@@ -131,14 +131,18 @@ const HomeScreen: React.FC<Props> = () => {
             rowStyle={styles.dropdown1RowStyle}
             rowTextStyle={styles.dropdown1RowTxtStyle}
           />
+
+          <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.SearchListScreen)}
+          style={[styles.textFieldStyle,{elevation:10}]}>
           <TextField
-            fieldStyle={[styles.textFieldStyle,{elevation:10}]}
             style={styles.text}
             paddingV-5
             paddingH-2
             placeholder={'What are you looking for ?'}
             leadingAccessory={<Image source={AppImages.SEARCH} style={{ width: 18, height: 18, right: 5 }} />}
-          />
+            editable={false}/>
+            </TouchableOpacity>
+
           <SelectDropdown
             data={lang}
             onSelect={(selectedItem, index) => {
@@ -218,7 +222,7 @@ const HomeScreen: React.FC<Props> = () => {
                 <View row centerV style={{ justifyContent: 'space-between' }}>
                   <Text style={styles.categoryText}>Popular in {item.name}</Text>
                   <TouchableOpacity onPress={() => {
-                    navigation.navigate(RouteNames.CategoryListScreen, { cat_Id: item.id, countryId: commonInput.common_country_id })
+                    navigation.navigate(RouteNames.CategoryListScreen, { cat_Id: item.id, name: item.name, countryId: commonInput.common_country_id })
                   }}>
                     <Image source={AppImages.ARROW_RIGHT} style={{ height: 10, width: 15 }} tintColor={'black'} />
                   </TouchableOpacity>

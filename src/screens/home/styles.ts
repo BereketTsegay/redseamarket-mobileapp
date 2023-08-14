@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
         borderColor: 'white',
         backgroundColor: 'white',
         borderRadius: 40,
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        marginHorizontal:3
       },
       categoryText:{
         fontSize:14,
@@ -50,17 +51,17 @@ const styles = StyleSheet.create({
         textAlign:'left'
       },
       priceText:{
-        fontSize:8,
+        fontSize:10,
         color:AppColors.darkBlue,
         fontFamily:AppFonts.POPPINS_SEMIBOLD
       },
       nameText:{
-        fontSize:8,
+        fontSize:10,
         color:'#000000',
         fontFamily:AppFonts.POPPINS_LIGHT
       },
       cityText:{
-        fontSize:8,
+        fontSize:10,
         color:'#000000',
         fontFamily:AppFonts.POPPINS_EXTRA_LIGHT
       },

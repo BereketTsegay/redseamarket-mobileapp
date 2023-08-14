@@ -14,6 +14,7 @@ import {fetchCategoryList} from '../../api/category/CategoryListSlice';
 import AppColors from '../../constants/AppColors';
 import CarouselView from '../../components/CarouselView';
 import FavoriteComponent from '../../components/FavoriteComponent';
+import CategoryListComponent from '../../components/CategoryListComponent';
 
 type CategoryListScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -52,6 +53,7 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
     list();
   };
 
+
   return (
     <View flex backgroundColor="#FFFFFF" paddingV-20>
       <View row centerV paddingH-20>
@@ -80,154 +82,156 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
         {loadingCategoryLists ? (
           <ActivityIndicator color={AppColors.blue} size={20} />
         ) : (
-          <FlatList
-            data={categoryLists}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item}) => {
-              return (
-                <>
-                  {name == 'Jobs' ? (
-                     <TouchableOpacity
-                     onPress={() => {
-                       navigation.navigate(RouteNames.DetailsScreen, {
-                         adId: item.id,
-                         countryId: countryId,
-                       });
-                     }}>
-                    <View style={styles.view1}>
-                      <View style={styles.rowView}>
-                        <View>
-                        {item.featured_flag == 1 &&
-                        <View center style={styles.featuredView}>
-                          <Text style={styles.featuredText}>Featured</Text>
-                        </View>}
-                        </View>
-                        <FavoriteComponent
-                          id={item.id}
-                          status={item.isFavourite}
-                          done={favDone}
-                        />
-                      </View>
+          // <FlatList
+          //   data={categoryLists}
+          //   showsVerticalScrollIndicator={false}
+          //   renderItem={({item}) => {
+          //     return (
+          //       <>
+          //         {name == 'Jobs' ? (
+          //            <TouchableOpacity
+          //            onPress={() => {
+          //              navigation.navigate(RouteNames.DetailsScreen, {
+          //                adId: item.id,
+          //                countryId: countryId,
+          //              });
+          //            }}>
+          //           <View style={styles.view1}>
+          //             <View style={styles.rowView}>
+          //               <View>
+          //               {item.featured_flag == 1 &&
+          //               <View center style={styles.featuredView}>
+          //                 <Text style={styles.featuredText}>Featured</Text>
+          //               </View>}
+          //               </View>
+          //               <FavoriteComponent
+          //                 id={item.id}
+          //                 status={item.isFavourite}
+          //                 done={favDone}
+          //               />
+          //             </View>
 
-                      <View style={styles.rowView}>
-                        <Image
-                          source={
-                            item.image == null ||
-                            item.image.length == 0 ||
-                            item.image[0].image == null
-                              ? AppImages.PLACEHOLDER
-                              : {
-                                  uri:
-                                    'https://admin-jamal.prompttechdemohosting.com/' +
-                                    item.image[0].image,
-                                }
-                          }
-                          style={{width: 70, height: 70, borderRadius:40}}
-                        />
-                        <View flex left marginH-20>
-                          {/* <Text style={styles.jobText}>TCS Solutions</Text> */}
-                          <Text style={[styles.jobText, {color: 'black'}]}>
-                            {item.title}
-                          </Text>
-                          <Text style={styles.jobText1}>
-                            Salary - {currencyLists?.currency.currency_code}{' '}
-                            {(currencyLists?.currency.value * item.price)
-                              .toFixed()
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                          </Text>
-                        </View>
-                      </View>
+          //             <View style={styles.rowView}>
+          //               <Image
+          //                 source={
+          //                   item.image == null ||
+          //                   item.image.length == 0 ||
+          //                   item.image[0].image == null
+          //                     ? AppImages.PLACEHOLDER
+          //                     : {
+          //                         uri:
+          //                           'https://admin-jamal.prompttechdemohosting.com/' +
+          //                           item.image[0].image,
+          //                       }
+          //                 }
+          //                 style={{width: 70, height: 70, borderRadius:40}}
+          //               />
+          //               <View flex left marginH-20>
+          //                 {/* <Text style={styles.jobText}>TCS Solutions</Text> */}
+          //                 <Text style={[styles.jobText, {color: 'black'}]}>
+          //                   {item.title}
+          //                 </Text>
+          //                 <Text style={styles.jobText1}>
+          //                   Salary - {currencyLists?.currency.currency_code}{' '}
+          //                   {(currencyLists?.currency.value * item.price)
+          //                     .toFixed()
+          //                     .toString()
+          //                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          //                 </Text>
+          //               </View>
+          //             </View>
 
-                      <View marginV-10>
-                        <Text style={styles.text}>Description</Text>
-                        <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.text, {opacity: 0.75}]}>
-                          {item.description}
-                        </Text>
-                      </View>
+          //             <View marginV-10>
+          //               <Text style={styles.text}>Description</Text>
+          //               <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.text, {opacity: 0.75}]}>
+          //                 {item.description}
+          //               </Text>
+          //             </View>
 
-                      <View marginB-10 style={styles.rowView}>
-                        <View row center>
-                          <Image source={AppImages.LOCATION} style={{height:15,width:15}}/>
-                        <Text>{item.state_name + ',' + item.country_name}</Text>
-                        </View>
-                        <Text>{item.created_on}</Text>
-                      </View>
-                    </View>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() => {
-                        navigation.navigate(RouteNames.DetailsScreen, {
-                          adId: item.id,
-                          countryId: countryId,
-                        });
-                      }}>
-                      <View style={styles.view} centerH>
-                        <Image
-                          source={
-                            item.image == null ||
-                            item.image.length == 0 ||
-                            item.image[0].image == null
-                              ? AppImages.PLACEHOLDER
-                              : {
-                                  uri:
-                                    'https://admin-jamal.prompttechdemohosting.com/' +
-                                    item.image[0].image,
-                                }
-                          }
-                          style={{
-                            height: '100%',
-                            width: '40%',
-                            borderTopLeftRadius: 20,
-                            borderBottomLeftRadius: 20,
-                          }}
-                          resizeMode="contain"
-                        />
-                        <View
-                          padding-10
-                          style={{
-                            position: 'absolute',
-                            alignSelf: 'flex-start',
-                          }}>
-                          <FavoriteComponent
-                            id={item.id}
-                            status={item.isFavourite}
-                            done={favDone}
-                          />
-                        </View>
-                        <View marginH-20 style={{width: '55%'}}>
-                          <Text style={styles.priceText}>
-                            {currencyLists?.currency.currency_code}{' '}
-                            {(currencyLists?.currency.value * item.price)
-                              .toFixed()
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                          </Text>
-                          <Text
-                            style={[styles.locationText, {fontSize: 14}]}
-                            numberOfLines={1}
-                            ellipsizeMode="tail">
-                            {item.title}
-                          </Text>
-                          <Text
-                            style={styles.titleText}
-                            numberOfLines={1}
-                            ellipsizeMode="tail">
-                            {item.description}
-                          </Text>
-                          <View row centerV>
-                          <Image source={AppImages.LOCATION} style={{height:15,width:15}}/>
-                        <Text>{item.country_name}</Text>
-                        </View>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                </>
-              );
-            }}
-          />
+          //             <View marginB-10 style={styles.rowView}>
+          //               <View row center>
+          //                 <Image source={AppImages.LOCATION} style={{height:15,width:15}}/>
+          //               <Text>{item.state_name + ',' + item.country_name}</Text>
+          //               </View>
+          //               <Text>{item.created_on}</Text>
+          //             </View>
+          //           </View>
+          //           </TouchableOpacity>
+          //         ) : (
+          //           <TouchableOpacity
+          //             onPress={() => {
+          //               navigation.navigate(RouteNames.DetailsScreen, {
+          //                 adId: item.id,
+          //                 countryId: countryId,
+          //               });
+          //             }}>
+          //             <View style={styles.view} centerH>
+          //               <Image
+          //                 source={
+          //                   item.image == null ||
+          //                   item.image.length == 0 ||
+          //                   item.image[0].image == null
+          //                     ? AppImages.PLACEHOLDER
+          //                     : {
+          //                         uri:
+          //                           'https://admin-jamal.prompttechdemohosting.com/' +
+          //                           item.image[0].image,
+          //                       }
+          //                 }
+          //                 style={{
+          //                   height: '100%',
+          //                   width: '40%',
+          //                   borderTopLeftRadius: 20,
+          //                   borderBottomLeftRadius: 20,
+          //                 }}
+          //                 resizeMode="contain"
+          //               />
+          //               <View
+          //                 padding-10
+          //                 style={{
+          //                   position: 'absolute',
+          //                   alignSelf: 'flex-start',
+          //                 }}>
+          //                 <FavoriteComponent
+          //                   id={item.id}
+          //                   status={item.isFavourite}
+          //                   done={favDone}
+          //                 />
+          //               </View>
+          //               <View marginH-20 style={{width: '55%'}}>
+          //                 <Text style={styles.priceText}>
+          //                   {currencyLists?.currency.currency_code}{' '}
+          //                   {(currencyLists?.currency.value * item.price)
+          //                     .toFixed()
+          //                     .toString()
+          //                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          //                 </Text>
+          //                 <Text
+          //                   style={[styles.locationText, {fontSize: 14}]}
+          //                   numberOfLines={1}
+          //                   ellipsizeMode="tail">
+          //                   {item.title}
+          //                 </Text>
+          //                 <Text
+          //                   style={styles.titleText}
+          //                   numberOfLines={1}
+          //                   ellipsizeMode="tail">
+          //                   {item.description}
+          //                 </Text>
+          //                 <View row centerV>
+          //                 <Image source={AppImages.LOCATION} style={{height:15,width:15}}/>
+          //               <Text>{item.country_name}</Text>
+          //               </View>
+          //               </View>
+          //             </View>
+          //           </TouchableOpacity>
+          //         )}
+          //       </>
+          //     );
+          //   }}
+          // />
+
+          <CategoryListComponent data={categoryLists} countryId={countryId} onPress={favDone} categoryName={name}/>
         )}
       </View>
     </View>

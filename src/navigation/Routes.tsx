@@ -27,5 +27,6 @@ export const RouteNames = {
   JobApply:'JobApply',
   HiringListScreen:'HiringListScreen',
   EditProfile:'EditProfile',
-  HiringJobDetails:'HiringJobDetails'
+  HiringJobDetails:'HiringJobDetails',
+  SearchListScreen: 'SearchListScreen'
 } as const;

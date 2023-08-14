@@ -28,4 +28,5 @@ export type RootStackParams = {
   HiringListScreen: undefined;
   EditProfile: undefined;
   HiringJobDetails: undefined;
+  SearchListScreen: undefined;
 };

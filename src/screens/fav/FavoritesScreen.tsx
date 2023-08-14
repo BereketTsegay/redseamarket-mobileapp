@@ -64,7 +64,7 @@ const FavoritesScreen: React.FC<Props> = () => {
             navigation.navigate(RouteNames.DetailsScreen,{adId:item.ads_id,countryId:commonInput.common_country_id})
           }}>
               <View style={styles.view}>
-                 <Image source={item.ads.image[0].image == null || item.ads.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ads.image[0].image}} 
+                 <Image source={item.ads.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ads.image[0].image}} 
                  resizeMode={'contain'} style={{height:70,width:'100%',borderTopLeftRadius:4,borderTopRightRadius:4}}/>
                  <View margin-3>
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.priceText}>{currencyLists == null ? 'USD ' + item.ads.price.toFixed()

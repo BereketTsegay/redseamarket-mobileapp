@@ -30,6 +30,7 @@ import { JobApplyProvider } from '../api/jobApply/JobApplyContext';
 import HiringListScreen from '../screens/category/HiringListScreen';
 import EditProfile from '../screens/menu/EditProfile';
 import HiringJobDetails from '../screens/details/HiringJobDetails';
+import SearchListScreen from '../screens/search/SearchListScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,7 @@ const AppStack = () => {
         <Stack.Screen name={'Apply_Job'} component={Apply_Job}/>
         <Stack.Screen name={RouteNames.EditProfile} component={EditProfile}/>
         <Stack.Screen name={RouteNames.HiringJobDetails} component={HiringJobDetails}/>
+        <Stack.Screen name={RouteNames.SearchListScreen} component={SearchListScreen}/>
      
     </Stack.Navigator>
     </CommonProvider>

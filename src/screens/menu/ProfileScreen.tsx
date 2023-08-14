@@ -104,7 +104,7 @@ const ProfileScreen: React.FC<Props> = () => {
 
         <View style={styles.divider} />
 
-        <View margin-20>
+        {/* <View margin-20>
           <Text style={styles.subHeading}>Settings</Text>
           <List image={AppImages.CITY} name={'City'}/>
 
@@ -112,11 +112,11 @@ const ProfileScreen: React.FC<Props> = () => {
         </View>
 
 
-        <View style={styles.divider} />
+        <View style={styles.divider} /> */}
 
         <View margin-20>
           <Text style={styles.subHeading}>Others</Text>
-          <List image={AppImages.SUPPORT} name={'Support'}/>
+          {/* <List image={AppImages.SUPPORT} name={'Support'}/> */}
 
           <List image={AppImages.HEART} name={'Terms & Conditions'} onPress={() => navigation.navigate(RouteNames.TermsAndConditions)} />
           

@@ -8,7 +8,7 @@ import AppFonts from '../constants/AppFonts';
 const HomeScreenSlider = ({data}) => {
     const width = Dimensions.get('window').width;
     const [currentIndex, setCurrentIndex] = useState(0);
-console.log(currentIndex)
+
     return (
         <View >
         <Carousel
