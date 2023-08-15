@@ -70,6 +70,7 @@ const AppStack = () => {
 };
 
 const AdPost = ({route}) => {
+  const {editData} = route.params;
   return(
     <PlaceAdProvider>
     <Stack.Navigator initialRouteName={RouteNames.PostListScreen}
@@ -78,7 +79,9 @@ const AdPost = ({route}) => {
     }}>
       <Stack.Screen name={RouteNames.PostListScreen} component={PostListScreen}/>
       <Stack.Screen name={RouteNames.PostSecondScreen} component={PostSecondScreen}/>
-      <Stack.Screen name={RouteNames.PlaceAdScreen} component={PlaceAdScreen}/>
+      <Stack.Screen name={RouteNames.PlaceAdScreen}>
+          {(props) => <PlaceAdScreen {...props} editData={editData} />}
+        </Stack.Screen>
       <Stack.Screen name={RouteNames.CustomPlaceAd} component={CustomPlaceAd}/>
       <Stack.Screen name={RouteNames.SellerInformation} component={SellerInformation}/>
       <Stack.Screen name={RouteNames.MotorPlaceAd} component={MotorPlaceAd}/>

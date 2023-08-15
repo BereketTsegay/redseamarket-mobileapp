@@ -134,7 +134,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                     />
 
                     {edit && (
-                      <TouchableOpacity onPress={()=>navigation.navigate('PostScreen',{screen:RouteNames.PlaceAdScreen})}>
+                      <TouchableOpacity onPress={()=>navigation.navigate('PostScreen',{screen:RouteNames.PlaceAdScreen, editData:dashboardDetails?.ads[0]})}>
                         <Image
                           source={AppImages.EDIT}
                           tintColor={AppColors.blue}
