@@ -38,6 +38,7 @@ const AppImages = {
     LOCATION: require('../images/location.png'),
     CARD: require('../images/card.png'),
     DOWNLOAD: require('../images/download.png'),
+    EDIT: require('../images/edit.png'),
   };
   
   export default AppImages;

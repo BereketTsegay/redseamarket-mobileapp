@@ -42,9 +42,8 @@ export type PlaceAdScreenRouteProps = RouteProp<
 
 interface Props {}
 
-const PlaceAdScreen: React.FC<Props> = ({route}) => {
+const PlaceAdScreen: React.FC<Props> = ({}) => {
   const navigation = useNavigation<PlaceAdScreenNavigationProps>();
-  const {cat_id, sub_id, name} = route.params;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
   const {commonInput, setCommonInput} = useContext(CommonContext)
@@ -91,8 +90,8 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
 
   useEffect(() => {
     let request = JSON.stringify({
-      category: cat_id,
-      subcategory: sub_id,
+      category: placeAdInput.category,
+      subcategory: placeAdInput.subcategory,
     });
     dispatch(fetchCustomField({requestBody: request}));
   }, []);
@@ -129,16 +128,16 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
       return;
     }
     else{
-    if (cat_id == 1) {
-      navigation.navigate(RouteNames.MotorPlaceAd, {name: name,});
+    if (placeAdInput.category == 1) {
+      navigation.navigate(RouteNames.MotorPlaceAd, {name: placeAdInput.category_Name,});
     } 
-    else if (cat_id == 2 || cat_id == 3) {
-      navigation.navigate(RouteNames.SaleRentPlaceAd, {name: name,});
+    else if (placeAdInput.category == 2 || placeAdInput.category == 3) {
+      navigation.navigate(RouteNames.SaleRentPlaceAd, {name: placeAdInput.category_Name,});
     } else {
       if (customLists?.data.category_field.length == 0) {
         navigation.navigate(RouteNames.SellerInformation);
       } else {
-        navigation.navigate(RouteNames.CustomPlaceAd, {name: name, });
+        navigation.navigate(RouteNames.CustomPlaceAd, {name: placeAdInput.category_Name, });
       }
     }
   }
@@ -203,7 +202,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
         </View>
       </View>
 
-      <Text style={styles.AdTitle}>Tell us about your {name}</Text>
+      <Text style={styles.AdTitle}>Tell us about your {placeAdInput.category_Name}</Text>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
@@ -300,7 +299,7 @@ const PlaceAdScreen: React.FC<Props> = ({route}) => {
           </View>
 
           <InputField
-            title={name == 'Jobs' ? 'Salary' : 'Price'}
+            title={placeAdInput.category_Name == 'Jobs' ? 'Salary' : 'Price'}
             multiline={false}
             height={45}
             type={'numeric'}

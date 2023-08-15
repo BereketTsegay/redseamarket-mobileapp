@@ -69,7 +69,7 @@ const AppStack = () => {
   );
 };
 
-const AdPost = () => {
+const AdPost = ({route}) => {
   return(
     <PlaceAdProvider>
     <Stack.Navigator initialRouteName={RouteNames.PostListScreen}

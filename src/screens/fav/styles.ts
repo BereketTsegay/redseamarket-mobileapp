@@ -30,17 +30,17 @@ const styles = StyleSheet.create({
  },
  priceText:{
     color:AppColors.darkBlue,
-    fontSize:8,
+    fontSize:10,
     fontFamily:AppFonts.POPPINS_SEMIBOLD,
  },
  titleText:{
     color:'black',
-    fontSize:8,
+    fontSize:10,
     fontFamily:AppFonts.POPPINS_LIGHT,
  },
  cityText:{
     color:'black',
-    fontSize:8,
+    fontSize:10,
     fontFamily:AppFonts.POPPINS_EXTRA_LIGHT
  },
  view:{
@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
     elevation:4,
     width:105,
     margin:5,
-    backgroundColor:'white'
+    backgroundColor:'white',
+    height:140
  }
 })
 export default styles;

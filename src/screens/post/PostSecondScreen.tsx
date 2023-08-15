@@ -26,10 +26,9 @@ export type PostSecondScreenRouteProps = RouteProp<
 
 interface Props {}
 
-const PostSecondScreen: React.FC<Props> = ({route}) => {
+const PostSecondScreen: React.FC<Props> = ({}) => {
   const navigation = useNavigation<PostSecondScreenNavigationProps>();
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext);
-  const {Id, name, country_id} = route.params;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {subCategoryLists, loadingSubCategoryLists} = useSelector(
     (state: RootState) => state.SubCategoryList,
@@ -45,17 +44,13 @@ const PostSecondScreen: React.FC<Props> = ({route}) => {
       });
     } else {
       setPlaceAdInput({...placeAdInput, subcategory: item.id});
-      navigation.navigate(RouteNames.PlaceAdScreen, {
-        cat_id: Id,
-        sub_id: item.id,
-        name: name
-      });
+      navigation.navigate(RouteNames.PlaceAdScreen);
     }
   };
 
   useEffect(() => {
     let request = JSON.stringify({
-      category: Id,
+      category: placeAdInput.category,
     });
     dispatch(fetchSubCategoryList({requestBody: request}));
   }, []);
@@ -89,11 +84,7 @@ const PostSecondScreen: React.FC<Props> = ({route}) => {
             <TouchableOpacity
               onPress={() => {
                 setPlaceAdInput({...placeAdInput, subcategory: childItem.id});
-                navigation.navigate(RouteNames.PlaceAdScreen, {
-                  cat_id: Id,
-                  sub_id: childItem.id,
-                  name: name
-                });
+                navigation.navigate(RouteNames.PlaceAdScreen);
               }}
               key={childItem.id}>
               <View row marginH-30 marginV-20>
@@ -122,7 +113,7 @@ const PostSecondScreen: React.FC<Props> = ({route}) => {
           </View>
         </TouchableOpacity>
         <View flex center>
-          <Text style={styles.heading}>{name}</Text>
+          <Text style={styles.heading}>{placeAdInput.category_Name}</Text>
           <Text style={styles.subHeading}>
             Choose the category that your ad fits into.
           </Text>
@@ -140,7 +131,7 @@ const PostSecondScreen: React.FC<Props> = ({route}) => {
           keyExtractor={item => item.id.toString()}
         />
         :
-        <TouchableOpacity onPress={()=> navigation.navigate(RouteNames.PlaceAdScreen, {cat_id: Id,sub_id: 0,name: name})}>
+        <TouchableOpacity onPress={()=> navigation.navigate(RouteNames.PlaceAdScreen)}>
         <View margin-30 padding-10 style={{backgroundColor:'white',elevation:5}}>
         <Text style={{fontSize:16,fontFamily:AppFonts.POPPINS_MEDIUM}}>Post Ad</Text>
         </View>

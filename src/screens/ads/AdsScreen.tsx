@@ -108,9 +108,9 @@ const AdsScreen: React.FC<Props> = () => {
     renderItem={({item})=>{
       return(
         <TouchableOpacity onPress={()=>{
-          navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:commonInput.common_country_id})
+          navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:commonInput.common_country_id,edit:true})
         }}>
-              <View style={styles.view}>
+              <View style={[styles.view,{height:180}]}>
                  <Image source={item.image == null || item.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.image[0].image}} 
                  resizeMode={'contain'} style={{height:70,width:'100%',borderTopLeftRadius:4,borderTopRightRadius:4}}/>
                  <View margin-3>
@@ -119,8 +119,8 @@ const AdsScreen: React.FC<Props> = () => {
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.titleText}>{item.title}</Text>
                  <Text style={styles.cityText}>{item.area}</Text>
                  <View row centerV style={{justifyContent:'space-between'}}>
-                 <Text style={[styles.titleText,{fontFamily:AppFonts.POPPINS_SEMIBOLD}]}>Status : 
-                 {item.status == 1 ? <Text color={'green'}> Accepted</Text> : item.status == 0 ? <Text color={'grey'}> Pending</Text> : <Text color={'red'}> Rejected</Text>}</Text>
+                 <Text style={[styles.titleText,{fontFamily:AppFonts.POPPINS_SEMIBOLD}]}>
+                 {item.status == 1 ? <Text color={'green'}>Accepted</Text> : item.status == 0 ? <Text color={'grey'}> Pending</Text> : <Text color={'red'}> Rejected</Text>}</Text>
                  <TouchableOpacity onPress={()=>AdsDelete(item.id)}>
                  <Image source={AppImages.DELETE} style={{width:18,height:18}}/>
                  </TouchableOpacity>

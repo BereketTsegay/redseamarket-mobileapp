@@ -112,7 +112,6 @@ const SellerInformation: React.FC<Props> = () => {
           'description',
           'descriptioninArabic',
           'email',
-          'featured',
           'fuel',
           'furnished',
           'gps',
@@ -147,6 +146,7 @@ const SellerInformation: React.FC<Props> = () => {
           formData.append(key, placeAdInput[key] ?? '');
         });
         formData.append('paymentId', pay_id);
+        formData.append('featured', placeAdInput.featured == 2 ? (placeAdInput.featuredSelect ? 1 : 0) : placeAdInput.featured );
 
         if(placeAdInput.image.length != 0){
           placeAdInput.image.forEach((image) => {

@@ -231,9 +231,9 @@ const HomeScreen: React.FC<Props> = () => {
                   <View row marginV-20>
                     {item.ads.map((item, index) => (
                       <TouchableOpacity onPress={() => {
-                        navigation.navigate(RouteNames.DetailsScreen, { adId: item.id, countryId: commonInput.common_country_id })
+                        navigation.navigate(RouteNames.DetailsScreen, { adId: item.id, countryId: commonInput.common_country_id, edit: false })
                       }}>
-                        <View backgroundColor='white' key={index} marginR-20 style={{ elevation: 4, width: 100 }}>
+                        <View backgroundColor='white' key={index} marginR-20 style={{ elevation: 4, width: 120, height:140 }}>
                           <Image source={item.ad_image == null ? AppImages.PLACEHOLDER : { uri: 'https://admin-jamal.prompttechdemohosting.com/' + item.ad_image?.image }}
                             resizeMode={'cover'} style={{ height: 70, width: '100%' }} />
                           <View margin-3>

@@ -12,11 +12,10 @@ import { RootState } from '../../store';
 interface props {
   data : any;
   countryId? : any;
-  onPress? : any;
   categoryName? : any
 }
 
-const CategoryListComponent = ({data, countryId, onPress, categoryName} : props) => {
+const CategoryListComponent = ({data, countryId, categoryName} : props) => {
   
     const navigation = useNavigation();
     const {currencyLists} = useSelector((state: RootState) => state.CurrencyList);
@@ -32,6 +31,7 @@ const CategoryListComponent = ({data, countryId, onPress, categoryName} : props)
                    navigation.navigate(RouteNames.DetailsScreen, {
                      adId: item.id,
                      countryId: countryId,
+                     edit:false
                    });
                  }}>
                 <View style={styles.view1}>
@@ -45,7 +45,6 @@ const CategoryListComponent = ({data, countryId, onPress, categoryName} : props)
                     <FavoriteComponent
                       id={item.id}
                       status={item.isFavourite}
-                      done={onPress}
                     />
                   </View>
 

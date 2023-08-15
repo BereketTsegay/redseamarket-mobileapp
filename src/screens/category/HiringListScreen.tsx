@@ -43,9 +43,7 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
     dispatch(fetchHiringJobList({requestBody: ''}));
   };
 
-  const favDone = () => {
-    list();
-  };
+
 
   return (
     <View flex backgroundColor="#FFFFFF" paddingV-20>
@@ -96,7 +94,6 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
                         <FavoriteComponent
                           id={item.id}
                           status={item.isFavourite}
-                          done={favDone}
                         />
                       </View> */}
 
