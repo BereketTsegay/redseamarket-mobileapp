@@ -72,11 +72,15 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
 
   useEffect(() => {
     if(editData){
+      const selectedImageURIs = editData.image.map((img) => ('https://admin-jamal.prompttechdemohosting.com/' + img.image));
+      const selectCountries = editData.mapCountry.map((item) => Number(item.country_id))
     setPlaceAdInput({
       ...placeAdInput, category: editData.category_id, subcategory: editData.subcategory_id, category_Name: editData.category.name,
       title: editData.title, titleinArabic: editData.title_arabic, canonical_name: editData.canonical_name, description: editData.description, descriptioninArabic: editData.description_arabic,
-      price: editData.price, country: editData.country_id, state: editData.state_id, city: editData.city_id, area: editData.area, sub_area: editData.sub_area, sub_area2: editData.sub_area2, negotiable: editData.negotiable_flag,
-      name: editData.seller_information.name, email: editData.seller_information.email, phone: editData.seller_information.phone, address: editData.seller_information.address, latitude: editData.latitude, longitude: editData.longitude, phone_hide: editData.seller_information.phone_hide_flag
+      price: editData.price, country: editData.country_id, state: editData.state_id, city: editData.city_id, area: editData.area, sub_area: editData.sub_area, sub_area2: editData.sub_area2, negotiable: editData.negotiable_flag ? true : false,
+      name: editData.seller_information.name, email: editData.seller_information.email, phone: editData.seller_information.phone, address: editData.seller_information.address, latitude: editData.latitude, longitude: editData.longitude, 
+      phone_hide: editData.seller_information.phone_hide_flag,  image: [...placeAdInput.image, ...selectedImageURIs],  adsCountry: [...placeAdInput.adsCountry, ...selectCountries], make_id: editData.motore_value.make_id, model_id: editData.motore_value.model_id,
+      variant_id: editData.motore_value.varient_id, registration_year: editData.motore_value.registration_year, fuel: editData.motore_value.fuel_type
     });
   }
   else{
@@ -84,7 +88,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
   }
   }, [editData]);
 
-  console.log(placeAdInput,'____=============')
+  console.log(placeAdInput.adsCountry,'____=============')
   // useEffect(() => {
   //   if (commonInput.common_country_id && !placeAdInput.country) {
   //     setPlaceAdInput({ ...placeAdInput, country: commonInput.common_country_id });
@@ -378,7 +382,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             {errors.state &&
               <Text color={'red'} style={{ alignSelf: 'flex-end' }}>required field</Text>}
             <ItemDropdown
-              value={'Select State'}
+              value={placeAdInput.state}
               data={stateLists?.state}
               add={setState}
               dropdownType={'State'}
@@ -389,7 +393,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             {errors.city &&
               <Text color={'red'} style={{ alignSelf: 'flex-end' }}>required field</Text>}
             <ItemDropdown
-              value={'Select City'}
+              value={placeAdInput.city}
               data={cityLists?.city}
               add={setCity}
               dropdownType={'City'}
@@ -435,7 +439,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             editable={true}
           />
 
-          <AdsCountrySelect countryLists={countryLists?.country} Id={commonInput.common_country_id} />
+          <AdsCountrySelect countryLists={countryLists?.country} Id={editData ? placeAdInput.adsCountry : [commonInput.common_country_id]} />
 
           <Checkbox
             label={'Price Negotiable'}

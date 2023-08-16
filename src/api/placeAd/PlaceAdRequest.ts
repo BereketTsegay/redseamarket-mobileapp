@@ -65,7 +65,7 @@ export class PlaceAdRequest{
 }
 
 export type Image = {
-    file: String;
+    image: String;
 }
 
 export type Field = {
@@ -74,5 +74,5 @@ export type Field = {
 }
 
 export type AdsCountry ={
-    id : Number;
+    country_id : any;
 }
