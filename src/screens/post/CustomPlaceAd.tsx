@@ -126,7 +126,8 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
             <>
               {item.field.type === 'text' ? (
                 <InputField
-                  title={item.field.name}
+                label={item.field.name}
+                  title={'Enter' + item.field.name}
                   multiline={false}
                   height={45}
                   type={'default'}
@@ -137,7 +138,8 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                 />
               ) : item.field.type === 'number' ? (
                 <InputField
-                  title={item.field.name}
+                label={item.field.name}
+                  title={'Enter' + item.field.name}
                   multiline={false}
                   height={45}
                   type={'numeric'}
@@ -148,7 +150,8 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                 />
                 ) : item.field.type === 'url' ? (
                   <InputField
-                    title={item.field.name}
+                  label={item.field.name}
+                  title={'Enter' + item.field.name}
                     multiline={false}
                     height={45}
                     type={'url'}
@@ -161,7 +164,8 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                 <TouchableOpacity
               onPress={() => setDateVisible(true)}>
                 <InputField
-                  title={item.field.name}
+                   label={item.field.name}
+                   title={'Enter' + item.field.name}
                   multiline={false}
                   height={45}
                   type={'default'}
@@ -183,7 +187,8 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                 /></TouchableOpacity>
               ) : item.field.type === 'textarea' ? (
                 <InputField
-                  title={item.field.name}
+                label={item.field.name}
+                title={'Enter' + item.field.name}
                   multiline={false}
                   height={80}
                   type={'default'}
@@ -217,6 +222,8 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                 />
                 </View>
               ) : item.field.type === 'select' ? (
+                <View>
+                <Text style={styles.labelStyle}>{item.field.name}</Text>
                 <SelectDropdown
                 data={item.field.field_option}
                 onSelect={(selectedItem, index) => {
@@ -239,6 +246,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                 rowStyle={AppStyles.dropdown1RowStyle}
                 rowTextStyle={AppStyles.dropdown1RowTxtStyle}
               />
+              </View>
               ) : item.field.type === 'file' ? (
                 <View marginB-20>
                 <TouchableOpacity onPress={()=>placeAdInput.image.length <= 4 ? openDocumentFile(item.field.id) : null}>

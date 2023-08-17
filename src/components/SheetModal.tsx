@@ -47,7 +47,7 @@ const SheetModal = ({closeSheet, set}: Props) => {
     }).start();
   };
 
-  const closeBottomSheet = (type) => {
+  const closeBottomSheet = () => {
     closeSheet();
     Animated.timing(translateY, {
       toValue: windowHeight,

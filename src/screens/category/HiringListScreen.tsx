@@ -61,15 +61,7 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
         </Text>
       </View>
 
-      <View row centerV style={styles.row}>
-        <Text style={styles.text}>Search Alert</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate(RouteNames.FilterScreen)}>
-          <Text style={styles.text}>Filter</Text>
-        </TouchableOpacity>
-        <Text style={styles.text}>Sort</Text>
-      </View>
-      <View flex paddingH-20>
+      <View flex padding-20>
         {loadingHiringJobList ? (
           <ActivityIndicator color={AppColors.blue} size={20} />
         ) : (

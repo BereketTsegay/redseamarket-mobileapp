@@ -7,11 +7,11 @@ const AppStyles = StyleSheet.create({
         borderWidth:1,
         borderColor:AppColors.lightBlue,
         height:45,
-        borderRadius:8,
+        borderRadius:4,
         paddingHorizontal: 15,
         backgroundColor:'white',
         width:'100%',
-        marginBottom:20
+        marginBottom:10
         
       },
       dropdown1BtnTxtStyle: {   fontSize:12,
@@ -28,7 +28,7 @@ const AppStyles = StyleSheet.create({
         borderWidth:1,
         borderColor:AppColors.lightBlue,
         height:45,
-        borderRadius:8
+        borderRadius:4
       },
       fieldText:{
         fontSize:12,
@@ -64,6 +64,13 @@ const AppStyles = StyleSheet.create({
         color: 'black',
         marginBottom:10
       },
+      labelStyle:{
+        fontSize:12,
+        fontFamily:AppFonts.POPPINS_REGULAR,
+        color:'black',
+        top:2,
+        left:2
+      }
       
   });
 

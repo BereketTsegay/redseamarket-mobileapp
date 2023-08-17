@@ -380,10 +380,10 @@ export const createFavorite = async (
 
 //API FOR PLACING AD
 export const createAd = async (
-  requestBody: any,
+  requestBody: any, url: any
 ): Promise<NetworkResponse<PlaceAdResponse | null>> => {
   const response = await ApiFormData(
-    'app/customer/ads/store',
+    url,
     'POST',
     requestBody,
   );

@@ -116,7 +116,7 @@ const ProfileScreen: React.FC<Props> = () => {
 
         <View margin-20>
           <Text style={styles.subHeading}>Others</Text>
-          {/* <List image={AppImages.SUPPORT} name={'Support'}/> */}
+          <List image={AppImages.SUPPORT} name={'Privacy Policy'} onPress={()=>Linking.openURL('https://jamal.prompttechdemohosting.com/#/privacy/policy')}/>
 
           <List image={AppImages.HEART} name={'Terms & Conditions'} onPress={() => navigation.navigate(RouteNames.TermsAndConditions)} />
           

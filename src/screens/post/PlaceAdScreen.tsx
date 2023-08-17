@@ -74,13 +74,18 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
     if(editData){
       const selectedImageURIs = editData.image.map((img) => ('https://admin-jamal.prompttechdemohosting.com/' + img.image));
       const selectCountries = editData.mapCountry.map((item) => Number(item.country_id))
+      setPriceValue(editData.price)
     setPlaceAdInput({
-      ...placeAdInput, category: editData.category_id, subcategory: editData.subcategory_id, category_Name: editData.category.name,
+      ...placeAdInput, id:editData.id, category: editData.category_id, subcategory: editData.subcategory_id, category_Name: editData.category.name,
       title: editData.title, titleinArabic: editData.title_arabic, canonical_name: editData.canonical_name, description: editData.description, descriptioninArabic: editData.description_arabic,
       price: editData.price, country: editData.country_id, state: editData.state_id, city: editData.city_id, area: editData.area, sub_area: editData.sub_area, sub_area2: editData.sub_area2, negotiable: editData.negotiable_flag ? true : false,
       name: editData.seller_information.name, email: editData.seller_information.email, phone: editData.seller_information.phone, address: editData.seller_information.address, latitude: editData.latitude, longitude: editData.longitude, 
-      phone_hide: editData.seller_information.phone_hide_flag,  image: [...placeAdInput.image, ...selectedImageURIs],  adsCountry: [...placeAdInput.adsCountry, ...selectCountries], make_id: editData.motore_value.make_id, model_id: editData.motore_value.model_id,
-      variant_id: editData.motore_value.varient_id, registration_year: editData.motore_value.registration_year, fuel: editData.motore_value.fuel_type
+      phone_hide: editData.seller_information.phone_hide_flag,  image: [...placeAdInput.image, ...selectedImageURIs],  adsCountry: [...placeAdInput.adsCountry, ...selectCountries], make_id: editData.category_id == 1 ? editData.motore_value.make_id : 0, model_id: editData.category_id == 1 ? editData.motore_value.model_id : 0,
+      variant_id: editData.category_id == 1 ? editData.motore_value.varient_id : 0, registration_year: editData.category_id == 1 ? editData.motore_value.registration_year : '', fuel: editData.category_id == 1 ? editData.motore_value.fuel_type : '', transmission: editData.category_id == 1 ? editData.motore_value.transmission == 'Manual' ? 1 : 2 : '',
+      condition: editData.category_id == 1 ? editData.motore_value.condition == 'New' ? 1 : 2 : '', mileage: editData.category_id == 1 ? editData.motore_value.milage : 0, aircondition: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'aircondition'), gps: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'gps'),
+      security: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'security'), tire: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'tire'), size: editData.category_id == 2 ? editData.property_rend.size : editData.category_id == 3 ? editData.property_sale.size : '',
+      room: editData.category_id == 2 ? editData.property_rend.room : editData.category_id == 3 ? editData.property_sale.room : '', furnished: editData.category_id == 2 ? editData.property_rend.furnished == 'Yes' ? 1 : 2 : editData.category_id == 3 ? editData.property_sale.furnished == 'Yes' ? 1 : 2 : '', building: editData.category_id == 2 ? editData.property_rend.building : editData.category_id == 3 ? editData.property_sale.building : '',
+      parking: editData.category_id == 2 ? editData.property_rend.parking : editData.category_id == 3 ? editData.property_sale.parking : '', featured: editData.featured_flag
     });
   }
   else{
@@ -88,7 +93,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
   }
   }, [editData]);
 
-  console.log(placeAdInput.adsCountry,'____=============')
+  // console.log(placeAdInput.adsCountry,'____=============')
   // useEffect(() => {
   //   if (commonInput.common_country_id && !placeAdInput.country) {
   //     setPlaceAdInput({ ...placeAdInput, country: commonInput.common_country_id });
@@ -230,7 +235,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
           <InputField
-            title={'Title in English'}
+          label={'Title in English'}
+            title={'Enter title'}
             multiline={false}
             height={45}
             type={'default'}
@@ -247,7 +253,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           />
 
           <InputField
-            title={'Title in Arabic'}
+          label={'Title in Arabic'}
+            title={'Enter title (Arabic)'}
             multiline={false}
             height={45}
             type={'default'}
@@ -264,7 +271,9 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           />
 
           <TextField
-            placeholder={'Canonical Name'}
+          label={'Canonical Name'}
+          labelStyle={styles.labelStyle}
+            placeholder={'Enter canonical name'}
             placeholderTextColor={'#000000'}
             color={'#000000'}
             style={styles.fieldText}
@@ -313,6 +322,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           <View>
             {errors.country &&
               <Text color={'red'} style={{ alignSelf: 'flex-end' }}>required field</Text>}
+              <Text style={styles.labelStyle}>Country</Text>
             <ItemDropdown
               value={placeAdInput.country}
               data={countryLists?.country}
@@ -323,7 +333,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           </View>
 
           <InputField
-            title={placeAdInput.category_Name == 'Jobs' ? 'Salary' : 'Price'}
+          label={placeAdInput.category_Name == 'Jobs' ? 'Salary' : 'Price'}
+            title={placeAdInput.category_Name == 'Jobs' ? 'Enter salary' : 'Enter price'}
             multiline={false}
             height={45}
             type={'numeric'}
@@ -345,7 +356,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           />
 
           <InputField
-            title={'Description in English'}
+          label={'Description in English'}
+            title={'Enter description'}
             multiline={true}
             height={80}
             type={'default'}
@@ -362,7 +374,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           />
 
           <InputField
-            title={'Description in Arabic'}
+          label={'Description in Arabic'}
+            title={'Enter description (Arabic)'}
             multiline={true}
             height={80}
             type={'default'}
@@ -381,6 +394,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           <View>
             {errors.state &&
               <Text color={'red'} style={{ alignSelf: 'flex-end' }}>required field</Text>}
+              <Text style={styles.labelStyle}>State</Text>
             <ItemDropdown
               value={placeAdInput.state}
               data={stateLists?.state}
@@ -392,6 +406,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           <View>
             {errors.city &&
               <Text color={'red'} style={{ alignSelf: 'flex-end' }}>required field</Text>}
+              <Text style={styles.labelStyle}>City</Text>
             <ItemDropdown
               value={placeAdInput.city}
               data={cityLists?.city}
@@ -401,7 +416,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           </View>
 
           <InputField
-            title={'Area'}
+          label={'Area'}
+            title={'Enter area'}
             multiline={false}
             height={45}
             type={'default'}
@@ -418,7 +434,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           />
 
           <InputField
-            title={'Sub area'}
+          label={'Sub Area'}
+            title={'enter sub area'}
             multiline={false}
             height={45}
             type={'default'}
@@ -429,7 +446,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           />
 
           <InputField
-            title={'Sub area2'}
+          label={'Sub Area2'}
+            title={'enter sub area2'}
             multiline={false}
             height={45}
             type={'default'}
@@ -438,9 +456,11 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             trailing={null}
             editable={true}
           />
-
+          
+          <View>
+            <Text style={styles.labelStyle}>Ad View Countries</Text>
           <AdsCountrySelect countryLists={countryLists?.country} Id={editData ? placeAdInput.adsCountry : [commonInput.common_country_id]} />
-
+</View>
           <Checkbox
             label={'Price Negotiable'}
             labelStyle={styles.fieldText}

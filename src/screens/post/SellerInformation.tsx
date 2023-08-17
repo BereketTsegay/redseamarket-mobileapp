@@ -98,23 +98,21 @@ const SellerInformation: React.FC<Props> = () => {
     }
     else{
         const formData = new FormData();
-      
+      if(placeAdInput.id != 0){
+        formData.append('id', placeAdInput.id)
+      }
         const keysToAppend = [
           'address',
-          'aircondition',
           'area',
           'building',
           'canonical_name',
           'category',
           'city',
-          'condition',
           'country',
           'description',
           'descriptioninArabic',
           'email',
           'fuel',
-          'furnished',
-          'gps',
           'latitude',
           'longitude',
           'make_id',
@@ -128,16 +126,13 @@ const SellerInformation: React.FC<Props> = () => {
           'price',
           'registration_year',
           'room',
-          'security',
           'size',
           'state',
           'sub_area',
           'sub_area2',
           'subcategory',
-          'tire',
           'title',
           'titleinArabic',
-          'transmission',
           'variant_id',
           'paymentMethod'
         ];
@@ -147,6 +142,40 @@ const SellerInformation: React.FC<Props> = () => {
         });
         formData.append('paymentId', pay_id);
         formData.append('featured', placeAdInput.featured == 2 ? (placeAdInput.featuredSelect ? 1 : 0) : placeAdInput.featured );
+
+        if(placeAdInput.aircondition){
+          formData.append('aircondition', 'aircondition');
+        }
+       if(placeAdInput.gps){
+          formData.append('gps', 'gps');
+        }
+        if(placeAdInput.security){
+          formData.append('security', 'security');
+        }
+        if(placeAdInput.tire){
+          formData.append('tire', 'tire');
+        }
+
+        if(placeAdInput.furnished == 1){
+          formData.append('furnished', 'Yes');
+        }
+        else if(placeAdInput.furnished == 2){
+          formData.append('furnished', 'No');
+        }
+
+        if(placeAdInput.transmission == 1){
+          formData.append('transmission', 'Manual');
+        }
+        else if(placeAdInput.transmission == 2){
+          formData.append('transmission', 'Automatic');
+        }
+
+        if(placeAdInput.condition == 1){
+          formData.append('condition', 'New');
+        }
+        else if(placeAdInput.condition == 2){
+          formData.append('condition', 'Used');
+        }
 
         if(placeAdInput.image.length != 0){
           placeAdInput.image.forEach((image) => {
@@ -171,7 +200,7 @@ const SellerInformation: React.FC<Props> = () => {
             formData.append(`fieldValue[${i}][value]`, fieldValueArray[i].value);
           }
         // console.log(formData, '-------------------------');
-        dispatch(createAd({requestBody: formData}))
+        dispatch(createAd({requestBody: formData, url:placeAdInput.id == 0 ? 'app/customer/ads/store' : 'app/customer/ads/update'}))
         .then(() => {
           dispatch(reset());
           setPlaceAdInput(new PlaceAdRequest())
@@ -219,7 +248,8 @@ const SellerInformation: React.FC<Props> = () => {
      <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
         <InputField
-          title={'Name'}
+        label={'Name'}
+          title={'enter name'}
           multiline={false}
           height={45}
           type={'default'}
@@ -235,7 +265,8 @@ const SellerInformation: React.FC<Props> = () => {
           />
 
 <InputField
-          title={'Email'}
+label={'Email'}
+          title={'Enter email'}
           multiline={false}
           height={45}
           type={'default'}
@@ -251,7 +282,8 @@ const SellerInformation: React.FC<Props> = () => {
           />
 
 <InputField
-          title={'Phone'}
+label={'Phone'}
+          title={'Enter phone'}
           multiline={false}
           height={45}
           type={'numeric'}
@@ -267,7 +299,8 @@ const SellerInformation: React.FC<Props> = () => {
           />
 
 <InputField
-          title={'Address'}
+label={'Address'}
+          title={'Enter address'}
           multiline={false}
           height={80}
           type={'default'}

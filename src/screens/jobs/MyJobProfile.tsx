@@ -254,7 +254,8 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
           <InputField
-            title={'Job Title'}
+          label={'Job title'}
+            title={'Enter job title'}
             height={45}
             type={'default'}
             value={jobInput.title}
@@ -262,7 +263,8 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           />
 
 <InputField
-            title={'Add work experience (optional)'}
+label={'Add work experience (optional)'}
+            title={'Enter work experience'}
             height={45}
             type={'numeric'}
             value={jobInput.work_experience}
@@ -290,28 +292,32 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
       ))}
 
 <InputField
-            title={'Add Education'}
+label={'Education'}
+            title={'Enter Education'}
             height={45}
             value={jobInput.education}
             onChange={(text)=>setJobInput({...jobInput, education: text})}
           />
 
 <InputField
-            title={'Add Certifications'}
+label={'Certifications'}
+            title={'Enter Certifications'}
             height={45}
             value={jobInput.certificate}
             onChange={(text)=>setJobInput({...jobInput, certificate: text})}
           />
 
 <InputField
-            title={'Add Language Known'}
+label={'Languages'}
+            title={'Enter languages known'}
             height={45}
             value={jobInput.language}
             onChange={(text)=>setJobInput({...jobInput, language: text})}
           />
 
 <InputField
-            title={'Add Skills'}
+label={'Skills'}
+            title={'Enter Skills'}
             height={45}
             value={jobInput.skils}
             onChange={(text)=>setJobInput({...jobInput, skils: text})}
@@ -352,33 +358,46 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
           
           <View>
       
+
+      <View>
+        <Text style={styles.labelStyle}>Country</Text>
+     
           <ItemDropdown
             value={jobInput.country_id}
             data={countryLists?.country}
             add={setCountry}
             dropdownType="Country"
           />
+           </View>
 
 <InputField
-            title={'Overview'}
+label={'Overview'}
+            title={'Describe yourself..........'}
             height={100}
             value={jobInput.overview}
             onChange={(text)=>setJobInput({...jobInput, overview: text})}
           />
     
+    <View>
+        <Text style={styles.labelStyle}>State</Text>
           <ItemDropdown
             value={jobInput.state_id}
             data={stateLists?.state}
             add={setState}
             dropdownType="State"
           />
+          </View>
 
+
+          <View>
+        <Text style={styles.labelStyle}>City</Text>
 <ItemDropdown
             value={jobInput.city_id}
             data={cityLists?.city}
             add={setCity}
             dropdownType="City"
           />
+          </View>
 
           <Button
             label={'Submit'}

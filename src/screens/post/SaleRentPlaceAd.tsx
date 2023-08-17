@@ -90,6 +90,7 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
   }
   };
 
+
   const renderRadioButton = (value, name) => {
     return (
       <View marginB-20>
@@ -124,11 +125,12 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
           <InputField
-            title={'Size'}
+          label={'Size'}
+            title={'Enter size'}
             multiline={false}
             height={45}
             type={'numeric'}
-            value={placeAdInput.size}
+            value={String(placeAdInput.size)}
             onChange={(text)=>{setPlaceAdInput({...placeAdInput, size:text})
             setErrors({...errors, size: false});
             }}
@@ -140,11 +142,12 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
           />
 
           <InputField
-            title={'Room'}
+          label={'Room'}
+            title={'Enter number of room'}
             multiline={false}
             height={45}
             type={'numeric'}
-            value={placeAdInput.room}
+            value={String(placeAdInput.room)}
             onChange={(text)=>{setPlaceAdInput({...placeAdInput, room:text})
             setErrors({...errors, room: false});
             }}
@@ -172,7 +175,8 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
           <View>
           {  errors.building &&
               <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-          <ItemDropdown value={'Building Type'} data={data} add={setBuilding} dropdownType={'Building Type'}/>
+                <Text style={styles.labelStyle}>Building Type</Text>
+          <ItemDropdown value={placeAdInput.building} data={data} add={setBuilding} dropdownType={'Building Type'}/>
           </View>
 
           <Checkbox

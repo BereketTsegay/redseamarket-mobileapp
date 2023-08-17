@@ -23,7 +23,7 @@ const styles =StyleSheet .create({
         borderWidth:1,
         borderColor:AppColors.lightBlue,
         height:45,
-        borderRadius:8
+        borderRadius:4
       },
       fieldText:{
         fontSize:12,
@@ -113,7 +113,7 @@ const styles =StyleSheet .create({
         paddingVertical:10,
         borderWidth:1, 
         borderColor:AppColors.lightBlue, 
-        borderRadius:8,
+        borderRadius:4,
         justifyContent:'space-between'
       },
       addCircle:{
@@ -121,6 +121,13 @@ const styles =StyleSheet .create({
         borderColor:AppColors.lightBlue,
         padding:4,
         borderRadius:15
+      },
+      labelStyle:{
+        fontSize:12,
+        fontFamily:AppFonts.POPPINS_REGULAR,
+        color:'black',
+        top:2,
+        left:2
       }
 })
 

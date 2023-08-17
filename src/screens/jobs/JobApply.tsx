@@ -181,7 +181,8 @@ const JobApply: React.FC<Props> = ({id}) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
           <InputField
-            title={'Total experience'}
+          label={'Total experience'}
+            title={'Enter total experience'}
             height={45}
             type={'numeric'}
             value={jobApplyInput.total_experience}
@@ -197,7 +198,8 @@ const JobApply: React.FC<Props> = ({id}) => {
           />
 
           <InputField
-            title={'Current CTC'}
+          label={'Current CTC'}
+            title={'Enter current ctc'}
             height={45}
             type={'numeric'}
             value={jobApplyInput.current_ctc}
@@ -211,7 +213,8 @@ const JobApply: React.FC<Props> = ({id}) => {
           />
 
           <InputField
-            title={'Expected CTC'}
+          label={'Expected CTC'}
+            title={'Enter expected ctc'}
             height={45}
             type={'numeric'}
             value={jobApplyInput.expect_ctc}
@@ -225,7 +228,8 @@ const JobApply: React.FC<Props> = ({id}) => {
           />
 
           <InputField
-            title={'Notice period'}
+          label={'Notice Period'}
+            title={'Enter notice period'}
             height={45}
             type={'numeric'}
             value={jobApplyInput.notice_period}
@@ -239,7 +243,8 @@ const JobApply: React.FC<Props> = ({id}) => {
           />
 
           <InputField
-            title={'Relevant field'}
+          label={'Relevant Field'}
+            title={'Enter job field'}
             height={45}
             type={'default'}
             value={jobApplyInput.relevent_field}
@@ -253,7 +258,8 @@ const JobApply: React.FC<Props> = ({id}) => {
           />
 
           <InputField
-            title={'Current company'}
+          label={'Current Company'}
+            title={'Enter current company'}
             height={45}
             type={'default'}
             value={jobApplyInput.current_company}
@@ -268,7 +274,8 @@ const JobApply: React.FC<Props> = ({id}) => {
             }
           />
 
-          <View marginB-20>
+          <View marginV-20>
+            {/* <Text style={styles.labelStyle}>Resume</Text> */}
             <TouchableOpacity onPress={() => openDocumentFile()}>
               <View
                 paddingH-15
@@ -291,7 +298,7 @@ const JobApply: React.FC<Props> = ({id}) => {
                 />
               </View>
             </TouchableOpacity>
-            <Text style={{color: 'red', fontSize: 8}}>
+            <Text style={{color: 'red', fontSize: 10,top:4}}>
               *Maximum 500kb file size are allowed
             </Text>
             {selectedFile && (
@@ -303,6 +310,7 @@ const JobApply: React.FC<Props> = ({id}) => {
                   padding: 5,
                   width: '50%',
                   borderRadius: 5,
+                  marginVertical:10
                 }}>
                 <Text>{selectedFile}</Text>
                 <TouchableOpacity

@@ -35,6 +35,13 @@ circle: {
   imageView:{
     alignSelf:'center',
     marginBottom:20
+  },
+  labelStyle:{
+    fontSize:12,
+    fontFamily:AppFonts.POPPINS_REGULAR,
+    color:'black',
+    top:2,
+    left:2
   }
 })
 

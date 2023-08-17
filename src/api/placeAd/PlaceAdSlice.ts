@@ -23,10 +23,10 @@ const initialState: PlaceAdState = {
 
 export const createAd = createAsyncThunk<
   {PlaceAdData: PlaceAdResponse | null},
-  {requestBody: any}
->('createAd', async ({requestBody}) => {
+  {requestBody: any, url: any}
+>('createAd', async ({requestBody, url}) => {
   if (requestBody != null) {
-    const response = await apiInterface.createAd(requestBody);
+    const response = await apiInterface.createAd(requestBody, url);
     if (response.kind == 'success') {
       return {
         PlaceAdData: response.body ?? null,

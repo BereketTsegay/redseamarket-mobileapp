@@ -28,10 +28,10 @@ import styles from './styles';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
-import { ProfileEditRequest } from '../../api/profile/ProfileEditRequest';
+import {ProfileEditRequest} from '../../api/profile/ProfileEditRequest';
 import ItemDropdown from '../../components/ItemDropdown';
-import { UpdateProfile, reset } from '../../api/profile/ProfileEditSlice';
-import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
+import {UpdateProfile, reset} from '../../api/profile/ProfileEditSlice';
+import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
 const {TextField} = Incubator;
 export type EditProfileNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -45,9 +45,13 @@ interface Props {}
 const EditProfile: React.FC<Props> = () => {
   const navigation = useNavigation<EditProfileNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const [EditInput, setEditInput] = useState<ProfileEditRequest>(new ProfileEditRequest());
+  const [EditInput, setEditInput] = useState<ProfileEditRequest>(
+    new ProfileEditRequest(),
+  );
   const {countryLists} = useSelector((state: RootState) => state.CountryList);
-  const {EditData, loadingEdit, EditingError} = useSelector((state: RootState) => state.ProfileEdit);
+  const {EditData, loadingEdit, EditingError} = useSelector(
+    (state: RootState) => state.ProfileEdit,
+  );
   const {profileDetails} = useSelector(
     (state: RootState) => state.ProfileDetails,
   );
@@ -55,17 +59,25 @@ const EditProfile: React.FC<Props> = () => {
     name: false,
     email: false,
     phone: false,
-    nationality: false
+    nationality: false,
   });
   useEffect(() => {
-    setItems()
+    setItems();
   }, []);
 
   const setItems = () => {
-    const item = profileDetails?.data.user
-    setEditInput({...EditInput, name: item?.name, email:item?.email, phone: item?.phone && item.phone, nationality: item?.nationality_id && Number(item.nationality_id),
-                                image: item?.image && 'https://admin-jamal.prompttechdemohosting.com/' + item.image })
-  }
+    const item = profileDetails?.data.user;
+    setEditInput({
+      ...EditInput,
+      name: item?.name,
+      email: item?.email,
+      phone: item?.phone && item.phone,
+      nationality: item?.nationality_id && Number(item.nationality_id),
+      image:
+        item?.image &&
+        'https://admin-jamal.prompttechdemohosting.com/' + item.image,
+    });
+  };
 
   const openDocumentFile = async () => {
     try {
@@ -73,7 +85,7 @@ const EditProfile: React.FC<Props> = () => {
         type: [DocumentPicker.types.images],
         allowMultiSelection: true,
       });
-      setEditInput({...EditInput, image: img[0].uri})
+      setEditInput({...EditInput, image: img[0].uri});
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         throw err;
@@ -88,22 +100,25 @@ const EditProfile: React.FC<Props> = () => {
 
   const Update = () => {
     const hasErrors =
-    !EditInput.name || !EditInput.email || !EditInput.phone || !EditInput.nationality;
+      !EditInput.name ||
+      !EditInput.email ||
+      !EditInput.phone ||
+      !EditInput.nationality;
 
-  if (hasErrors) {
-    setErrors({
+    if (hasErrors) {
+      setErrors({
         name: !EditInput.name,
         email: !EditInput.email,
         phone: !EditInput.phone,
-        nationality: !EditInput.nationality
-    });
-    return;
-  } else {
-    const formData = new FormData();
-    formData.append('name', EditInput.name);
-    formData.append('email', EditInput.email);
-    formData.append('phone', EditInput.phone);
-    formData.append('nationality', EditInput.nationality);
+        nationality: !EditInput.nationality,
+      });
+      return;
+    } else {
+      const formData = new FormData();
+      formData.append('name', EditInput.name);
+      formData.append('email', EditInput.email);
+      formData.append('phone', EditInput.phone);
+      formData.append('nationality', EditInput.nationality);
 
       if (EditInput.image) {
         formData.append('image', {
@@ -116,26 +131,19 @@ const EditProfile: React.FC<Props> = () => {
       }
       console.log(formData, '-------------------------');
       dispatch(UpdateProfile({requestBody: formData}))
-      .then(() => {
-        dispatch(reset());
-        dispatch(fetchProfileDetails({requestBody: ''}));
-        setEditInput(new ProfileEditRequest())
-      })
-      .catch((err: any) => console.log(err));
+        .then(() => {
+          dispatch(reset());
+          dispatch(fetchProfileDetails({requestBody: ''}));
+          setEditInput(new ProfileEditRequest());
+        })
+        .catch((err: any) => console.log(err));
     }
   };
 
   if (EditData != null) {
     // console.log(jobSaveData)
-    if (
-      !loadingEdit &&
-      !EditingError &&
-      EditData.status == 'success'
-    ) {
-      ToastAndroid.show(
-        JSON.stringify(EditData.message),
-        ToastAndroid.SHORT,
-      );
+    if (!loadingEdit && !EditingError && EditData.status == 'success') {
+      ToastAndroid.show(JSON.stringify(EditData.message), ToastAndroid.SHORT);
       navigation.goBack();
     } else {
       // console.log(jobSaveData,'failure')
@@ -163,74 +171,78 @@ const EditProfile: React.FC<Props> = () => {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-10>
-          
           <TouchableOpacity onPress={openDocumentFile}>
             <View style={styles.imageView}>
-              <Image source={EditInput.image ? {uri: EditInput.image} : AppImages.PLACEHOLDER} style={{width:80,height:80,borderRadius:40}}/>
+              <Image
+                source={
+                  EditInput.image
+                    ? {uri: EditInput.image}
+                    : AppImages.PLACEHOLDER
+                }
+                style={{width: 80, height: 80, borderRadius: 40}}
+              />
             </View>
-            </TouchableOpacity>
-
-          <InputField
-            title={'name'}
-            height={45}
-            type={'default'}
-            value={EditInput.name}
-            onChange={text => {
+          </TouchableOpacity>
+          <View marginT-20>
+            <InputField
+              label={'Name'}
+              title={'Enter name'}
+              height={45}
+              type={'default'}
+              value={EditInput.name}
+              onChange={text => {
                 setEditInput({...EditInput, name: text});
                 setErrors({...errors, name: false});
               }}
               trailing={
-                errors.name && (
-                  <Text color={'red'}>required field</Text>
-                )
+                errors.name && <Text color={'red'}>required field</Text>
               }
-          />
+            />
 
-          <InputField
-            title={'email'}
-            height={45}
-            type={'default'}
-            value={EditInput.email}
-            onChange={text => {
+            <InputField
+              label={'Email'}
+              title={'Enter email'}
+              height={45}
+              type={'default'}
+              value={EditInput.email}
+              onChange={text => {
                 setEditInput({...EditInput, email: text});
                 setErrors({...errors, email: false});
               }}
               trailing={
-                errors.email && (
-                  <Text color={'red'}>required field</Text>
-                )
+                errors.email && <Text color={'red'}>required field</Text>
               }
-          />
+            />
 
-          <InputField
-            title={'Phone'}
-            height={45}
-            type={'numeric'}
-            value={EditInput.phone}
-            onChange={text => {
+            <InputField
+              label={'Phone'}
+              title={'Enter phone'}
+              height={45}
+              type={'numeric'}
+              value={EditInput.phone}
+              onChange={text => {
                 setEditInput({...EditInput, phone: text});
                 setErrors({...errors, phone: false});
               }}
               trailing={
-                errors.phone && (
-                  <Text color={'red'}>required field</Text>
-                )
+                errors.phone && <Text color={'red'}>required field</Text>
               }
-          />
-<View>
-    { errors.nationality && (
-                  <Text style={{alignSelf:'flex-end'}} color={'red'}>required field</Text>
-                )
-              }
-<ItemDropdown
-            value={EditInput.nationality}
-            data={countryLists?.country}
-            add={setCountry}
-            dropdownType="Nationality"
-          />
+            />
+            <View>
+              {errors.nationality && (
+                <Text style={{alignSelf: 'flex-end'}} color={'red'}>
+                  required field
+                </Text>
+              )}
+              <Text style={styles.labelStyle}>Country</Text>
+              <ItemDropdown
+                value={EditInput.nationality}
+                data={countryLists?.country}
+                add={setCountry}
+                dropdownType="Nationality"
+              />
+            </View>
           </View>
-
-        
         </View>
       </ScrollView>
       <Button

@@ -36,12 +36,12 @@ const styles = StyleSheet.create({
  titleText:{
     color:'black',
     fontSize:10,
-    fontFamily:AppFonts.POPPINS_LIGHT,
+    fontFamily:AppFonts.POPPINS_REGULAR,
  },
  cityText:{
     color:'black',
     fontSize:10,
-    fontFamily:AppFonts.POPPINS_EXTRA_LIGHT
+    fontFamily:AppFonts.POPPINS_LIGHT
  },
  view:{
     borderRadius:4,

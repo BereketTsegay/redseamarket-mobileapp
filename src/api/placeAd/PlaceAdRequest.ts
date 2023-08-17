@@ -46,7 +46,7 @@ export class PlaceAdRequest{
      //Sale or Rent Information
      size: String = '';
      room: String = '';
-     furnished: String = '';
+     furnished: number = 0;
      building: String = '';
      parking: Boolean = false;
      fieldValue: Field[] = [];

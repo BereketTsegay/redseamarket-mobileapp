@@ -39,6 +39,8 @@ const AppImages = {
     CARD: require('../images/card.png'),
     DOWNLOAD: require('../images/download.png'),
     EDIT: require('../images/edit.png'),
+    FILTER: require('../images/filter.png'),
+    SORT: require('../images/sort.png'),
   };
   
   export default AppImages;

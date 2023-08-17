@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
     text:{
         fontSize:12,
         color:'black',
-        fontFamily:AppFonts.POPPINS_LIGHT
+        fontFamily:AppFonts.POPPINS_LIGHT,
+        
     },
     row:{
         justifyContent:'space-between',
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
         borderTopWidth:1,
         borderBottomColor:'#707070',
         borderBottomWidth:1,
-        paddingHorizontal:20,
+        paddingHorizontal:30,
         marginVertical:20,
         paddingVertical:10
     },

@@ -144,7 +144,6 @@ const [errors, setErrors] = useState({
   }
   };
 
-
   return (
     <View flex backgroundColor='white' padding-20>
          <View row centerV>
@@ -169,19 +168,23 @@ const [errors, setErrors] = useState({
         <View>
           {  errors.make_id &&
               <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-<ItemDropdown value={'Make'} data={makeList?.make} add={setMake} dropdownType={'Make'}/>
+              <Text style={styles.labelStyle}>Make_Id</Text>
+<ItemDropdown value={placeAdInput.make_id} data={makeList?.make} add={setMake} dropdownType={'Make'}/>
 </View>
 
 <View>
           {  errors.model_id &&
               <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-<ItemDropdown value={'Model'} data={modelList?.model} add={setModel} dropdownType={'Model'}/>
+                <Text style={styles.labelStyle}>Model_Id</Text>
+<ItemDropdown value={placeAdInput.model_id} data={modelList?.model} add={setModel} dropdownType={'Model'}/>
 </View>
 
-<ItemDropdown value={'Variant'} data={variantList?.variant} add={setVariant} dropdownType={'Variant'}/>
+<Text style={styles.labelStyle}>Variant_Id</Text>
+<ItemDropdown value={placeAdInput.variant_id} data={variantList?.variant} add={setVariant} dropdownType={'Variant'}/>
 
 <InputField
-          title={'Registered Year'}
+label={'Registered Year'}
+          title={'Enter registered year'}
           multiline={false}
           height={45}
           type={'numeric'}
@@ -199,7 +202,8 @@ const [errors, setErrors] = useState({
 <View>
           {  errors.fuel &&
               <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-<ItemDropdown value={'Fuel Type'} data={fuelOption} add={setFuel} dropdownType={'Fuel Type'}/>
+                <Text style={styles.labelStyle}>Fuel</Text>
+<ItemDropdown value={placeAdInput.fuel} data={fuelOption} add={setFuel} dropdownType={'Fuel Type'}/>
 </View>
 
 <View row marginB-20>
@@ -231,11 +235,12 @@ const [errors, setErrors] = useState({
             </RadioGroup>
 
 <InputField
-          title={'Mileage'}
+label={'Mileage'}
+          title={'Enter mileage'}
           multiline={false}
           height={45}
           type={'numeric'}
-          value={placeAdInput.mileage}
+          value={String(placeAdInput.mileage)}
           onChange={(text)=>{setPlaceAdInput({...placeAdInput, mileage:text})
           setErrors({...errors, mileage: false});
             }}

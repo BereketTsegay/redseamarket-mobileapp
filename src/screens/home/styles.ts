@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         
       },
       dropdown1BtnTxtStyle: { color: '#444', textAlign: 'right' },
-      dropdown1DropdownStyle: { backgroundColor: '#EFEFEF' },
+      dropdown1DropdownStyle: { backgroundColor: '#EFEFEF', borderRadius:10 },
       dropdown1RowStyle: {
         backgroundColor: '#EFEFEF',
         borderBottomColor: '#C5C5C5',
@@ -51,19 +51,19 @@ const styles = StyleSheet.create({
         textAlign:'left'
       },
       priceText:{
-        fontSize:10,
+        fontSize:12,
         color:AppColors.darkBlue,
         fontFamily:AppFonts.POPPINS_SEMIBOLD
       },
       nameText:{
-        fontSize:10,
+        fontSize:12,
         color:'#000000',
-        fontFamily:AppFonts.POPPINS_LIGHT
+        fontFamily:AppFonts.POPPINS_REGULAR
       },
       cityText:{
         fontSize:10,
         color:'#000000',
-        fontFamily:AppFonts.POPPINS_EXTRA_LIGHT
+        fontFamily:AppFonts.POPPINS_LIGHT
       },
       text:{
         fontSize:12,

@@ -122,7 +122,8 @@ const PaymentDetails = ({amount, value}) => {
       <Text style={AppStyles.title}>Payment Details</Text>
 
       <InputField
-        title={'Name'}
+      label={'Name'}
+        title={'Enter name'}
         multiline={false}
         height={45}
         type={'default'}
@@ -136,7 +137,8 @@ const PaymentDetails = ({amount, value}) => {
       />
 
       <InputField
-        title={'Email'}
+      label={'Email'}
+        title={'Enter email'}
         height={45}
         type={'default'}
         value={placeAdInput.email}
@@ -148,7 +150,8 @@ const PaymentDetails = ({amount, value}) => {
       />
 
       <InputField
-        title={'Phone'}
+      label={'Phone'}
+        title={'Enter phone'}
         height={45}
         type={'numeric'}
         value={placeAdInput.phone}
@@ -160,7 +163,8 @@ const PaymentDetails = ({amount, value}) => {
       />
 
       <InputField
-        title={'Card Number'}
+      label={'Card Number'}
+        title={'Enter card number'}
         height={45}
         type={'numeric'}
         value={cardNumber}
@@ -171,6 +175,7 @@ const PaymentDetails = ({amount, value}) => {
 
       <View row style={{justifyContent: 'space-between'}}>
         <InputField
+        label={'Month'}
           title={'Month'}
           height={45}
           width={80}
@@ -184,6 +189,7 @@ const PaymentDetails = ({amount, value}) => {
         />
 
         <InputField
+        label={'Year'}
           title={'Year'}
           height={45}
           width={80}
@@ -197,6 +203,7 @@ const PaymentDetails = ({amount, value}) => {
         />
 
         <InputField
+        label={'CVV'}
           title={'CVV'}
           height={45}
           width={80}

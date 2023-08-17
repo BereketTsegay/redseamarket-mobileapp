@@ -11,7 +11,6 @@ const AdsCountrySelect = ({ countryLists, Id }) => {
   const { placeAdInput, setPlaceAdInput } = useContext(PlaceAdContext);
 
   const initiallySelectedCountry = countryLists.filter(country => Id.includes(country.id));
-  console.log(initiallySelectedCountry)
   const [selectedItems, setSelectedItems] = useState(initiallySelectedCountry);
   const [dropdownOptions, setDropdownOptions] = useState(countryLists.filter(country => !Id.includes(country.id)));
 

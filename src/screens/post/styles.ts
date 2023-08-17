@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     
     backgroundColor:'#B5B5B5',
     height:45,
-    borderRadius:8
+    borderRadius:4
   },
   fieldText:{
     fontSize:12,
@@ -89,6 +89,13 @@ color:'black'
     justifyContent:"space-between",
     alignItems:'center',
     paddingHorizontal:15
+  },
+  labelStyle:{
+    fontSize:12,
+    fontFamily:AppFonts.POPPINS_REGULAR,
+    color:'black',
+    top:2,
+    left:2
   }
 });
 export default styles;
