@@ -30,6 +30,12 @@ export type LoginScreenRouteProps = RouteProp<
 interface Props {}
 
 const LoginScreen: React.FC<Props> = () => {
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const navigation = useNavigation<LoginScreenNavigationProps>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -110,16 +116,16 @@ const LoginScreen: React.FC<Props> = () => {
    source={AppImages.BG} style={styles.container}>
     <View row centerV style={{justifyContent:'space-between'}}>
         <View marginL-40>
-    <Text style={styles.text}>Hi, Welcome</Text>
-    <Text style={styles.text1}>Back</Text>
+    <Text style={styles.text}>{strings.welcome}</Text>
+    <Text style={styles.text1}>{strings.back}</Text>
     </View>
     <Image source={AppImages.PERSON1} style={{left:6}}/>
     </View>
     <View style={styles.view}>
-      <Text style={styles.heading}>Log in</Text>
+      <Text style={styles.heading}>{strings.Login}</Text>
       <TextField
       fieldStyle={styles.inputLayout}
-      placeholder={'Email'}
+      placeholder={strings.email}
       floatingPlaceholder
       floatingPlaceholderColor={'black'}
       floatOnFocus="true"
@@ -139,7 +145,7 @@ const LoginScreen: React.FC<Props> = () => {
 
 <TextField
       fieldStyle={styles.inputLayout}
-      placeholder={'Password'}
+      placeholder={strings.password}
       floatingPlaceholder
       floatingPlaceholderColor={'black'}
       floatOnFocus="true"
@@ -180,11 +186,11 @@ const LoginScreen: React.FC<Props> = () => {
       {loadingLogin?
       <ActivityIndicator size={20} color={AppColors.blue} />  
     :
-      <Text style={styles.text2}>Login</Text>}
+      <Text style={styles.text2}>{strings.Login}</Text>}
     </TouchableOpacity>
 
     <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.RegisterScreen)}>
-    <Text style={styles.bottomText}>Don't have an account? Create one</Text>
+    <Text style={styles.bottomText}>{strings.noAccount}</Text>
     </TouchableOpacity>
     </View>
 

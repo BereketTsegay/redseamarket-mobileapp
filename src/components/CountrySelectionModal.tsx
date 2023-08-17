@@ -4,6 +4,8 @@ import { View, Modal, FlatList, TouchableOpacity, Image, Text } from 'react-nati
 import SelectDropdown from 'react-native-select-dropdown';
 import AppImages from '../constants/AppImages';
 import AppStyles from '../constants/AppStyles';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 interface Props {
   isVisible: boolean;
@@ -13,6 +15,12 @@ interface Props {
 }
 
 const CountrySelectionModal: React.FC<Props> = ({ isVisible, countryLists, onSelectCountry, onRequestClose }) => {
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   return (
     <Modal visible={isVisible} onRequestClose={onRequestClose} transparent>
       <View  
@@ -21,7 +29,7 @@ const CountrySelectionModal: React.FC<Props> = ({ isVisible, countryLists, onSel
         <SelectDropdown
             data={countryLists}
             onSelect={(selectedItem) => onSelectCountry(selectedItem)}
-            defaultButtonText="Please select a Country"
+            defaultButtonText={strings.pleaseSelectCountry}
             buttonTextAfterSelection={(selectedItem) => selectedItem.name}
             rowTextForSelection={(item) => item.name}
             buttonStyle={AppStyles.dropdown1BtnStyle}

@@ -13,7 +13,7 @@ const SaleAndRentDetails = ({details}) => {
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.motorText}>Building_type</Text>
+              <Text style={styles.motorText}>Building type</Text>
               <Text style={styles.motorText1}>{details?.building_type}</Text>
             </View>
 

@@ -10,6 +10,8 @@ import AppImages from '../../constants/AppImages';
 import AppFonts from '../../constants/AppFonts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 export type WelcomeScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'WelcomeScreen'
@@ -24,6 +26,13 @@ interface Props {}
 
 const WelcomeScreen: React.FC<Props> = () => {
   const navigation = useNavigation<WelcomeScreenNavigationProps>();
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
+ 
   const [token, setToken] = useState(null);
   useEffect(() => {
    checkToken()
@@ -39,14 +48,14 @@ const WelcomeScreen: React.FC<Props> = () => {
    <ImageBackground
    source={AppImages.BG} style={styles.container}>
 
-    <Text style={styles.text}>Red sea Market</Text>
-    <Text style={styles.text1}>General trading</Text>
+    <Text style={styles.text}>{strings.appName}</Text>
+    <Text style={styles.text1}>{strings.trading}</Text>
 
     <TouchableOpacity onPress={()=>{token?
     navigation.navigate(RouteNames.BottomTabs):
     navigation.navigate(RouteNames.LoginScreen)}}
     style={styles.button}>
-      <Text style={styles.text2}>Let's Get Started</Text>
+      <Text style={styles.text2}>{strings.getStarted}</Text>
     </TouchableOpacity>
 
    </ImageBackground>

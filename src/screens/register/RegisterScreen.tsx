@@ -29,6 +29,12 @@ interface Props {}
 
 const RegisterScreen: React.FC<Props> = () => {
   const navigation = useNavigation<RegisterScreenNavigationProps>();
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -114,17 +120,17 @@ const RegisterScreen: React.FC<Props> = () => {
 <View row>
 <Image source={AppImages.PERSON2} style={{right:5}}/>
         <View marginL-20>
-    <Text style={styles.text}>Hello Let's Get</Text>
-    <Text style={styles.text1}>Started</Text>
+    <Text style={styles.text}>{strings.hello}</Text>
+    <Text style={styles.text1}>{strings.started}</Text>
     </View>
     
     </View>
     <View style={styles.view}>
-      <Text style={styles.heading}>Sign up</Text>
+      <Text style={styles.heading}>{strings.started}</Text>
       
 <TextField
       fieldStyle={styles.inputLayout}
-      placeholder={'Username'}
+      placeholder={strings.username}
       floatingPlaceholder
       floatingPlaceholderColor={'black'}
       floatOnFocus="true"
@@ -143,7 +149,7 @@ const RegisterScreen: React.FC<Props> = () => {
 
 <TextField
       fieldStyle={styles.inputLayout}
-      placeholder={'Email'}
+      placeholder={strings.email}
       floatingPlaceholder
       floatingPlaceholderColor={'black'}
       floatOnFocus="true"
@@ -171,7 +177,7 @@ const RegisterScreen: React.FC<Props> = () => {
 
 <TextField
       fieldStyle={styles.inputLayout}
-      placeholder={'Password'}
+      placeholder={strings.password}
       floatingPlaceholder
       floatingPlaceholderColor={'black'}
       floatOnFocus="true"
@@ -201,7 +207,7 @@ const RegisterScreen: React.FC<Props> = () => {
 
 <TextField
       fieldStyle={styles.inputLayout}
-      placeholder={'Confirm Password'}
+      placeholder={strings.confirmPassword}
       floatingPlaceholder
       floatingPlaceholderColor={'black'}
       floatOnFocus="true"
@@ -240,11 +246,11 @@ const RegisterScreen: React.FC<Props> = () => {
       {loadingRegister?
       <ActivityIndicator size={20} color={AppColors.blue} />  
     :
-      <Text style={styles.text2}>Signup</Text>}
+      <Text style={styles.text2}>{strings.signUp}</Text>}
     </TouchableOpacity>
 
     <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.LoginScreen)}>
-    <Text style={styles.bottomText}>Already have an account? Login</Text>
+    <Text style={styles.bottomText}>{strings.haveAccount}</Text>
     </TouchableOpacity>
     </View>
 

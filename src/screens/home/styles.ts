@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         width:'100%',
-        top:8
+        top:8,
       },
       dropdown1BtnStyle: {
         backgroundColor: 'white',
@@ -36,13 +36,16 @@ const styles = StyleSheet.create({
       },
       dropdown1RowTxtStyle: { color: '#444', textAlign: 'right' },
       textFieldStyle: {
-        flex:1,
         borderWidth: 1,
         borderColor: 'white',
         backgroundColor: 'white',
         borderRadius: 40,
-        paddingHorizontal:10,
-        marginHorizontal:3
+        paddingHorizontal:5,
+        height:40,
+        width:'52%',
+        alignItems:'center',
+        justifyContent:'center',
+        flexDirection:'row'
       },
       categoryText:{
         fontSize:14,
@@ -74,7 +77,19 @@ const styles = StyleSheet.create({
         fontSize:12,
         color:'#000000',
         fontFamily:AppFonts.POPPINS_REGULAR
-      }
+      },
+      smallDropdown: {
+        borderWidth: 1,
+        borderColor: 'white',
+        backgroundColor: 'white',
+        borderRadius: 40,
+        paddingHorizontal:5,
+        elevation:20,
+        width:85,
+        height:40,
+        alignItems:'center',
+        justifyContent:'center'
+      },
   });
 
 export default styles

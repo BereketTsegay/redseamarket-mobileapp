@@ -35,6 +35,12 @@ const FavoritesScreen: React.FC<Props> = () => {
     const {currencyLists} = useSelector(
       (state: RootState) => state.CurrencyList,
     );
+    const currentLanguage = useSelector(
+      (state: RootState) => state.language.currentLanguage,
+    );
+    const strings = useSelector(
+      (state: RootState) => state.language.resources[currentLanguage],
+    );
 
     useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
@@ -49,7 +55,7 @@ const FavoritesScreen: React.FC<Props> = () => {
        <Header/>
 
         <View paddingH-30 paddingT-10 paddingB-70 flex>
-          <Text style={styles.text}>Favourites</Text>
+          <Text style={styles.text}>{strings.favorites}</Text>
 
           {loadingFavLists ?
     <ActivityIndicator color={AppColors.blue} size={30}/>

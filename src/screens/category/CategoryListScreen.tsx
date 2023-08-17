@@ -34,20 +34,28 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
   const [sortOpen, setSortOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [initialValue, setValue] = useState('');
+  const [FilterValue, setFilterValue] = useState([]);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {categoryLists, loadingCategoryLists} = useSelector(
     (state: RootState) => state.CategoryList,
   );
 
   useEffect(() => {
-    list('');
+    list('','','','','','','');
   }, []);
 
-  const list = (initialValue) => {
+  const list = (initialValue,state,city,area,subarea,priceFrom,priceTo) => {
     let request = JSON.stringify({
       category: cat_Id,
       country: countryId,
-      sort: initialValue
+      sort: initialValue,
+      state_id:state,
+      city:city,
+      area: area,
+      subArea:subarea,
+      priceFrom:priceFrom,
+      priceTo:priceTo
+
     });
     dispatch(fetchCategoryList({requestBody: request}));
   };
@@ -62,14 +70,19 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
   const sortSet = value => {
     if (value == 1) {
       setValue('low-to-high');
-      list('low-to-high')
+      list('low-to-high','','','','','','')
     } else if (value == 2) {
       setValue('high-to-low');
-      list('high-to-low')
+      list('high-to-low','','','','','','')
     }
     setSortOpen(false);
     
   };
+
+  const FilterSet = (state, city, area, subArea, fromPrice, toPrice) => {
+    list('',state, city, area, subArea, fromPrice, toPrice)
+    setFilterOpen(false)
+  }
 
   return (
     <View
@@ -151,14 +164,7 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
 {filterOpen && (
         <FilterModal
           closeSheet={closeFilterSheet}
-          initialValue={
-            initialValue == 'low-to-high'
-              ? 1
-              : initialValue == 'high-to-low'
-              ? 2
-              : 0
-          }
-          set={sortSet}
+          set={FilterSet}
         />
       )}
     </View>

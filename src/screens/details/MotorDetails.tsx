@@ -16,12 +16,12 @@ const MotorDetails = ({features,details}) => {
             </ScrollView>
              <Text style={styles.subHeading}>Details</Text>
             <View style={styles.row}>
-              <Text style={styles.motorText}>Registration_Year</Text>
+              <Text style={styles.motorText}>Registration Year</Text>
               <Text style={styles.motorText1}>{details?.registration_year}</Text>
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.motorText}>Fuel_type</Text>
+              <Text style={styles.motorText}>Fuel type</Text>
               <Text style={styles.motorText1}>{details?.fuel_type}</Text>
             </View>
 
@@ -31,7 +31,7 @@ const MotorDetails = ({features,details}) => {
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.motorText}>Milage</Text>
+              <Text style={styles.motorText}>Mileage</Text>
               <Text style={styles.motorText1}>{details?.milage}</Text>
             </View>
 

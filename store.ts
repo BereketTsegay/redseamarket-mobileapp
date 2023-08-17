@@ -30,8 +30,10 @@ import ProfileEditSlice from './src/api/profile/ProfileEditSlice';
 import FeaturedAmountSlice from './src/api/featured/FeaturedAmountSlice';
 import StripePaymentSlice from './src/api/stripe/StripePaymentSlice';
 import DirectPaymentSlice from './src/api/directPayment/DirectPaymentSlice';
+import languageSlice, { setLanguage } from './src/api/language/languageSlice';
 
 const rootReducer = combineReducers({
+  language: languageSlice,
   registerCreate: RegisterCreateSlice,
   otpVerify: OtpVerificationSlice,
   otpResend: OtpResendSlice,
@@ -74,5 +76,7 @@ const store = configureStore({
       serializableCheck: false,
     }),
 });
+
+store.dispatch(setLanguage("en"));
 
 export default store;

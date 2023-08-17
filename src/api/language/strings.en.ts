@@ -1,0 +1,38 @@
+export default {
+    name:"Name",
+    email: "E-mail",
+    appName: "Red Sea market",
+    trading: "General trading",
+    getStarted: "Let's Get Started",
+    welcome: "Hi, Welcome",
+    back: "Back",
+    Login: "Log in",
+    password: "Password",
+    confirmPassword: "Confirm Password",
+    noAccount: "Don't have an account? Create one",
+    hello: "Hello Let's Get",
+    started: "Started",
+    signUp: "Sign up",
+    username: "Username",
+    haveAccount: "Already have an account? Login",
+    country: "Country",
+    looking: "What are you looking for?",
+    lang: "Language",
+    pleaseSelectCountry: "Please select a Country",
+    myAds: "My Ads",
+    favorites: "Favorites",
+    home: "Home",
+    menu: "Menu",
+    myAccount: "My Account",
+    profile: "Profile",
+    myJobProfile: "My Job Profile",
+    wallet: "Wallet",
+    others: "Others",
+    policy: "Privacy Policy",
+    terms: "Terms & Conditions",
+    callUs: "Call Us",
+    logout: "Logout"
+
+
+  };
+  

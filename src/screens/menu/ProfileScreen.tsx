@@ -41,6 +41,12 @@ const ProfileScreen: React.FC<Props> = () => {
   const {profileDetails} = useSelector(
     (state: RootState) => state.ProfileDetails,
   );
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
 
   useEffect(() => {
     dispatch(fetchJobProfileList({ requestBody: '' }));
@@ -78,24 +84,24 @@ const ProfileScreen: React.FC<Props> = () => {
       <Header />
       <View flex >
         <View margin-20>
-          <Text style={styles.subHeading}>My Account</Text>
-          <List image={AppImages.PROFILE} name={'Profile'} onPress={()=>navigation.navigate(RouteNames.EditProfile)} />
+          <Text style={styles.subHeading}>{strings.myAccount}</Text>
+          <List image={AppImages.PROFILE} name={strings.profile} onPress={()=>navigation.navigate(RouteNames.EditProfile)} />
 
-          <List image={AppImages.MYADS} name={'My Ads'} onPress={() => navigation.navigate(RouteNames.AdsScreen)} number={profileDetails?.data.myads}/>
+          <List image={AppImages.MYADS} name={strings.myAds} onPress={() => navigation.navigate(RouteNames.AdsScreen)} number={profileDetails?.data.myads}/>
 
-          <List image={AppImages.HEART} name={'My job Profile'} onPress={() => {
+          <List image={AppImages.HEART} name={strings.myJobProfile} onPress={() => {
             jobProfileList?.data ?
             navigation.navigate('JobProfile',{screen:RouteNames.MyJobDetails})
             :
             navigation.navigate('JobProfile',{screen:RouteNames.MyJobProfile})
           }} />
 
-          <List image={AppImages.HEART} name={'Favourites'} onPress={() => navigation.navigate(RouteNames.FavoritesScreen)} number={profileDetails?.data.myfavourite}/>
+          <List image={AppImages.HEART} name={strings.favorites} onPress={() => navigation.navigate(RouteNames.FavoritesScreen)} number={profileDetails?.data.myfavourite}/>
 
           <View row paddingV-5 centerV style={{ justifyContent: 'space-between' }}>
           <Image source={AppImages.BANKING} style={{width:20,height:20}}/>
           <View flex left marginL-20>
-            <Text style={styles.title}>Wallet</Text>
+            <Text style={styles.title}>{strings.wallet}</Text>
           </View>
        
             <Text marginR-10 style={styles.title}>{profileDetails?.data.user.wallet ? profileDetails?.data.user.wallet : 0} USD</Text>
@@ -115,15 +121,15 @@ const ProfileScreen: React.FC<Props> = () => {
         <View style={styles.divider} /> */}
 
         <View margin-20>
-          <Text style={styles.subHeading}>Others</Text>
-          <List image={AppImages.SUPPORT} name={'Privacy Policy'} onPress={()=>Linking.openURL('https://jamal.prompttechdemohosting.com/#/privacy/policy')}/>
+          <Text style={styles.subHeading}>{strings.others}</Text>
+          <List image={AppImages.SUPPORT} name={strings.policy} onPress={()=>Linking.openURL('https://jamal.prompttechdemohosting.com/#/privacy/policy')}/>
 
-          <List image={AppImages.HEART} name={'Terms & Conditions'} onPress={() => navigation.navigate(RouteNames.TermsAndConditions)} />
+          <List image={AppImages.HEART} name={strings.terms} onPress={() => navigation.navigate(RouteNames.TermsAndConditions)} />
           
           {profileDetails?.data.user.phone &&
-          <List image={AppImages.CALL} name={'Call Us'} onPress={()=>openCall(profileDetails?.data.user.phone)} />}
+          <List image={AppImages.CALL} name={strings.callUs} onPress={()=>openCall(profileDetails?.data.user.phone)} />}
 
-          <List image={AppImages.HEART} name={'Logout'} onPress={Logout} />
+          <List image={AppImages.HEART} name={strings.logout} onPress={Logout} />
         </View>
       </View>
     </View>

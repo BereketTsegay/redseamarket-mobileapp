@@ -35,6 +35,12 @@ interface Props {}
 const BottomTabs: React.FC<Props> = () => {
   const navigation = useNavigation<BottomTabsNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   
 
   useEffect(() => {
@@ -53,19 +59,19 @@ const BottomTabs: React.FC<Props> = () => {
     switch (routeName) {
       case RouteNames.AdsScreen:
         icon = AppImages.AD;
-        name = 'My Ads';
+        name = strings.myAds;
         break;
       case RouteNames.FavoritesScreen:
         icon = AppImages.HEART_FILL;
-        name = 'Favorites'
+        name = strings.favorites
         break;
         case RouteNames.HomeScreen:
         icon = AppImages.HOME;
-        name = 'Home'
+        name = strings.home
         break;
       case RouteNames.ProfileScreen:
         icon = AppImages.MENU;
-        name = 'Menu'
+        name = strings.menu
         break;
     }
 

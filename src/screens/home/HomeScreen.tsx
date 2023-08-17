@@ -19,6 +19,8 @@ import { fetchCurrencyList } from '../../api/currency/CurrencyListSlice';
 import CountrySelectionModal from '../../components/CountrySelectionModal';
 import { CommonContext } from '../../api/commonContext';
 import HomeScreenSlider from '../../components/HomeScreenSlider';
+import CountryLanguageHomeModal from '../../components/CountryLanguageHomeModal';
+import { setLanguage } from '../../api/language/languageSlice';
 const { TextField } = Incubator;
 export type HomeScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -34,11 +36,21 @@ interface Props { }
 
 const HomeScreen: React.FC<Props> = () => {
   const navigation = useNavigation<HomeScreenNavigationProps>();
-  const [lang, setLang] = useState([{ code: 'English', name: 'UK', id: 1 }]);
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
+  const [lang, setLang] = useState([{ code: 'English', name: 'UK', id: 1 },
+  { code: 'Arabic', name: 'UAE', id: 2 }]);
   const { commonInput, setCommonInput } = useContext(CommonContext)
   const [showCountryModal, setShowCountryModal] = useState(true);
   const [selectedCountry, setSelectedCountry] = useState<any>(null);
   const [selectedCountryFlag, setSelectedCountryFlag] = useState<string>('Country');
+  const [showCountryLanguageModal, setShowCountryLanguageModal] = useState(false);
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+const [selectedLanguage, setSelectedLanguage] = useState<any>('UK');
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const { dashboardLists, loadingDashBoardList } = useSelector(
     (state: RootState) => state.DashBoardList,
@@ -88,7 +100,10 @@ const HomeScreen: React.FC<Props> = () => {
     setShowCountryModal(false);
   };
 
-
+  function handleLanguageChange(language: Language) {
+    dispatch(setLanguage(language));
+    
+  }
 
   return (
     <View flex backgroundColor="#FFFFFF" paddingB-60>
@@ -98,73 +113,38 @@ const HomeScreen: React.FC<Props> = () => {
         style={styles.topBackground}
         resizeMode='stretch'
       >
-        <Text style={{ fontSize: 15, fontFamily: AppFonts.POPPINS_SEMIBOLD, color: 'white', width: '30%' }}>Red sea Market</Text>
+        <Text style={{ fontSize: 15, fontFamily: AppFonts.POPPINS_SEMIBOLD, color: 'white', width: '30%' }}>{strings.appName}</Text>
       
       <HomeScreenSlider data={dashboardLists?.data.slider}/>
 
         <View center style={styles.rowContainer}>
-          <SelectDropdown
-            data={countryLists?.country || []}
-            onSelect={(selectedItem, index) => {
-              setSelectedCountry(selectedItem.id);
-              setSelectedCountryFlag(selectedItem.flag);
-            }}
-            defaultButtonText={selectedCountryFlag ? 
-              <Image source={{ uri: 'https://admin-jamal.prompttechdemohosting.com/' + selectedCountryFlag }}
-                style={{ width: 25, height: 25, right: 10 }} />
-            : 'Country'}
+        <TouchableOpacity onPress={() => setShowCountryLanguageModal(true)}>
+          <View row style={styles.smallDropdown} >
+  {selectedCountry ? 
+  <Image source={{ uri: 'https://admin-jamal.prompttechdemohosting.com/' + selectedCountryFlag }}
+  style={{ width: 25, height: 25}} />
+  :
+  <Text style={styles.text}>{strings.country}</Text>}
+  <Image source={AppImages.ARROW_DOWN} style={{left:10}}/>
+  </View>
+</TouchableOpacity>
 
-            buttonTextAfterSelection={(selectedItem, index) => {
-              return <Image source={{ uri: 'https://admin-jamal.prompttechdemohosting.com/' + selectedItem.flag }}
-                style={{ width: 25, height: 25, right: 10 }} />;
-            }}
-            rowTextForSelection={(item, index) => {
-              return item.name + ', ' + item.code;
-            }}
-            buttonStyle={[styles.dropdown1BtnStyle,{elevation:10}]}
-            buttonTextStyle={styles.dropdown1BtnTxtStyle}
-            renderDropdownIcon={isOpened => {
-              return <Image source={AppImages.ARROW_DOWN} />;
-            }}
-            dropdownIconPosition={'right'}
-            dropdownStyle={styles.dropdown1DropdownStyle}
-            rowStyle={styles.dropdown1RowStyle}
-            rowTextStyle={styles.dropdown1RowTxtStyle}
-          />
 
           <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.SearchListScreen)}
           style={[styles.textFieldStyle,{elevation:10}]}>
-          <TextField
-            style={styles.text}
-            paddingV-5
-            paddingH-2
-            placeholder={'What are you looking for ?'}
-            leadingAccessory={<Image source={AppImages.SEARCH} style={{ width: 18, height: 18, right: 5 }} />}
-            editable={false}/>
+             <Image source={AppImages.SEARCH} style={{ width: 18, height: 18, right: 5 }} />
+          <Text
+            style={styles.text}>{strings.looking}</Text>
+           
             </TouchableOpacity>
 
-          <SelectDropdown
-            data={lang}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem)
-            }}
-            defaultButtonText={'UK'}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              return selectedItem.name
-            }}
-            rowTextForSelection={(item, index) => {
-              return item.name + ', ' + item.code;
-            }}
-            buttonStyle={[styles.dropdown1BtnStyle,{elevation:10}]}
-            buttonTextStyle={styles.text}
-            renderDropdownIcon={isOpened => {
-              return <Image source={AppImages.ARROW_DOWN} />;
-            }}
-            dropdownIconPosition={'right'}
-            dropdownStyle={styles.dropdown1DropdownStyle}
-            rowStyle={styles.dropdown1RowStyle}
-            rowTextStyle={styles.dropdown1RowTxtStyle}
-          />
+            <TouchableOpacity onPress={() => setShowLanguageModal(true)}>
+          <View row style={styles.smallDropdown}>
+  <Text style={styles.text}>{selectedLanguage ? selectedLanguage : strings.lang}</Text>
+  <Image source={AppImages.ARROW_DOWN} style={{left:0}}/>
+  </View>
+</TouchableOpacity>
+
         </View>
       </ImageBackground>
       <CountrySelectionModal
@@ -251,6 +231,28 @@ const HomeScreen: React.FC<Props> = () => {
               </View>
             )
           }} />}
+
+<CountryLanguageHomeModal
+  isVisible={showCountryLanguageModal}
+  data={countryLists?.country || []}
+  onSelectItem={(item) => {
+    setSelectedCountry(item.id);
+              setSelectedCountryFlag(item.flag);
+    setShowCountryLanguageModal(false);
+  }}
+  onRequestClose={() => setShowCountryLanguageModal(false)}
+/>
+
+<CountryLanguageHomeModal
+  isVisible={showLanguageModal}
+  data={lang}
+  onSelectItem={(item) => {
+    setSelectedLanguage(item.name);
+    handleLanguageChange(item.id == 1 ? "en" : "ar")
+    setShowLanguageModal(false);
+  }}
+  onRequestClose={() => setShowLanguageModal(false)}
+/>
     </View>
   );
 };
