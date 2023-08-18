@@ -28,9 +28,14 @@ interface Props { }
 const HiringJobDetails: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<HiringJobDetailsNavigationProps>();
   const [showPdf, setShowPdf] = useState(false);
-  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {hiringJobList, loadingHiringJobList, hiringJobListError} = useSelector(
     (state: RootState) => state.HiringJob,
+  );
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
   );
   const {index} = route.params;
 
@@ -100,33 +105,33 @@ const HiringJobDetails: React.FC<Props> = ({route}) => {
         </View>
       </View>
 
-      <Text style={styles.subHeading}>Details</Text>
+      <Text style={styles.subHeading}>{strings.details}</Text>
             <View style={styles.row}>
-              <Text style={styles.motorText}>Work Experience</Text>
+              <Text style={styles.motorText}>{strings.workExperience}</Text>
               <Text style={styles.motorText1}>{hiringJobList?.data[index].work_experience} years</Text>
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.motorText}>Education</Text>
+              <Text style={styles.motorText}>{strings.education}</Text>
               <Text style={styles.motorText1}>{hiringJobList?.data[index].education}</Text>
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.motorText}>Certificates</Text>
+              <Text style={styles.motorText}>{strings.certificates}</Text>
               <Text style={styles.motorText1}>{hiringJobList?.data[index].certificate}</Text>
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.motorText}>Language</Text>
+              <Text style={styles.motorText}>{strings.lang}</Text>
               <Text style={styles.motorText1}>{hiringJobList?.data[index].language}</Text>
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.motorText}>Skills</Text>
+              <Text style={styles.motorText}>{strings.skills}</Text>
               <Text style={styles.motorText1}>{hiringJobList?.data[index].skils}</Text>
             </View>
 
-            <Text style={[styles.subHeading,{marginTop:20}]}>Description</Text>
+            <Text style={[styles.subHeading,{marginTop:20}]}>{strings.description}</Text>
                 <Text
                   style={[
                     styles.subHeading,
@@ -147,7 +152,7 @@ const HiringJobDetails: React.FC<Props> = ({route}) => {
      
       <View style={styles.buttonView}>
               <Button
-                label={'Call'}
+                label={strings.call}
                 onPress={() =>
                   openCall(hiringJobList?.data[index].user.phone)
                 }
@@ -159,7 +164,7 @@ const HiringJobDetails: React.FC<Props> = ({route}) => {
                 style={styles.callButton}
               />
               <Button
-                label={'Mail'}
+                label={strings.mail}
                 onPress={() =>
                   openMail(hiringJobList?.data[index].user.email)
                 }

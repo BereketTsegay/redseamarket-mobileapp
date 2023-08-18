@@ -70,6 +70,12 @@ const AppStyles = StyleSheet.create({
         color:'black',
         top:2,
         left:2
+      },
+      required:{
+        alignSelf:'center',
+        fontSize:10,
+        paddingBottom:10,
+        fontFamily:AppFonts.POPPINS_LIGHT,color:AppColors.blue
       }
       
   });

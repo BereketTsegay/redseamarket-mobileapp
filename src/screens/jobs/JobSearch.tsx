@@ -10,6 +10,8 @@ import AppFonts from '../../constants/AppFonts';
 import {PlaceAdContext} from '../../api/placeAd/PlaceAdContext';
 import styles from '../post/styles';
 import { CommonContext } from '../../api/commonContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 export type JobSearchNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'JobSearch'
@@ -25,6 +27,12 @@ interface Props {}
 const JobSearch: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<JobSearchNavigationProps>();
   const {Id, name} = route.params;
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const {commonInput, setCommonInput} = useContext(CommonContext)
 
   return (
@@ -41,7 +49,7 @@ const JobSearch: React.FC<Props> = ({route}) => {
         <View flex center>
           <Text style={styles.heading}>{name}</Text>
           <Text style={styles.subHeading}>
-            Choose the category that you want.
+            {strings.categoryYouWant}
           </Text>
         </View>
       </View>
@@ -52,7 +60,7 @@ const JobSearch: React.FC<Props> = ({route}) => {
             }}>
           <View marginH-30 marginV-20>
             <Text style={{fontSize: 14, fontFamily: AppFonts.POPPINS_SEMIBOLD}}>
-              Find your job
+              {strings.findJob}
             </Text>
           </View>
           <View
@@ -61,11 +69,11 @@ const JobSearch: React.FC<Props> = ({route}) => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={()=>{
-              navigation.navigate(RouteNames.HiringListScreen,{cat_Id:Id,name:name, countryId:commonInput.common_country_id})
+              navigation.navigate(RouteNames.HiringListScreen)
             }}>
           <View marginH-30 marginV-20>
             <Text style={{fontSize: 14, fontFamily: AppFonts.POPPINS_SEMIBOLD}}>
-              Hire people
+              {strings.hirePeople}
             </Text>
           </View>
           <View

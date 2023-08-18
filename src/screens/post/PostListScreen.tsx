@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 import { getWithAuthCall } from '../../api/apiClient';
+import { CommonContext } from '../../api/commonContext';
 export type PostListScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'PostListScreen'
@@ -25,7 +26,14 @@ interface Props {}
 
 const PostListScreen: React.FC<Props> = () => {
   const navigation = useNavigation<PostListScreenNavigationProps>();
+  const {commonInput, setCommonInput} = useContext(CommonContext);
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const {dashboardLists,loadingDashBoardList} = useSelector(
     (state: RootState) => state.DashBoardList,
   );
@@ -49,9 +57,9 @@ const PostListScreen: React.FC<Props> = () => {
           </View>
         </TouchableOpacity>
         <View flex center>
-          <Text style={styles.heading}>What are you listing?</Text>
+          <Text style={styles.heading}>{strings.listing}</Text>
           <Text style={styles.subHeading}>
-            Choose the category that your ad fits into.
+            {strings.chooseCategoryFits}
           </Text>
         </View>
       </View>
@@ -72,7 +80,7 @@ const PostListScreen: React.FC<Props> = () => {
           style={{width:60, height:60}}
           resizeMode="contain"
         />
-            <Text style={styles.title}>{item.name}</Text>
+            <Text style={styles.title}>{commonInput.language == 'ar' ? item.arabic_name : item.name}</Text>
           </TouchableOpacity>
         ))}
       </View>

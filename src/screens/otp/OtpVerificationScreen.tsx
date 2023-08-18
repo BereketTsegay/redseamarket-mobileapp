@@ -39,6 +39,12 @@ const OtpVerificationScreen: React.FC<Props> = ({route}) => {
   const {OtpResendData, loadingOtpResend, OtpResendError} = useSelector(
     (state: RootState) => state.otpResend,
   );
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
 
 
   useEffect(() => {
@@ -110,14 +116,14 @@ const OtpVerificationScreen: React.FC<Props> = ({route}) => {
    source={AppImages.BG} style={styles.container}>
     <View row centerV style={{justifyContent:'space-between'}}>
         <View marginL-40>
-    <Text style={styles.text}>Verification</Text>
-    <Text style={styles.text1}>Code</Text>
+    <Text style={styles.text}>{strings.verify}</Text>
+    <Text style={styles.text1}>{strings.code}</Text>
     </View>
     <Image source={AppImages.PERSON1} style={{left:6}}/>
     </View>
     <View center style={styles.view}>
-      <Text style={styles.heading}>Verify your Email</Text>
-      <Text style={[styles.subTitle,{marginTop:30}]}>We have sent the code verification to your Email</Text>
+      <Text style={styles.heading}>{strings.emailVerify}</Text>
+      <Text style={[styles.subTitle,{marginTop:30}]}>{strings.sentCode}</Text>
       <Text style={styles.numberText}>{email}</Text>
 
       <OTPTextView
@@ -127,12 +133,12 @@ const OtpVerificationScreen: React.FC<Props> = ({route}) => {
           tintColor={AppColors.blue}
         />
 
-      <Text style={styles.subTitle}>I didn't receive a code!</Text>
+      <Text style={styles.subTitle}>{strings.codeReceive}</Text>
       <TouchableOpacity onPress={ResendingOtp}>
       {loadingOtpResend?
       <ActivityIndicator size={20} color={AppColors.blue} />  
     :
-      <Text style={[styles.heading,{fontSize:16}]}>Resend Code</Text>}
+      <Text style={[styles.heading,{fontSize:16}]}>{strings.resendCode}</Text>}
       </TouchableOpacity>
   
     <TouchableOpacity onPress={OtpVerification}
@@ -140,7 +146,7 @@ const OtpVerificationScreen: React.FC<Props> = ({route}) => {
        {loadingOtp?
       <ActivityIndicator size={20} color={AppColors.blue} />  
     :
-    <Text style={styles.text2}>Submit</Text>}
+    <Text style={styles.text2}>{strings.submit}</Text>}
       
     </TouchableOpacity>
 

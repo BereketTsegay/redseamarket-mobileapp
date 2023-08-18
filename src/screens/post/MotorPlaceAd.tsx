@@ -45,6 +45,12 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
   const {variantList} = useSelector(
     (state: RootState) => state.VariantList,
   );
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const [fuelOption, setFuelOption] = useState([
     {
         id: 'Petrol',
@@ -156,35 +162,35 @@ const [errors, setErrors] = useState({
               </View>
             </TouchableOpacity>
             <View flex center>
-            <Text style={styles.heading}>Place an Ad</Text>
+            <Text style={styles.heading}>{strings.placeAd}</Text>
             </View>
           </View>
 
-          <Text style={styles.AdTitle}>Tell us about your {name}</Text>
+          <Text style={styles.AdTitle}>{strings.tellUs} {name}</Text>
 
      <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
 
         <View>
           {  errors.make_id &&
-              <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-              <Text style={styles.labelStyle}>Make_Id</Text>
-<ItemDropdown value={placeAdInput.make_id} data={makeList?.make} add={setMake} dropdownType={'Make'}/>
+              <Text color={'red'} style={{alignSelf:'flex-end'}}>{strings.requiredField}</Text>}
+              <Text style={styles.labelStyle}>{strings.make} {strings.id}</Text>
+<ItemDropdown value={placeAdInput.make_id} data={makeList?.make} add={setMake} dropdownType={strings.make}/>
 </View>
 
 <View>
           {  errors.model_id &&
-              <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-                <Text style={styles.labelStyle}>Model_Id</Text>
-<ItemDropdown value={placeAdInput.model_id} data={modelList?.model} add={setModel} dropdownType={'Model'}/>
+              <Text color={'red'} style={{alignSelf:'flex-end'}}>{strings.requiredField}</Text>}
+                <Text style={styles.labelStyle}>{strings.model} {strings.id}</Text>
+<ItemDropdown value={placeAdInput.model_id} data={modelList?.model} add={setModel} dropdownType={strings.model}/>
 </View>
 
-<Text style={styles.labelStyle}>Variant_Id</Text>
-<ItemDropdown value={placeAdInput.variant_id} data={variantList?.variant} add={setVariant} dropdownType={'Variant'}/>
+<Text style={styles.labelStyle}>{strings.variant} {strings.id}</Text>
+<ItemDropdown value={placeAdInput.variant_id} data={variantList?.variant} add={setVariant} dropdownType={strings.variant}/>
 
 <InputField
-label={'Registered Year'}
-          title={'Enter registered year'}
+label={strings.registration}
+          title={strings.enterRegisteredYear}
           multiline={false}
           height={45}
           type={'numeric'}
@@ -194,49 +200,49 @@ label={'Registered Year'}
           }}
           trailing={
             errors.registration_year &&
-            <Text color={'red'}>required field</Text>
+            <Text color={'red'}>{strings.requiredField}</Text>
           }
           editable={true}
           />
 
 <View>
           {  errors.fuel &&
-              <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-                <Text style={styles.labelStyle}>Fuel</Text>
-<ItemDropdown value={placeAdInput.fuel} data={fuelOption} add={setFuel} dropdownType={'Fuel Type'}/>
+              <Text color={'red'} style={{alignSelf:'flex-end'}}>{strings.requiredField}</Text>}
+                <Text style={styles.labelStyle}>{strings.FuelType}</Text>
+<ItemDropdown value={placeAdInput.fuel} data={fuelOption} add={setFuel} dropdownType={strings.FuelType}/>
 </View>
 
 <View row marginB-20>
-<Text style={[styles.title,{fontSize:14}]}>Transmission</Text>
+<Text style={[styles.title,{fontSize:14}]}>{strings.transmission}</Text>
 {  errors.transmission &&
-              <Text color={'red'}>required field</Text>}
+              <Text color={'red'}>{strings.requiredField}</Text>}
 </View>
 <RadioGroup
               initialValue={placeAdInput.transmission}
               onValueChange={(value: any) =>{setPlaceAdInput({...placeAdInput, transmission:value})
               setErrors({...errors, transmission: false});}}
               >
-              {renderRadioButton(1,'Manual')}
-              {renderRadioButton(2,'Automatic')}
+              {renderRadioButton(1,strings.manual)}
+              {renderRadioButton(2,strings.automatic)}
             </RadioGroup>
 
             <View row marginB-20>
-<Text style={[styles.title,{fontSize:14}]}>Condition</Text>
+<Text style={[styles.title,{fontSize:14}]}>{strings.condition}</Text>
 {  errors.condition &&
-              <Text color={'red'}>required field</Text>}
+              <Text color={'red'}>{strings.requiredField}</Text>}
 </View>
 <RadioGroup
               initialValue={placeAdInput.condition}
               onValueChange={(value: any) =>{setPlaceAdInput({...placeAdInput, condition:value})
               setErrors({...errors, condition: false});}}
               >
-              {renderRadioButton(1,'New')}
-              {renderRadioButton(2,'Used')}
+              {renderRadioButton(1,strings.new)}
+              {renderRadioButton(2,strings.used)}
             </RadioGroup>
 
 <InputField
-label={'Mileage'}
-          title={'Enter mileage'}
+label={strings.mileage}
+          title={strings.enterMileage}
           multiline={false}
           height={45}
           type={'numeric'}
@@ -246,15 +252,15 @@ label={'Mileage'}
             }}
             trailing={
               errors.mileage &&
-              <Text color={'red'}>required field</Text>
+              <Text color={'red'}>{strings.requiredField}</Text>
             }
             editable={true}
           />
 
-          <Text style={[styles.title,{fontSize:14,marginBottom:20}]}>Features</Text>
+          <Text style={[styles.title,{fontSize:14,marginBottom:20}]}>{strings.features}</Text>
 
 <Checkbox
-          label={'Air Conditioner'}
+          label={strings.airCondition}
           labelStyle={styles.fieldText}
           value={placeAdInput.aircondition}
           onValueChange={(value: any) =>setPlaceAdInput({...placeAdInput, aircondition:value})}
@@ -262,7 +268,7 @@ label={'Mileage'}
           containerStyle={{marginBottom:20}}/>
 
 <Checkbox
-          label={'GPS'}
+          label={strings.gps}
           labelStyle={styles.fieldText}
           value={placeAdInput.gps}
           onValueChange={(value: any) =>setPlaceAdInput({...placeAdInput, gps:value})}
@@ -270,7 +276,7 @@ label={'Mileage'}
           containerStyle={{marginBottom:20}}/>
 
 <Checkbox
-          label={'Security System'}
+          label={strings.security}
           labelStyle={styles.fieldText}
           value={placeAdInput.security}
           onValueChange={(value: any) =>setPlaceAdInput({...placeAdInput, security:value})}
@@ -278,7 +284,7 @@ label={'Mileage'}
           containerStyle={{marginBottom:20}}/>
 
 <Checkbox
-          label={'Spare Tire'}
+          label={strings.spare}
           labelStyle={styles.fieldText}
           value={placeAdInput.tire}
           onValueChange={(value: any) =>setPlaceAdInput({...placeAdInput, tire:value})}
@@ -286,7 +292,7 @@ label={'Mileage'}
           containerStyle={{marginBottom:20}}/>
 
           <Button
-          label={'Next'}
+          label={strings.next}
           style={{backgroundColor:AppColors.lightBlue}}
           onPress={nextScreen}/>
                 </View>

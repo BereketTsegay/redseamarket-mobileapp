@@ -23,6 +23,12 @@ interface Props {}
 
 const TermsAndConditions: React.FC<Props> = () => {
   const navigation = useNavigation<TermsAndConditionsNavigationProps>();
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const [terms, setTerms] = useState('')
   useEffect(() => {
     apiClient('app/terms/conditions', 'POST', '')
@@ -43,7 +49,7 @@ const TermsAndConditions: React.FC<Props> = () => {
       </TouchableOpacity>
 
       <Text style={[styles.AdTitle, {}]}>
-        Terms And Conditions
+        {strings.terms}
       </Text>
 
       <View flex>

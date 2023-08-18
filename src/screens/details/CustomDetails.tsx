@@ -3,11 +3,19 @@ import { Text, View } from "react-native-ui-lib";
 import styles from "./styles";
 import moment from "moment";
 import { FlatList } from "react-native";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 const CustomDetails = ({details}) => {
+    const currentLanguage = useSelector(
+        (state: RootState) => state.language.currentLanguage,
+      );
+      const strings = useSelector(
+        (state: RootState) => state.language.resources[currentLanguage],
+      );
     return(
         <View marginT-10>
-             <Text style={styles.subHeading}>Details</Text>
+             <Text style={styles.subHeading}>{strings.details}</Text>
 
              <FlatList
              data={details}

@@ -25,8 +25,6 @@ import { fetchStateList } from '../../api/country/StateListSlice';
 import { fetchCityList } from '../../api/country/CityListSlice';
 import { fetchCustomField } from '../../api/customField/CustomFieldSlice';
 import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
-import { PlaceAdRequest } from '../../api/placeAd/PlaceAdRequest';
-import { getWithAuthCall } from '../../api/apiClient';
 import AdsCountrySelect from '../../components/AdsCountrySelect';
 import { CommonContext } from '../../api/commonContext';
 const { TextField } = Incubator;
@@ -57,6 +55,12 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
   );
   const { customLists } = useSelector(
     (state: RootState) => state.CustomFieldList,
+  );
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
   );
   const [errors, setErrors] = useState({
     title: false,
@@ -226,17 +230,17 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           </View>
         </TouchableOpacity>
         <View flex center>
-          <Text style={styles.heading}>Place an Ad</Text>
+          <Text style={styles.heading}>{strings.placeAd}</Text>
         </View>
       </View>
 
-      <Text style={styles.AdTitle}>Tell us about your {placeAdInput.category_Name}</Text>
+      <Text style={styles.AdTitle}>{strings.tellUs} {placeAdInput.category_Name}</Text>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
           <InputField
-          label={'Title in English'}
-            title={'Enter title'}
+          label={strings.engTitle}
+            title={strings.enterTitle}
             multiline={false}
             height={45}
             type={'default'}
@@ -247,14 +251,14 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             }}
             trailing={
               errors.title &&
-              <Text color={'red'}>required field</Text>
+              <Text color={'red'}>{strings.requiredField}</Text>
             }
             editable={true}
           />
 
           <InputField
-          label={'Title in Arabic'}
-            title={'Enter title (Arabic)'}
+          label={strings.arabTitle}
+            title={strings.enterArab}
             multiline={false}
             height={45}
             type={'default'}
@@ -265,15 +269,15 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             }}
             trailing={
               errors.titleinArabic &&
-              <Text color={'red'}>required field</Text>
+              <Text color={'red'}>{strings.requiredField}</Text>
             }
             editable={true}
           />
 
           <TextField
-          label={'Canonical Name'}
+          label={strings.canonical}
           labelStyle={styles.labelStyle}
-            placeholder={'Enter canonical name'}
+            placeholder={strings.enterCanonical}
             placeholderTextColor={'#000000'}
             color={'#000000'}
             style={styles.fieldText}
@@ -293,7 +297,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
                   styles.fieldStyle,
                   { borderStyle: 'dashed', justifyContent: 'space-between' },
                 ]}>
-                <Text style={styles.fieldText}>Upload Image</Text>
+                <Text style={styles.fieldText}>{strings.UploadImage}</Text>
                 <Image
                   source={AppImages.UPLOAD}
                   tintColor={AppColors.lightBlue}
@@ -301,7 +305,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
               </View>
             </TouchableOpacity>
             <Text style={{ color: 'red', fontSize: 8 }}>
-              *Maximum 5 images are allowed
+              *{strings.maxImages}
             </Text>
             {placeAdInput.image.length != 0 &&
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -321,20 +325,20 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
 
           <View>
             {errors.country &&
-              <Text color={'red'} style={{ alignSelf: 'flex-end' }}>required field</Text>}
-              <Text style={styles.labelStyle}>Country</Text>
+              <Text color={'red'} style={{ alignSelf: 'flex-end' }}>{strings.requiredField}</Text>}
+              <Text style={styles.labelStyle}>{strings.country}</Text>
             <ItemDropdown
               value={placeAdInput.country}
               data={countryLists?.country}
               add={setCountry}
-              dropdownType={'Country'}
+              dropdownType={strings.country}
             />
 
           </View>
 
           <InputField
-          label={placeAdInput.category_Name == 'Jobs' ? 'Salary' : 'Price'}
-            title={placeAdInput.category_Name == 'Jobs' ? 'Enter salary' : 'Enter price'}
+          label={placeAdInput.category_Name == 'Jobs' ? strings.salary : strings.price}
+            title={placeAdInput.category_Name == 'Jobs' ? strings.enterSalary : strings.enterPrice}
             multiline={false}
             height={45}
             type={'numeric'}
@@ -347,7 +351,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             trailing={
               <View row>
                 {errors.priceValue &&
-                  <Text color={'red'}>required field</Text>
+                  <Text color={'red'}>{strings.requiredField}</Text>
                 }
                 <Text>{placeAdInput.price != 0 && placeAdInput.price + ' USD'}</Text>
               </View>
@@ -356,8 +360,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           />
 
           <InputField
-          label={'Description in English'}
-            title={'Enter description'}
+          label={strings.engDescription}
+            title={strings.enterDescription}
             multiline={true}
             height={80}
             type={'default'}
@@ -368,14 +372,14 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             }}
             trailing={
               errors.description &&
-              <Text color={'red'}>required field</Text>
+              <Text color={'red'}>{strings.requiredField}</Text>
             }
             editable={true}
           />
 
           <InputField
-          label={'Description in Arabic'}
-            title={'Enter description (Arabic)'}
+          label={strings.arabDescription}
+            title={strings.enterArabDescription}
             multiline={true}
             height={80}
             type={'default'}
@@ -386,38 +390,38 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             }}
             trailing={
               errors.descriptioninArabic &&
-              <Text color={'red'}>required field</Text>
+              <Text color={'red'}>{strings.requiredField}</Text>
             }
             editable={true}
           />
 
           <View>
             {errors.state &&
-              <Text color={'red'} style={{ alignSelf: 'flex-end' }}>required field</Text>}
-              <Text style={styles.labelStyle}>State</Text>
+              <Text color={'red'} style={{ alignSelf: 'flex-end' }}>{strings.requiredField}</Text>}
+              <Text style={styles.labelStyle}>{strings.state}</Text>
             <ItemDropdown
               value={placeAdInput.state}
               data={stateLists?.state}
               add={setState}
-              dropdownType={'State'}
+              dropdownType={strings.state}
             />
           </View>
 
           <View>
             {errors.city &&
-              <Text color={'red'} style={{ alignSelf: 'flex-end' }}>required field</Text>}
-              <Text style={styles.labelStyle}>City</Text>
+              <Text color={'red'} style={{ alignSelf: 'flex-end' }}>{strings.requiredField}</Text>}
+              <Text style={styles.labelStyle}>{strings.city}</Text>
             <ItemDropdown
               value={placeAdInput.city}
               data={cityLists?.city}
               add={setCity}
-              dropdownType={'City'}
+              dropdownType={strings.city}
             />
           </View>
 
           <InputField
-          label={'Area'}
-            title={'Enter area'}
+          label={strings.Area}
+            title={strings.enterArea}
             multiline={false}
             height={45}
             type={'default'}
@@ -428,17 +432,16 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             }}
             trailing={
               errors.area &&
-              <Text color={'red'}>required field</Text>
+              <Text color={'red'}>{strings.requiredField}</Text>
             }
             editable={true}
           />
 
           <InputField
-          label={'Sub Area'}
-            title={'enter sub area'}
+          label={strings.subArea}
+            title={strings.enterSubArea}
             multiline={false}
             height={45}
-            type={'default'}
             value={placeAdInput.sub_area}
             onChange={(text) => { setPlaceAdInput({ ...placeAdInput, sub_area: text }) }}
             trailing={null}
@@ -446,11 +449,10 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           />
 
           <InputField
-          label={'Sub Area2'}
-            title={'enter sub area2'}
+          label={strings.subArea + '2'}
+            title={strings.enterSubArea + '2'}
             multiline={false}
             height={45}
-            type={'default'}
             value={placeAdInput.sub_area2}
             onChange={(text) => { setPlaceAdInput({ ...placeAdInput, sub_area2: text }) }}
             trailing={null}
@@ -458,11 +460,11 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           />
           
           <View>
-            <Text style={styles.labelStyle}>Ad View Countries</Text>
+            <Text style={styles.labelStyle}>{strings.viewCountries}</Text>
           <AdsCountrySelect countryLists={countryLists?.country} Id={editData ? placeAdInput.adsCountry : [commonInput.common_country_id]} />
 </View>
           <Checkbox
-            label={'Price Negotiable'}
+            label={strings.negotiable}
             labelStyle={styles.fieldText}
             value={placeAdInput.negotiable}
             color={'grey'}
@@ -472,7 +474,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
 
           {placeAdInput.featured == 2 &&
             <Checkbox
-              label={'Featured'}
+              label={strings.featured}
               labelStyle={styles.fieldText}
               value={placeAdInput.featuredSelect}
               color={'grey'}
@@ -481,7 +483,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             />}
 
           <Button
-            label={'Next'}
+            label={strings.next}
             style={{ backgroundColor: AppColors.lightBlue }}
             onPress={nextScreen}
           />

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Button, Image, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
@@ -27,6 +27,7 @@ import FavoriteComponent from '../../components/FavoriteComponent';
 import moment from 'moment';
 import MapComponent from '../../components/MapComponent';
 import DirectPaymentModal from '../../components/DirectPaymentModal';
+import { CommonContext } from '../../api/commonContext';
 export type DetailsScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'DetailsScreen'
@@ -41,8 +42,15 @@ interface Props {}
 
 const DetailsScreen: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<DetailsScreenNavigationProps>();
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const {adId, countryId, edit} = route.params;
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const {commonInput, setCommonInput} = useContext(CommonContext);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {dashboardDetails, loadingDashBoardDetail} = useSelector(
     (state: RootState) => state.DashBoardDetails,
@@ -146,7 +154,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                 </View>
 
                 <Text style={styles.titleText}>
-                  {dashboardDetails?.ads[0].title}
+                  {commonInput.language == 'ar' ? dashboardDetails?.ads[0].title_arabic ? dashboardDetails?.ads[0].title_arabic : dashboardDetails?.ads[0].title : dashboardDetails?.ads[0].title}
                 </Text>
 
                 {dashboardDetails?.ads[0].motor_features &&
@@ -176,14 +184,14 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                 ) : null}
 
                 <View style={styles.row}>
-                  <Text style={styles.motorText}>Posted On</Text>
+                  <Text style={styles.motorText}>{strings.posted}</Text>
                   <Text style={styles.motorText1}>
                     {dashboardDetails?.ads[0].created_on}
                   </Text>
                 </View>
 
                 <View marginB-20 style={styles.row}>
-                  <Text style={styles.motorText}>Updated at</Text>
+                  <Text style={styles.motorText}>{strings.updated}</Text>
                   <Text style={styles.motorText1}>
                     {dashboardDetails?.ads[0].updated_on}
                   </Text>
@@ -196,7 +204,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                   dashboardDetails?.lastpay == 0 && (
                     <Button
                       label={
-                        'Upload Payment Document (USD ' +
+                        strings.uploadPaymentDocument + ' (USD ' +
                         dashboardDetails.ads[0].payment.amount +
                         ')'
                       }
@@ -216,7 +224,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                   dashboardDetails?.ads[0].status == 0 && (
                     <View center>
                       <Text style={{color: 'red'}}>
-                        Ad pending for Verification
+                        {strings.pendingVerification}
                       </Text>
                     </View>
                   )}
@@ -226,8 +234,8 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                     <Button
                       label={
                         dashboardDetails?.ads[0].isApply
-                          ? 'Job already applied'
-                          : 'Apply this Job'
+                          ? strings.jobApplied
+                          : strings.ApplyJob
                       }
                       style={{
                         backgroundColor: AppColors.lightBlue,
@@ -245,16 +253,16 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                     />
                   )}
 
-                <Text style={styles.subHeading}>Description</Text>
+                <Text style={styles.subHeading}>{strings.description}</Text>
                 <Text
                   style={[
                     styles.subHeading,
                     {fontFamily: AppFonts.POPPINS_REGULAR},
                   ]}>
-                  {dashboardDetails?.ads[0].description}
+                  {commonInput.language == 'ar' ? dashboardDetails?.ads[0].description_arabic ? dashboardDetails?.ads[0].description_arabic : dashboardDetails?.ads[0].description : dashboardDetails?.ads[0].description}
                 </Text>
 
-                <Text style={styles.subHeading}>Location</Text>
+                <Text style={styles.subHeading}>{strings.location}</Text>
                 <Text
                   style={[
                     styles.subHeading,
@@ -273,7 +281,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
 
             <View style={styles.buttonView}>
               <Button
-                label={'Call'}
+                label={strings.call}
                 onPress={() =>
                   openCall(dashboardDetails?.ads[0].seller_information.phone)
                 }
@@ -285,7 +293,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                 style={styles.callButton}
               />
               <Button
-                label={'Mail'}
+                label={strings.mail}
                 onPress={() =>
                   openMail(dashboardDetails?.ads[0].seller_information.email)
                 }

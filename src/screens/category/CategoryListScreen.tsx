@@ -30,6 +30,12 @@ interface Props {}
 
 const CategoryListScreen: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<CategoryListScreenNavigationProps>();
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const {cat_Id, name, countryId} = route.params;
   const [sortOpen, setSortOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -57,6 +63,7 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
       priceTo:priceTo
 
     });
+    // console.log(request)
     dispatch(fetchCategoryList({requestBody: request}));
   };
 
@@ -99,7 +106,7 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
           </View>
         </TouchableOpacity>
         <Text flex center style={[styles.text, {fontSize: 14}]}>
-          {categoryLists?.length} Results
+          {categoryLists?.ads.length} {strings.results}
         </Text>
       </View>
 
@@ -112,7 +119,7 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
               style={{width: 15, height: 15, marginRight: 5}}
               tintColor={'black'}
             />
-            <Text style={[styles.text]}>Search Alert</Text>
+            <Text style={[styles.text]}>{strings.searchAlert}</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -122,7 +129,7 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
               source={AppImages.FILTER}
               style={{width: 15, height: 15, marginRight: 5}}
             />
-            <Text style={styles.text}>Filter</Text>
+            <Text style={styles.text}>{strings.filter}</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setSortOpen(!sortOpen)}>
@@ -131,7 +138,7 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
               source={AppImages.SORT}
               style={{width: 15, height: 15, marginRight: 5}}
             />
-            <Text style={styles.text}>Sort</Text>
+            <Text style={styles.text}>{strings.sort}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -139,8 +146,13 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
         {loadingCategoryLists ? (
           <ActivityIndicator color={AppColors.blue} size={20} />
         ) : (
+          categoryLists?.ads.length == 0 ?
+          <View flex center>
+          <Text style={styles.filterText}>{strings.listNothing}</Text>
+          </View>
+          :
           <CategoryListComponent
-            data={categoryLists}
+            data={categoryLists?.ads}
             countryId={countryId}
             categoryName={name}
           />

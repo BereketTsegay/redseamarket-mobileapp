@@ -10,6 +10,8 @@ import styles from './styles';
 import {CommonContext} from '../../api/commonContext';
 import {apiClient} from '../../api/apiClient';
 import CategoryListComponent from '../../components/CategoryListComponent';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 const {TextField} = Incubator;
 export type SearchListScreenNavigationProps = NativeStackNavigationProp<
@@ -26,6 +28,12 @@ interface Props {}
 
 const SearchListScreen: React.FC<Props> = () => {
   const navigation = useNavigation<SearchListScreenNavigationProps>();
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const [searchKey, setSearchKey] = useState('');
   const {commonInput, setCommonInput} = useContext(CommonContext);
   const [searchData, setSearchData] = useState([]);
@@ -44,9 +52,6 @@ const SearchListScreen: React.FC<Props> = () => {
     });
   };
 
-  const favDone = () => {
-    list(searchKey);
-  };
 
   return (
     <View flex backgroundColor="#FFFFFF" padding-20>
@@ -54,7 +59,7 @@ const SearchListScreen: React.FC<Props> = () => {
         fieldStyle={styles.fieldStyle}
         style={styles.fieldText}
         padding-10
-        placeholder={'Search'}
+        placeholder={strings.search}
         value={searchKey}
         onChangeText={text =>{setSearchKey(text)
         list(text)}}
@@ -80,14 +85,13 @@ const SearchListScreen: React.FC<Props> = () => {
       />
       {searchData.length == 0 ? (
         <View flex center>
-          <Text>Nothing in Search</Text>
+          <Text>{strings.searchNothing}</Text>
         </View>
       ) : (
         <View marginV-20>
           <CategoryListComponent
             data={searchData}
             countryId={commonInput.common_country_id}
-            onPress={favDone}
           />
         </View>
       )}

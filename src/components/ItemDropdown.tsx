@@ -3,14 +3,22 @@ import AppStyles from '../constants/AppStyles';
 import { Image } from 'react-native-ui-lib';
 import AppImages from '../constants/AppImages';
 import SelectDropdown from 'react-native-select-dropdown';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 
 const ItemDropdown = ({value,data,add,dropdownType}) => {
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const selectedItem = data ? data.find((item) => item.id === value) : null;
   const defaultButtonText =
     selectedItem && selectedItem.name
       ? selectedItem.name
-      : `Select ${dropdownType}`;
+      : `${strings.select} ${dropdownType}`;
 
     return (
       <SelectDropdown

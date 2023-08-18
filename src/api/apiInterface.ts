@@ -249,7 +249,7 @@ export const fetchCurrencyList = async (
 //API FOR CATEGORY LIST
 export const fetchCategoryList = async (
   requestBody: any,
-): Promise<NetworkResponse<Details_Ad | null>> => {
+): Promise<NetworkResponse<DashBoardDetails | null>> => {
   const response = await apiClient(
     'app/customer/get/category/ads',
     'POST',

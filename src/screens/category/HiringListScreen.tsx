@@ -26,12 +26,17 @@ type HiringListScreenRouteProps = RouteProp<
 
 interface Props {}
 
-const HiringListScreen: React.FC<Props> = ({route}) => {
+const HiringListScreen: React.FC<Props> = ({}) => {
   const navigation = useNavigation<HiringListScreenNavigationProps>();
-  const {cat_Id, name, countryId} = route.params;
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {hiringJobList, loadingHiringJobList, hiringJobListError} = useSelector(
     (state: RootState) => state.HiringJob,
+  );
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
   );
   const {currencyLists} = useSelector((state: RootState) => state.CurrencyList);
 
@@ -104,7 +109,7 @@ const HiringListScreen: React.FC<Props> = ({route}) => {
                       </View>
 
                       <View marginV-10>
-                        <Text style={styles.text}>Description</Text>
+                        <Text style={styles.text}>{strings.description}</Text>
                         <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.text, {opacity: 0.75}]}>
                           {item.overview}
                         </Text>

@@ -21,6 +21,12 @@ import {createPayment, reset} from '../api/stripe/StripePaymentSlice';
 
 const PaymentDetails = ({amount, value}) => {
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext);
   const {paymentData, loadingPayment, paymentError} = useSelector(
     (state: RootState) => state.StripePayment,
@@ -119,11 +125,11 @@ const PaymentDetails = ({amount, value}) => {
 
   return (
     <View>
-      <Text style={AppStyles.title}>Payment Details</Text>
+      <Text style={AppStyles.title}>{strings.paymentDetails}</Text>
 
       <InputField
-      label={'Name'}
-        title={'Enter name'}
+      label={strings.name}
+        title={strings.enterName}
         multiline={false}
         height={45}
         type={'default'}
@@ -132,13 +138,13 @@ const PaymentDetails = ({amount, value}) => {
           setPlaceAdInput({...placeAdInput, name: text});
           setErrors({...errors, name: false});
         }}
-        trailing={errors.name && <Text color={'red'}>required field</Text>}
+        trailing={errors.name && <Text color={'red'}>{strings.requiredField}</Text>}
         editable={true}
       />
 
       <InputField
-      label={'Email'}
-        title={'Enter email'}
+      label={strings.email}
+        title={strings.enterEmail}
         height={45}
         type={'default'}
         value={placeAdInput.email}
@@ -146,12 +152,12 @@ const PaymentDetails = ({amount, value}) => {
           setPlaceAdInput({...placeAdInput, email: text});
           setErrors({...errors, email: false});
         }}
-        trailing={errors.email && <Text color={'red'}>required field</Text>}
+        trailing={errors.email && <Text color={'red'}>{strings.requiredField}</Text>}
       />
 
       <InputField
-      label={'Phone'}
-        title={'Enter phone'}
+      label={strings.phone}
+        title={strings.enterPhone}
         height={45}
         type={'numeric'}
         value={placeAdInput.phone}
@@ -159,12 +165,12 @@ const PaymentDetails = ({amount, value}) => {
           setPlaceAdInput({...placeAdInput, phone: text});
           setErrors({...errors, phone: false});
         }}
-        trailing={errors.phone && <Text color={'red'}>required field</Text>}
+        trailing={errors.phone && <Text color={'red'}>{strings.requiredField}</Text>}
       />
 
       <InputField
-      label={'Card Number'}
-        title={'Enter card number'}
+      label={strings.cardNumber}
+        title={strings.enterCard}
         height={45}
         type={'numeric'}
         value={cardNumber}
@@ -175,8 +181,8 @@ const PaymentDetails = ({amount, value}) => {
 
       <View row style={{justifyContent: 'space-between'}}>
         <InputField
-        label={'Month'}
-          title={'Month'}
+        label={strings.month}
+          title={strings.month}
           height={45}
           width={80}
           type={'numeric'}
@@ -189,8 +195,8 @@ const PaymentDetails = ({amount, value}) => {
         />
 
         <InputField
-        label={'Year'}
-          title={'Year'}
+        label={strings.year}
+          title={strings.year}
           height={45}
           width={80}
           type={'numeric'}
@@ -203,8 +209,8 @@ const PaymentDetails = ({amount, value}) => {
         />
 
         <InputField
-        label={'CVV'}
-          title={'CVV'}
+        label={strings.Cvv}
+          title={strings.Cvv}
           height={45}
           width={80}
           type={'numeric'}
@@ -218,7 +224,7 @@ const PaymentDetails = ({amount, value}) => {
       </View>
 
       <Button
-        label={'Proceed to pay'}
+        label={strings.proceed}
         style={{backgroundColor: '#28a745', borderRadius: 5}}
         onPress={Proceed}
       />

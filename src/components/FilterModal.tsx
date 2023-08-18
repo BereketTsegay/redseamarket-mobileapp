@@ -29,6 +29,12 @@ type Props = {
 
 const FilterModal = ({ closeSheet, initialValue, set }: Props) => {
     const navigation = useNavigation();
+    const currentLanguage = useSelector(
+      (state: RootState) => state.language.currentLanguage,
+    );
+    const strings = useSelector(
+      (state: RootState) => state.language.resources[currentLanguage],
+    );
     const bottomSheetRef = useRef(null);
     const translateY = useRef(new Animated.Value(windowHeight)).current;
     const [priceValue, setPriceValue] = useState(1000000)
@@ -120,12 +126,12 @@ const FilterModal = ({ closeSheet, initialValue, set }: Props) => {
       >
 
 <View marginH-10>
-            <Text style={[AppStyles.text,{marginBottom:5}]}>Filter</Text>
+            <Text style={[AppStyles.text,{marginBottom:5}]}>{strings.filter}</Text>
 
             <View>
-        <Text style={AppStyles.labelStyle}>State</Text>
+        <Text style={AppStyles.labelStyle}>{strings.state}</Text>
 <ItemDropdown
-            value={'Select state'}
+            value={strings.selectState}
             data={stateLists?.state}
             add={setSate}
             dropdownType="State"
@@ -133,9 +139,9 @@ const FilterModal = ({ closeSheet, initialValue, set }: Props) => {
           </View>
 
             <View>
-        <Text style={AppStyles.labelStyle}>City</Text>
+        <Text style={AppStyles.labelStyle}>{strings.city}</Text>
 <ItemDropdown
-            value={'Select city'}
+            value={strings.selectCity}
             data={cityLists?.city}
             add={setCity}
             dropdownType="City"
@@ -143,22 +149,22 @@ const FilterModal = ({ closeSheet, initialValue, set }: Props) => {
           </View>
 
             <InputField
-              label={'Area'}
-              title={'Enter area'}
+              label={strings.area}
+              title={strings.enterArea}
               height={45}
               value={area}
               onChange={(text)=>setArea(text)}
             />
 
 <InputField
-              label={'Sub Area'}
-              title={'Enter sub area'}
+              label={strings.subArea}
+              title={strings.enterSubArea}
               height={45}
               value={subArea}
               onChange={(text)=>setSubArea(text)}
             />
 <View>
-    <Text style={AppStyles.labelStyle}>Price Range</Text>
+    <Text style={AppStyles.labelStyle}>{strings.priceRange}</Text>
 
 <Slider
   value={0}
@@ -176,7 +182,7 @@ const FilterModal = ({ closeSheet, initialValue, set }: Props) => {
 
 
 <Button
-        label={'Submit'}
+        label={strings.submit}
         style={{backgroundColor: AppColors.lightBlue,width:'50%',alignSelf:'center'}}
         onPress={()=>set(state_id,city_id,area,subArea,0,Math.round(priceValue))}
       />

@@ -33,6 +33,12 @@ interface Props {}
 const SellerInformation: React.FC<Props> = () => {
   const navigation = useNavigation<SellerInformationNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
   const {PlaceAdData,loadingPlaceAd,PlaceAdError} = useSelector((state: RootState) => state.PlaceAd);
   const {profileDetails} = useSelector(
@@ -239,17 +245,17 @@ const SellerInformation: React.FC<Props> = () => {
               </View>
             </TouchableOpacity>
             <View flex center>
-            <Text style={styles.heading}>Place an Ad</Text>
+            <Text style={styles.heading}>{strings.placeAd}</Text>
             </View>
           </View>
 
-          <Text style={styles.AdTitle}>Seller information</Text>
+          <Text style={styles.AdTitle}>{strings.seller}</Text>
 
      <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
         <InputField
-        label={'Name'}
-          title={'enter name'}
+        label={strings.name}
+          title={strings.enterName}
           multiline={false}
           height={45}
           type={'default'}
@@ -259,14 +265,14 @@ const SellerInformation: React.FC<Props> = () => {
         }}
         trailing={
           errors.name &&
-          <Text color={'red'}>required field</Text>
+          <Text color={'red'}>{strings.requiredField}</Text>
         }
         editable={true}
           />
 
 <InputField
-label={'Email'}
-          title={'Enter email'}
+label={strings.email}
+title={strings.enterEmail}
           multiline={false}
           height={45}
           type={'default'}
@@ -276,14 +282,14 @@ label={'Email'}
             }}
             trailing={
               errors.email &&
-              <Text color={'red'}>required field</Text>
+              <Text color={'red'}>{strings.requiredField}</Text>
             }
             editable={true}
           />
 
 <InputField
-label={'Phone'}
-          title={'Enter phone'}
+label={strings.phone}
+title={strings.enterPhone}
           multiline={false}
           height={45}
           type={'numeric'}
@@ -293,14 +299,14 @@ label={'Phone'}
         }}
         trailing={
           errors.phone &&
-          <Text color={'red'}>required field</Text>
+          <Text color={'red'}>{strings.requiredField}</Text>
         }
           editable={true}
           />
 
 <InputField
-label={'Address'}
-          title={'Enter address'}
+label={strings.address}
+title={strings.enterAddress}
           multiline={false}
           height={80}
           type={'default'}
@@ -310,13 +316,13 @@ label={'Address'}
         }}
         trailing={
           errors.address &&
-          <Text color={'red'}>required field</Text>
+          <Text color={'red'}>{strings.requiredField}</Text>
         }
         editable={true}
           />
           
           <Checkbox
-          label={'Phone Hide'}
+          label={strings.phoneHide}
           labelStyle={styles.fieldText} 
           value={placeAdInput.phone_hide}
           onValueChange={(value)=>{setPlaceAdInput({...placeAdInput, phone_hide:value})}}
@@ -325,7 +331,7 @@ label={'Address'}
           containerStyle={{marginBottom:20}}/>
 
           <View marginB-20>
-            <Text style={styles.fieldText} marginB-5>Location</Text>
+            <Text style={styles.fieldText} marginB-5>{strings.location}</Text>
             <MapComponent onPress={locationSet}/>
           </View>
 
@@ -337,8 +343,8 @@ label={'Address'}
           color={'grey'}
           onValueChange={(value)=>setTerms(value)}/>
           <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.TermsAndConditions)}>
-          <Text style={[styles.fieldText,{left:15}]}>Accept
-          <Text color={'#006EFF'}> Terms & Conditions</Text>
+          <Text style={[styles.fieldText,{left:15}]}>{strings.accept}
+          <Text color={'#006EFF'}> {strings.terms}</Text>
           </Text>
           </TouchableOpacity>
           </View>
@@ -352,14 +358,14 @@ label={'Address'}
         {placeAdInput.paymentMethod != 'stripe' &&
           <View row style={{justifyContent:'space-between'}}>
           <Button
-          label={'Back'}
+          label={strings.back}
           labelStyle={styles.buttonLabelStyle}
           style={{backgroundColor:'white',borderColor:AppColors.lightBlue,borderWidth:1,width:'48%'}}
           onPress={()=>submit('')}/>
           
 
           <Button
-          label={'Create'}
+          label={strings.create}
           labelStyle={[styles.buttonLabelStyle,{color:'white'}]}
           style={{backgroundColor:AppColors.lightBlue,width:'48%',
           opacity:(terms && placeAdInput.featured == 0) ? 1 : 

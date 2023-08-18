@@ -15,6 +15,7 @@ export type Data = {
 export type Categor = {
     id:             number;
     name:           string;
+    arabic_name?:   string;
     canonical_name: string;
     description:    string;
     image:          string;
@@ -122,7 +123,7 @@ export type DashBoardDetails = {
     message: string;
     code:    number;
     ads:     Details_Ad[];
-    lastpay: number;
+    lastpay?: number;
 }
 
 export type Details_Ad = {

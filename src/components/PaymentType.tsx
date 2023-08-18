@@ -11,6 +11,12 @@ import {fetchFeaturedAmount} from '../api/featured/FeaturedAmountSlice';
 import PaymentDetails from './PaymentDetails';
 
 const PaymentType = ({value}) => {
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext);
   const {featuredAmount, loadingFeaturedAmount, featuredAmountError} =
@@ -38,9 +44,9 @@ const PaymentType = ({value}) => {
   };
   return (
     <View marginB-20>
-      <Text style={AppStyles.text}>Payment Type</Text>
+      <Text style={AppStyles.text}>{strings.paymentType}</Text>
       <Text style={AppStyles.text1}>
-        Pay
+        {strings.pay}
         <Text style={AppStyles.text2}>
           {' '}
           USD{' '}
@@ -51,7 +57,7 @@ const PaymentType = ({value}) => {
                 100) *
               placeAdInput.adsCountry.length}
         </Text>{' '}
-        for your featured Ad
+        {strings.forFeaturedAd}
       </Text>
       <RadioGroup
         initialValue={placeAdInput.paymentMethod}
@@ -60,17 +66,17 @@ const PaymentType = ({value}) => {
         }>
         {renderRadioButton(
           'account',
-          'Direct Payment(Payment directly from your account)',
+          strings.directPayment,
         )}
         <Text style={AppStyles.warnText}>
           <Text style={{fontFamily: AppFonts.POPPINS_BOLD, color: 'red'}}>
-            Waring:{' '}
+            {strings.warning}:{' '}
           </Text>{' '}
-          the Ad is approve only after submitting the proper payment documents
+          {strings.warnMsg}
         </Text>
         {renderRadioButton(
           'stripe',
-          'Payment to account(Payment using payment Gateway)',
+          strings.accountPayment,
         )}
       </RadioGroup>
 

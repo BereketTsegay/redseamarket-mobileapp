@@ -20,6 +20,8 @@ import AppColors from '../../constants/AppColors';
 import InputField from '../../components/InputField';
 import ItemDropdown from '../../components/ItemDropdown';
 import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 const {TextField} = Incubator;
 export type SaleRentPlaceAdNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -37,6 +39,12 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<SaleRentPlaceAdNavigationProps>();
   const {name} = route.params;
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext)
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const [data, setData] = useState([
     {
       id: 'Apartment',
@@ -116,17 +124,17 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
           </View>
         </TouchableOpacity>
         <View flex center>
-          <Text style={styles.heading}>Place an Ad</Text>
+          <Text style={styles.heading}>{strings.placeAd}</Text>
         </View>
       </View>
 
-      <Text style={styles.AdTitle}>Tell us about your {name}</Text>
+      <Text style={styles.AdTitle}>{strings.tellUs} {name}</Text>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
           <InputField
-          label={'Size'}
-            title={'Enter size'}
+          label={strings.size}
+            title={strings.enterSize}
             multiline={false}
             height={45}
             type={'numeric'}
@@ -136,14 +144,14 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
             }}
             trailing={
               errors.size &&
-              <Text color={'red'}>required field</Text>
+              <Text color={'red'}>{strings.requiredField}</Text>
             }
             editable={true}
           />
 
           <InputField
-          label={'Room'}
-            title={'Enter number of room'}
+          label={strings.rooms}
+          title={strings.enterRoom}
             multiline={false}
             height={45}
             type={'numeric'}
@@ -153,34 +161,34 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
             }}
             trailing={
               errors.room &&
-              <Text color={'red'}>required field</Text>
+              <Text color={'red'}>{strings.requiredField}</Text>
             }
             editable={true}
           />
 
 <View row marginB-20>
-<Text style={[styles.title,{fontSize:14}]}>Furnished</Text>
+<Text style={[styles.title,{fontSize:14}]}>{strings.furnished}</Text>
 {  errors.furnished &&
-              <Text color={'red'}>required field</Text>}
+              <Text color={'red'}>{strings.requiredField}</Text>}
 </View>
           <RadioGroup
           initialValue={placeAdInput.furnished}
           onValueChange={(value: any) =>{setPlaceAdInput({...placeAdInput, furnished:value})
           setErrors({...errors, furnished: false});}}
           >
-            {renderRadioButton(1, 'Yes')}
-            {renderRadioButton(2, 'No')}
+            {renderRadioButton(1, strings.yes)}
+            {renderRadioButton(2, strings.no)}
           </RadioGroup>
          
           <View>
           {  errors.building &&
-              <Text color={'red'} style={{alignSelf:'flex-end'}}>required field</Text>}
-                <Text style={styles.labelStyle}>Building Type</Text>
-          <ItemDropdown value={placeAdInput.building} data={data} add={setBuilding} dropdownType={'Building Type'}/>
+              <Text color={'red'} style={{alignSelf:'flex-end'}}>{strings.requiredField}</Text>}
+                <Text style={styles.labelStyle}>{strings.building}</Text>
+          <ItemDropdown value={placeAdInput.building} data={data} add={setBuilding} dropdownType={strings.building}/>
           </View>
 
           <Checkbox
-            label={'Parking'}
+            label={strings.parking}
             labelStyle={styles.fieldText}
             value={placeAdInput.parking}
             onValueChange={(value: any) =>setPlaceAdInput({...placeAdInput, parking:value})}
@@ -189,7 +197,7 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
           />
 
           <Button
-            label={'Next'}
+            label={strings.parking}
             style={{backgroundColor: AppColors.lightBlue}}
             onPress={nextScreen}
           />

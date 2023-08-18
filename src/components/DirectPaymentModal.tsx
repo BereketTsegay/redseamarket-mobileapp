@@ -19,6 +19,12 @@ interface Props {
 }
 
 const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose }) => {
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const [images, setImages] = useState([]);
   const [transactionId, setTransactionId] = useState<string | null>(null);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
@@ -115,7 +121,7 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
       <View  
             style={{justifyContent: 'center',flex:1,backgroundColor:"rgba(0, 0, 0, 0.3)",paddingHorizontal:30}}>
         <View style={{backgroundColor:'white',padding:20,borderRadius:20}}>
-          <Text style={[AppStyles.title,{color:AppColors.darkBlue}]}>Upload Payment Document</Text>
+          <Text style={[AppStyles.title,{color:AppColors.darkBlue}]}>{strings.uploadPaymentDocument}</Text>
         <InputField
             title={'Transaction Id'}
             height={45}
@@ -126,7 +132,7 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
             }}
             trailing={
               errors.transactionId &&
-              <Text color={'red'}>required field</Text>
+              <Text color={'red'}>{strings.requiredField}</Text>
             }
           />
 
@@ -140,7 +146,7 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
                 AppStyles.fieldStyle,
                 {borderStyle: 'dashed', justifyContent: 'space-between'},
               ]}>
-              <Text style={AppStyles.fieldText}>Upload Document(image/pdf)</Text>
+              <Text style={AppStyles.fieldText}>{strings.uploadDocument}</Text>
               {
               errors.images &&
               <Text color={'red'}>**</Text>
@@ -170,7 +176,7 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
           </View>
 
 <Button
-            label={'Upload'}
+            label={strings.upload}
             style={{backgroundColor: AppColors.lightBlue,width:'50%'}}
             onPress={Upload}
           />

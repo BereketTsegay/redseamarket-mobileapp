@@ -122,11 +122,11 @@ const AdsScreen: React.FC<Props> = () => {
                  <View margin-3>
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.priceText}>{currencyLists == null ? 'USD ' + item.price.toFixed()
                   : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price).toFixed().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))}</Text>
-                 <Text numberOfLines={1} ellipsizeMode='tail' style={styles.titleText}>{item.title}</Text>
+                 <Text numberOfLines={1} ellipsizeMode='tail' style={styles.titleText}>{commonInput.language == 'ar' ? item.title_arabic ? item.title_arabic : item.title : item.title}</Text>
                  <Text style={styles.cityText}>{item.area}</Text>
                  <View row centerV style={{justifyContent:'space-between'}}>
                  <Text style={[styles.titleText,{fontFamily:AppFonts.POPPINS_SEMIBOLD}]}>
-                 {item.status == 5 || item.status == 0 ? <Text color={'grey'}> Pending</Text> : item.status == 2 ? <Text color={'red'}> Rejected</Text> : ''}</Text>
+                 {item.status == 5 || item.status == 0 ? <Text color={'grey'}> {strings.pending}</Text> : item.status == 2 ? <Text color={'red'}> Rejected</Text> : ''}</Text>
                  <TouchableOpacity onPress={()=>AdsDelete(item.id)}>
                  <Image source={AppImages.DELETE} style={{width:18,height:18}}/>
                  </TouchableOpacity>
@@ -134,7 +134,7 @@ const AdsScreen: React.FC<Props> = () => {
 
                  {(item.category.name == 'Jobs' && item.status == 1) &&
                  <TouchableOpacity onPress={()=>Documents(item.id)}>
-                  <Text style={[styles.titleText,{color:'#007bff'}]}>View Request Documents</Text>
+                  <Text style={[styles.titleText,{color:'#007bff'}]}>{strings.viewDocuments}</Text>
                  </TouchableOpacity>}
                  </View>
                 </View>

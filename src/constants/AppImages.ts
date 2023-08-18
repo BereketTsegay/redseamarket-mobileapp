@@ -41,6 +41,8 @@ const AppImages = {
     EDIT: require('../images/edit.png'),
     FILTER: require('../images/filter.png'),
     SORT: require('../images/sort.png'),
+    RADIO_ON: require('../images/radioOn.png'),
+    RADIO_OFF: require('../images/radiooff.png'),
   };
   
   export default AppImages;

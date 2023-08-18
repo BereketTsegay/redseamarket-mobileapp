@@ -34,6 +34,12 @@ const MyJobDetails: React.FC<Props> = () => {
   const [showPdf, setShowPdf] = useState(false);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {jobInput, setJobInput} = useContext(JobContext)
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const { jobProfileList, loadingJobProfileList} = useSelector(
     (state: RootState) => state.JobProfileList,
   );
@@ -81,10 +87,10 @@ const MyJobDetails: React.FC<Props> = () => {
         style={{
           justifyContent: 'space-between',
         }}>
-        <Text style={styles.heading}>My Job Profile</Text>
-        <View center style={styles.smallButton}>
+        <Text style={styles.heading}>{strings.myJobProfile}</Text>
+        {/* <View center style={styles.smallButton}>
           <Text style={styles.buttonText}>My Jobs</Text>
-        </View>
+        </View> */}
       </View>
 
       <View flex backgroundColor='white'>
@@ -97,21 +103,21 @@ const MyJobDetails: React.FC<Props> = () => {
             <View paddingB-60>
            
           <Text style={styles.title}>{jobProfileList?.data.title}</Text>
-          <Text style={styles.text}>{jobProfileList?.data.work_experience} years total experience</Text>
+          <Text style={styles.text}>{jobProfileList?.data.work_experience} {strings.yearsExp}</Text>
 
           <View style={styles.divider}/>
 
-          <Text style={styles.subHeading}>Education</Text>
+          <Text style={styles.subHeading}>{strings.education}</Text>
           <Text style={styles.text}>{jobProfileList?.data.education}</Text>
           
           <View style={styles.divider}/>
           
-          <Text style={styles.subHeading}>Certification</Text>
+          <Text style={styles.subHeading}>{strings.certificates}</Text>
           <Text style={styles.text}>{jobProfileList?.data.certificate}</Text>
           
           <View style={styles.divider}/>
           
-          <Text style={styles.subHeading}>Languages Known</Text>
+          <Text style={styles.subHeading}>{strings.lang}</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           {jobProfileList?.data.language.split(",").map((word, index) => (
             word.length!=0 ?
@@ -124,7 +130,7 @@ const MyJobDetails: React.FC<Props> = () => {
           
           <View style={styles.divider}/>
           
-          <Text style={styles.subHeading}>Skills</Text>
+          <Text style={styles.subHeading}>{strings.skills}</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           {jobProfileList?.data.skils.split(",").map((word, index) => (
              word.length!=0 ?
@@ -137,7 +143,7 @@ const MyJobDetails: React.FC<Props> = () => {
           
           <View style={styles.divider}/>
 
-          <Text style={styles.subHeading}>Work Experience</Text>
+          <Text style={styles.subHeading}>{strings.workExperience}</Text>
           {jobProfileList?.data.company.map((item, index) => (
             <View key={index} row style={{justifyContent:'space-between'}}>
               <Text style={styles.text}>{item.company}</Text>
@@ -148,7 +154,7 @@ const MyJobDetails: React.FC<Props> = () => {
 <View style={styles.divider}/>
           
           <View row centerV style={{justifyContent:'space-between'}} marginV-10>
-          <Text style={styles.subHeading}>Resume</Text>
+          <Text style={styles.subHeading}>{strings.resume}</Text>
           <TouchableOpacity onPress={handleViewResume}>
           <View  style={styles.cvView}>
           <Text>{jobProfileList?.data.cv_file}</Text>
@@ -164,7 +170,7 @@ const MyJobDetails: React.FC<Props> = () => {
           </View>
           </ScrollView>
 
-          <Button label={'Edit'} style={styles.button} onPress={()=>{setJobInput({...jobInput, jobprofile_id: jobProfileList?.data.id})
+          <Button label={strings.edit} style={styles.button} onPress={()=>{setJobInput({...jobInput, jobprofile_id: jobProfileList?.data.id})
             navigation.navigate('JobProfile',{screen: RouteNames.MyJobProfile})}}/>
         </View>
 }

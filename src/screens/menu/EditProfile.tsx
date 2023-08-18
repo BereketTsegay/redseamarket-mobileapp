@@ -55,6 +55,12 @@ const EditProfile: React.FC<Props> = () => {
   const {profileDetails} = useSelector(
     (state: RootState) => state.ProfileDetails,
   );
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const [errors, setErrors] = useState({
     name: false,
     email: false,
@@ -129,7 +135,7 @@ const EditProfile: React.FC<Props> = () => {
       } else {
         formData.append('image', '');
       }
-      console.log(formData, '-------------------------');
+      // console.log(formData, '-------------------------');
       dispatch(UpdateProfile({requestBody: formData}))
         .then(() => {
           dispatch(reset());
@@ -167,7 +173,7 @@ const EditProfile: React.FC<Props> = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.AdTitle}>Edit your profile</Text>
+      <Text style={styles.AdTitle}>{strings.editProfile}</Text>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-10>
@@ -185,8 +191,8 @@ const EditProfile: React.FC<Props> = () => {
           </TouchableOpacity>
           <View marginT-20>
             <InputField
-              label={'Name'}
-              title={'Enter name'}
+              label={strings.name}
+              title={strings.enterName}
               height={45}
               type={'default'}
               value={EditInput.name}
@@ -195,13 +201,13 @@ const EditProfile: React.FC<Props> = () => {
                 setErrors({...errors, name: false});
               }}
               trailing={
-                errors.name && <Text color={'red'}>required field</Text>
+                errors.name && <Text color={'red'}>{strings.requiredField}</Text>
               }
             />
 
             <InputField
-              label={'Email'}
-              title={'Enter email'}
+              label={strings.email}
+              title={strings.enterEmail}
               height={45}
               type={'default'}
               value={EditInput.email}
@@ -210,13 +216,13 @@ const EditProfile: React.FC<Props> = () => {
                 setErrors({...errors, email: false});
               }}
               trailing={
-                errors.email && <Text color={'red'}>required field</Text>
+                errors.email && <Text color={'red'}>{strings.requiredField}</Text>
               }
             />
 
             <InputField
-              label={'Phone'}
-              title={'Enter phone'}
+              label={strings.phone}
+              title={strings.enterPhone}
               height={45}
               type={'numeric'}
               value={EditInput.phone}
@@ -225,28 +231,28 @@ const EditProfile: React.FC<Props> = () => {
                 setErrors({...errors, phone: false});
               }}
               trailing={
-                errors.phone && <Text color={'red'}>required field</Text>
+                errors.phone && <Text color={'red'}>{strings.requiredField}</Text>
               }
             />
             <View>
               {errors.nationality && (
                 <Text style={{alignSelf: 'flex-end'}} color={'red'}>
-                  required field
+                  {strings.requiredField}
                 </Text>
               )}
-              <Text style={styles.labelStyle}>Country</Text>
+              <Text style={styles.labelStyle}>{strings.country}</Text>
               <ItemDropdown
                 value={EditInput.nationality}
                 data={countryLists?.country}
                 add={setCountry}
-                dropdownType="Nationality"
+                dropdownType={strings.nationality}
               />
             </View>
           </View>
         </View>
       </ScrollView>
       <Button
-        label={'Submit'}
+        label={strings.submit}
         style={{backgroundColor: AppColors.lightBlue}}
         onPress={Update}
       />

@@ -9,6 +9,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { RadioButton, RadioGroup, Text, View } from 'react-native-ui-lib';
 import AppStyles from '../constants/AppStyles';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const {height: windowHeight} = Dimensions.get('window');
 
@@ -19,6 +21,12 @@ type Props = {
 }
 
 const SortModal = ({closeSheet, initialValue, set}: Props) => {
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
     const navigation = useNavigation();
   const bottomSheetRef = useRef(null);
   const translateY = useRef(new Animated.Value(windowHeight)).current;
@@ -94,14 +102,14 @@ const SortModal = ({closeSheet, initialValue, set}: Props) => {
       {...panResponder.panHandlers}>
 
         <View marginH-10>
-            <Text style={[AppStyles.text,{marginBottom:5}]}>Sort By</Text>
+            <Text style={[AppStyles.text,{marginBottom:5}]}>{strings.sortBy}</Text>
 
             <RadioGroup
           initialValue={initialValue}
           onValueChange={(value: any) =>{set(value)}}
           >
-            {renderRadioButton(1, 'Price(Low - High)')}
-            {renderRadioButton(2, 'Price(High - Low)')}
+            {renderRadioButton(1, strings.low_high)}
+            {renderRadioButton(2, strings.high_low)}
           </RadioGroup>
         </View>
        

@@ -49,6 +49,12 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
   const {customLists} = useSelector(
     (state: RootState) => state.CustomFieldList,
   );
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
 
   useEffect(() => {}, []);
 
@@ -114,11 +120,11 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
           </View>
         </TouchableOpacity>
         <View flex center>
-          <Text style={styles.heading}>Place an Ad</Text>
+          <Text style={styles.heading}>{strings.placeAd}</Text>
         </View>
       </View>
 
-      <Text style={styles.AdTitle}>Tell us about your {name}</Text>
+      <Text style={styles.AdTitle}>{strings.tellUs} {name}</Text>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>

@@ -44,6 +44,12 @@ interface Props {}
 const JobApply: React.FC<Props> = ({id}) => {
   const navigation = useNavigation<JobApplyNavigationProps>();
   const [fileSizeError, setFileSizeError] = useState<string | null>(null);
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const [selectedFile, setSelectedFile] = useState<any | null>(null);
   const {jobApplyInput, setJobApplyInput} = useContext(JobApplyContext);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
@@ -176,13 +182,13 @@ const JobApply: React.FC<Props> = ({id}) => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.AdTitle}>Tell us more about you</Text>
+      <Text style={styles.AdTitle}>{strings.moreAbout}</Text>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View marginV-20>
           <InputField
-          label={'Total experience'}
-            title={'Enter total experience'}
+          label={strings.totalExp}
+            title={strings.enterTotalExp}
             height={45}
             type={'numeric'}
             value={jobApplyInput.total_experience}
@@ -192,14 +198,14 @@ const JobApply: React.FC<Props> = ({id}) => {
             }}
             trailing={
               errors.total_experience && (
-                <Text color={'red'}>required field</Text>
+                <Text color={'red'}>{strings.requiredField}</Text>
               )
             }
           />
 
           <InputField
-          label={'Current CTC'}
-            title={'Enter current ctc'}
+          label={strings.currentSalary}
+            title={strings.enterCurrentSalary}
             height={45}
             type={'numeric'}
             value={jobApplyInput.current_ctc}
@@ -208,13 +214,13 @@ const JobApply: React.FC<Props> = ({id}) => {
               setErrors({...errors, current_ctc: false});
             }}
             trailing={
-              errors.current_ctc && <Text color={'red'}>required field</Text>
+              errors.current_ctc && <Text color={'red'}>{strings.requiredField}</Text>
             }
           />
 
           <InputField
-          label={'Expected CTC'}
-            title={'Enter expected ctc'}
+          label={strings.expectedSalary}
+            title={strings.enterExpectSalary}
             height={45}
             type={'numeric'}
             value={jobApplyInput.expect_ctc}
@@ -223,13 +229,13 @@ const JobApply: React.FC<Props> = ({id}) => {
               setErrors({...errors, expect_ctc: false});
             }}
             trailing={
-              errors.expect_ctc && <Text color={'red'}>required field</Text>
+              errors.expect_ctc && <Text color={'red'}>{strings.requiredField}</Text>
             }
           />
 
           <InputField
-          label={'Notice Period'}
-            title={'Enter notice period'}
+          label={strings.notice}
+            title={strings.enterNotice}
             height={45}
             type={'numeric'}
             value={jobApplyInput.notice_period}
@@ -238,13 +244,13 @@ const JobApply: React.FC<Props> = ({id}) => {
               setErrors({...errors, notice_period: false});
             }}
             trailing={
-              errors.notice_period && <Text color={'red'}>required field</Text>
+              errors.notice_period && <Text color={'red'}>{strings.requiredField}</Text>
             }
           />
 
           <InputField
-          label={'Relevant Field'}
-            title={'Enter job field'}
+          label={strings.field}
+            title={strings.enterField}
             height={45}
             type={'default'}
             value={jobApplyInput.relevent_field}
@@ -253,13 +259,13 @@ const JobApply: React.FC<Props> = ({id}) => {
               setErrors({...errors, relevent_field: false});
             }}
             trailing={
-              errors.relevent_field && <Text color={'red'}>required field</Text>
+              errors.relevent_field && <Text color={'red'}>{strings.requiredField}</Text>
             }
           />
 
           <InputField
-          label={'Current Company'}
-            title={'Enter current company'}
+          label={strings.currentCompany}
+            title={strings.enterCurrentCompany}
             height={45}
             type={'default'}
             value={jobApplyInput.current_company}
@@ -269,7 +275,7 @@ const JobApply: React.FC<Props> = ({id}) => {
             }}
             trailing={
               errors.current_company && (
-                <Text color={'red'}>required field</Text>
+                <Text color={'red'}>{strings.requiredField}</Text>
               )
             }
           />
@@ -285,13 +291,13 @@ const JobApply: React.FC<Props> = ({id}) => {
                   styles.fieldStyle,
                   {borderStyle: 'dashed', justifyContent: 'space-between'},
                 ]}>
-                <Text style={styles.fieldText}>Upload Resume</Text>
+                <Text style={styles.fieldText}>{strings.uploadResume}</Text>
                 {fileSizeError && (
                   <Text style={{color: 'red', fontSize: 8}}>
                     {fileSizeError}
                   </Text>
                 )}
-                {errors.cv_file && <Text color={'red'}>required field</Text>}
+                {errors.cv_file && <Text color={'red'}>{strings.requiredField}</Text>}
                 <Image
                   source={AppImages.UPLOAD}
                   tintColor={AppColors.lightBlue}
@@ -299,7 +305,7 @@ const JobApply: React.FC<Props> = ({id}) => {
               </View>
             </TouchableOpacity>
             <Text style={{color: 'red', fontSize: 10,top:4}}>
-              *Maximum 500kb file size are allowed
+              *{strings.maxFiles}
             </Text>
             {selectedFile && (
               <View
@@ -329,7 +335,7 @@ const JobApply: React.FC<Props> = ({id}) => {
         </View>
       </ScrollView>
       <Button
-        label={'Submit'}
+        label={strings.submit}
         style={{backgroundColor: AppColors.lightBlue}}
         onPress={apply}
       />

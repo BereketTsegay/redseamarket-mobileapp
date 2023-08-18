@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import { Image, Text, View } from 'react-native-ui-lib';
 import FavoriteComponent from './FavoriteComponent';
@@ -8,6 +8,7 @@ import AppImages from '../constants/AppImages';
 import { RouteNames } from '../navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { CommonContext } from '../api/commonContext';
 
 interface props {
   data : any;
@@ -16,7 +17,13 @@ interface props {
 }
 
 const CategoryListComponent = ({data, countryId, categoryName} : props) => {
-  
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
+  const {commonInput, setCommonInput} = useContext(CommonContext);
     const navigation = useNavigation();
     const {currencyLists} = useSelector((state: RootState) => state.CurrencyList);
    
@@ -39,7 +46,7 @@ const CategoryListComponent = ({data, countryId, categoryName} : props) => {
                     <View>
                     {item.featured_flag == 1 &&
                     <View center style={styles.featuredView}>
-                      <Text style={styles.featuredText}>Featured</Text>
+                      <Text style={styles.featuredText}>{strings.featured}</Text>
                     </View>}
                     </View>
                     <FavoriteComponent
@@ -66,10 +73,10 @@ const CategoryListComponent = ({data, countryId, categoryName} : props) => {
                     <View flex left marginH-20>
                       {/* <Text style={styles.jobText}>TCS Solutions</Text> */}
                       <Text style={[styles.jobText, {color: 'black'}]}>
-                        {item.title}
+                      {commonInput.language == 'ar' ? item.title_arabic ? item.title_arabic : item.title : item.title}
                       </Text>
                       <Text style={styles.jobText1}>
-                       {(categoryName || item.category.name) == 'Jobs' ? 'Salary -' : 'Price -'} {currencyLists?.currency.currency_code}{' '}
+                       {(categoryName || item.category.name) == 'Jobs' ? strings.salary + ' -' : strings.price + ' -'} {currencyLists?.currency.currency_code}{' '}
                         {(currencyLists?.currency.value * item.price)
                           .toFixed()
                           .toString()
@@ -79,9 +86,9 @@ const CategoryListComponent = ({data, countryId, categoryName} : props) => {
                   </View>
 
                   <View marginV-10>
-                    <Text style={styles.text}>Description</Text>
+                    <Text style={styles.text}>{strings.description}</Text>
                     <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.text, {opacity: 0.75}]}>
-                      {item.description}
+                    {commonInput.language == 'ar' ? item.description_arabic ? item.description_arabic : item.description : item.description}
                     </Text>
                   </View>
 

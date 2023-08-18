@@ -1,10 +1,10 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import * as apiInterface from '../apiInterface';
-import { Details_Ad } from '../home/DashBoardResponse';
+import { DashBoardDetails } from '../home/DashBoardResponse';
 
 
 export type CategoryListState = {
-  categoryLists: Details_Ad | null;
+  categoryLists: DashBoardDetails | null;
   loadingCategoryLists: boolean;
   categoryListError: boolean;
 };
@@ -16,7 +16,7 @@ const initialState: CategoryListState = {
 };
 
 export const fetchCategoryList = createAsyncThunk<
-  {categoryLists: Details_Ad | null},
+  {categoryLists: DashBoardDetails | null},
   {requestBody: any}
 >('fetchCategoryList', async ({requestBody}) => {
   const response = await apiInterface.fetchCategoryList(requestBody);

@@ -5,6 +5,7 @@ const CommonContext = createContext();
 export class CommonRequest {
     //Common Country id
     common_country_id: any = null;
+    language: any = 'en';
 }
 
 const CommonProvider = ({ children }) => {

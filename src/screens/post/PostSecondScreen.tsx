@@ -33,6 +33,12 @@ const PostSecondScreen: React.FC<Props> = ({}) => {
   const {subCategoryLists, loadingSubCategoryLists} = useSelector(
     (state: RootState) => state.SubCategoryList,
   );
+  const currentLanguage = useSelector(
+    (state: RootState) => state.language.currentLanguage,
+  );
+  const strings = useSelector(
+    (state: RootState) => state.language.resources[currentLanguage],
+  );
   const [openSubCategories, setOpenSubCategories] = useState([]);
 
   const handleCategoryPress = (index, item) => {
@@ -115,7 +121,7 @@ const PostSecondScreen: React.FC<Props> = ({}) => {
         <View flex center>
           <Text style={styles.heading}>{placeAdInput.category_Name}</Text>
           <Text style={styles.subHeading}>
-            Choose the category that your ad fits into.
+            {strings.chooseCategoryFits}
           </Text>
         </View>
       </View>
@@ -133,7 +139,7 @@ const PostSecondScreen: React.FC<Props> = ({}) => {
         :
         <TouchableOpacity onPress={()=> navigation.navigate(RouteNames.PlaceAdScreen)}>
         <View margin-30 padding-10 style={{backgroundColor:'white',elevation:5}}>
-        <Text style={{fontSize:16,fontFamily:AppFonts.POPPINS_MEDIUM}}>Post Ad</Text>
+        <Text style={{fontSize:16,fontFamily:AppFonts.POPPINS_MEDIUM}}>{strings.postAd}</Text>
         </View>
         </TouchableOpacity>
       )}
