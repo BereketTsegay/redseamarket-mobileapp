@@ -12,6 +12,8 @@ import styles from '../post/styles';
 import AppImages from '../../constants/AppImages';
 import { apiClient } from '../../api/apiClient';
 import AppFonts from '../../constants/AppFonts';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 export type TermsAndConditionsNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'TermsAndConditions'

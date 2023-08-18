@@ -420,7 +420,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           </View>
 
           <InputField
-          label={strings.Area}
+          label={strings.area}
             title={strings.enterArea}
             multiline={false}
             height={45}
