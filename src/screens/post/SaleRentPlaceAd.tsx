@@ -45,6 +45,8 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
   const strings = useSelector(
     (state: RootState) => state.language.resources[currentLanguage],
   );
+
+
   const [data, setData] = useState([
     {
       id: 'Apartment',
@@ -197,7 +199,7 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
           />
 
           <Button
-            label={strings.parking}
+            label={strings.next}
             style={{backgroundColor: AppColors.lightBlue}}
             onPress={nextScreen}
           />

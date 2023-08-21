@@ -58,8 +58,12 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
   const {currencyLists} = useSelector((state: RootState) => state.CurrencyList);
 
   useEffect(() => {
-    list();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      list()
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const list = () => {
     let request = JSON.stringify({

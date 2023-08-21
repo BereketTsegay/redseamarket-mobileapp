@@ -11,7 +11,7 @@ import { RootStackParams, RouteNames } from '../../navigation';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
-import { FlatList, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
+import { FlatList, ImageBackground, ScrollView, ToastAndroid, TouchableOpacity } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import AppImages from '../../constants/AppImages';
 import styles from './styles';
@@ -27,6 +27,7 @@ import { fetchCustomField } from '../../api/customField/CustomFieldSlice';
 import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 import AdsCountrySelect from '../../components/AdsCountrySelect';
 import { CommonContext } from '../../api/commonContext';
+import { apiClient } from '../../api/apiClient';
 const { TextField } = Incubator;
 export type PlaceAdScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -76,8 +77,19 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
 
   useEffect(() => {
     if(editData){
-      const selectedImageURIs = editData.image.map((img) => ('https://admin-jamal.prompttechdemohosting.com/' + img.image));
+      const selectedImageURIs = editData.image.map((img) => ({
+        id: img.id,
+        image: 'https://admin-jamal.prompttechdemohosting.com/' + img.image,
+      }));
+      setPlaceAdInput({
+        ...placeAdInput,
+        image: [...placeAdInput.image, ...selectedImageURIs],
+      });
       const selectCountries = editData.mapCountry.map((item) => Number(item.country_id))
+      const customData = editData.custom_value.map(item => ({
+        field_id: item.field_id,
+        value: item.value
+      }));
       setPriceValue(editData.price)
     setPlaceAdInput({
       ...placeAdInput, id:editData.id, category: editData.category_id, subcategory: editData.subcategory_id, category_Name: editData.category.name,
@@ -88,16 +100,18 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
       variant_id: editData.category_id == 1 ? editData.motore_value.varient_id : 0, registration_year: editData.category_id == 1 ? editData.motore_value.registration_year : '', fuel: editData.category_id == 1 ? editData.motore_value.fuel_type : '', transmission: editData.category_id == 1 ? editData.motore_value.transmission == 'Manual' ? 1 : 2 : '',
       condition: editData.category_id == 1 ? editData.motore_value.condition == 'New' ? 1 : 2 : '', mileage: editData.category_id == 1 ? editData.motore_value.milage : 0, aircondition: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'aircondition'), gps: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'gps'),
       security: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'security'), tire: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'tire'), size: editData.category_id == 2 ? editData.property_rend.size : editData.category_id == 3 ? editData.property_sale.size : '',
-      room: editData.category_id == 2 ? editData.property_rend.room : editData.category_id == 3 ? editData.property_sale.room : '', furnished: editData.category_id == 2 ? editData.property_rend.furnished == 'Yes' ? 1 : 2 : editData.category_id == 3 ? editData.property_sale.furnished == 'Yes' ? 1 : 2 : '', building: editData.category_id == 2 ? editData.property_rend.building : editData.category_id == 3 ? editData.property_sale.building : '',
-      parking: editData.category_id == 2 ? editData.property_rend.parking : editData.category_id == 3 ? editData.property_sale.parking : '', featured: editData.featured_flag
+      room: editData.category_id == 2 ? editData.property_rend.room : editData.category_id == 3 ? editData.property_sale.room : '', furnished: editData.category_id == 2 ? editData.property_rend.furnished == 'Yes' ? 1 : 2 : editData.category_id == 3 ? editData.property_sale.furnished == 'Yes' ? 1 : 2 : '', building: editData.category_id == 2 ? editData.property_rend.building_type : editData.category_id == 3 ? editData.property_sale.building.building_type : '',
+      parking: editData.category_id == 2 ? editData.property_rend.parking : editData.category_id == 3 ? editData.property_sale.parking : '', featured: editData.featured_flag, fieldValue: customData
     });
+     
   }
   else{
-    setPlaceAdInput({ ...placeAdInput, country: commonInput.common_country_id });
+    setPlaceAdInput({ ...placeAdInput, country: commonInput.common_country_id, adsCountry: [commonInput.common_country_id] });
   }
+ 
   }, [editData]);
 
-  // console.log(placeAdInput.adsCountry,'____=============')
+  // console.log(placeAdInput.country,'____=============', commonInput.common_country_id)
   // useEffect(() => {
   //   if (commonInput.common_country_id && !placeAdInput.country) {
   //     setPlaceAdInput({ ...placeAdInput, country: commonInput.common_country_id });
@@ -124,7 +138,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
       subcategory: placeAdInput.subcategory,
     });
     dispatch(fetchCustomField({ requestBody: request }));
-  }, []);
+  }, [placeAdInput.category, placeAdInput.subcategory]);
 
   const setCountry = value => {
     setPlaceAdInput({ ...placeAdInput, country: value });
@@ -164,7 +178,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
       else if (placeAdInput.category == 2 || placeAdInput.category == 3) {
         navigation.navigate(RouteNames.SaleRentPlaceAd, { name: placeAdInput.category_Name, });
       } else {
-        if (customLists?.data.category_field.length == 0) {
+        if (editData ? placeAdInput.fieldValue == 0 : customLists?.data.category_field.length == 0) {
           navigation.navigate(RouteNames.SellerInformation);
         } else {
           navigation.navigate(RouteNames.CustomPlaceAd, { name: placeAdInput.category_Name, });
@@ -179,7 +193,10 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
         type: [DocumentPicker.types.images],
         allowMultiSelection: true,
       });
-      const selectedImageURIs = imgs.map((img) => img.uri);
+      const selectedImageURIs = imgs.map((img, index) => ({
+        id: placeAdInput.image.length + index + 1,
+        image: img.uri,
+      }));
       setPlaceAdInput({
         ...placeAdInput,
         image: [...placeAdInput.image, ...selectedImageURIs],
@@ -191,16 +208,31 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
     }
   };
 
-  const deleteImageAtIndex = (index: number) => {
+  const deleteImageAtIndex = (index: number, id: any) => {
+    if(placeAdInput.id != 0){
+      let request = JSON.stringify({
+        id:id
+      })
+      apiClient('customer/ads/remove_image', 'POST', request)
+      .then(request=>{
+        ToastAndroid.show(
+          JSON.stringify(request.data.message),
+          ToastAndroid.SHORT,
+        );
+      })
+    }
     const updatedImages = [...placeAdInput.image];
+  updatedImages.splice(index, 1);
 
-    updatedImages.splice(index, 1);
-
-    setPlaceAdInput({
-      ...placeAdInput,
-      image: updatedImages,
-    });
+  setPlaceAdInput({
+    ...placeAdInput,
+    image: updatedImages.map((img, idx) => ({
+      id: idx + 1,
+      image: img.image,
+    })),
+  });
   };
+  // console.log(placeAdInput.adsCountry,'-------')
 
   const clearFieldsExceptCountryAndCommonCountryId = () => {
     const { category, subcategory } = placeAdInput;
@@ -214,6 +246,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
 
     setPlaceAdInput(newPlaceAdInput);
   };
+
+  // console.log(placeAdInput.image)
 
   return (
     <View flex backgroundColor="white" padding-20>
@@ -310,11 +344,11 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             {placeAdInput.image.length != 0 &&
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View row>
-                  {placeAdInput.image.map((file, index) => (
+                  {placeAdInput.image.map((image, index) => (
                     <TouchableOpacity
-                      onPress={() => deleteImageAtIndex(index)}
+                      onPress={() => deleteImageAtIndex(index,image.id)}
                       key={index}>
-                      <ImageBackground source={{ uri: file }} style={{ width: 60, height: 60, marginHorizontal: 5 }}>
+                      <ImageBackground source={{ uri: image.image }} style={{ width: 60, height: 60, marginHorizontal: 5 }}>
                         <Image source={AppImages.DELETE} style={{ alignSelf: 'flex-end', backgroundColor: 'white' }} />
                       </ImageBackground>
                     </TouchableOpacity>
@@ -461,7 +495,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           
           <View>
             <Text style={styles.labelStyle}>{strings.viewCountries}</Text>
-          <AdsCountrySelect countryLists={countryLists?.country} Id={editData ? placeAdInput.adsCountry : [commonInput.common_country_id]} />
+          <AdsCountrySelect countryLists={countryLists?.country} Id={editData ? editData.mapCountry.map((item) => Number(item.country_id)) : [commonInput.common_country_id]} />
 </View>
           <Checkbox
             label={strings.negotiable}

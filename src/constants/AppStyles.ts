@@ -18,12 +18,12 @@ const AppStyles = StyleSheet.create({
         fontFamily:AppFonts.POPPINS_LIGHT,
     textAlign:'left',
     left:10 },
-      dropdown1DropdownStyle: { backgroundColor: '#EFEFEF' },
+      dropdown1DropdownStyle: { backgroundColor: '#EFEFEF',borderRadius:15 },
       dropdown1RowStyle: {
         backgroundColor: '#EFEFEF',
         borderBottomColor: '#C5C5C5',
       },
-      dropdown1RowTxtStyle: { color: '#444', textAlign: 'left' },
+      dropdown1RowTxtStyle: { color: 'black', textAlign: 'left' , fontFamily: AppFonts.POPPINS_MEDIUM, fontSize:14},
       fieldStyle:{
         borderWidth:1,
         borderColor:AppColors.lightBlue,

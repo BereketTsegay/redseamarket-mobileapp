@@ -126,7 +126,7 @@ const AdsScreen: React.FC<Props> = () => {
                  <Text style={styles.cityText}>{item.area}</Text>
                  <View row centerV style={{justifyContent:'space-between'}}>
                  <Text style={[styles.titleText,{fontFamily:AppFonts.POPPINS_SEMIBOLD}]}>
-                 {item.status == 5 || item.status == 0 ? <Text color={'grey'}> {strings.pending}</Text> : item.status == 2 ? <Text color={'red'}> Rejected</Text> : ''}</Text>
+                 {item.status == 5 || item.status == 0 ? <Text color={'grey'}> {strings.pending}</Text> : item.status == 2 ? <Text color={'red'}> {strings.reject}</Text> : ''}</Text>
                  <TouchableOpacity onPress={()=>AdsDelete(item.id)}>
                  <Image source={AppImages.DELETE} style={{width:18,height:18}}/>
                  </TouchableOpacity>

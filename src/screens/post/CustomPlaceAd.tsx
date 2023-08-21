@@ -40,7 +40,7 @@ interface Props {}
 
 const CustomPlaceAd: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<CustomPlaceAdNavigationProps>();
-  const {name} = route.params;
+  const {name,} = route.params;
   const [image, setImage] = useState('');
   const [dateVisible, setDateVisible] = useState(false)
   const [date, setDate] = useState('');
@@ -108,6 +108,18 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
     setDateVisible(false);
   };
 
+  const getValue=(field_id)=>{
+    let value='';
+    placeAdInput.fieldValue.forEach(function(item,index){
+       if(item.field_id==field_id)
+       {
+          value=item.value;
+          return false;
+       }
+    });
+    return value;
+ }
+
   return (
     <View flex backgroundColor="white" padding-20>
       <View row centerV>
@@ -133,11 +145,11 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
               {item.field.type === 'text' ? (
                 <InputField
                 label={item.field.name}
-                  title={'Enter' + item.field.name}
+                  title={'Enter ' + item.field.name}
                   multiline={false}
                   height={45}
                   type={'default'}
-                  value={placeAdInput.textValue}
+                  value={getValue(item.field.id)}
                   onChange={text => updateFieldValue(item.field.id, text)}
                   trailing={null}
                   editable={true}
@@ -145,11 +157,11 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
               ) : item.field.type === 'number' ? (
                 <InputField
                 label={item.field.name}
-                  title={'Enter' + item.field.name}
+                  title={'Enter ' + item.field.name}
                   multiline={false}
                   height={45}
                   type={'numeric'}
-                  value={placeAdInput.textValue}
+                  value={getValue(item.field.id)}
                   onChange={text => updateFieldValue(item.field.id, text)}
                   trailing={null}
                   editable={true}
@@ -157,11 +169,11 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                 ) : item.field.type === 'url' ? (
                   <InputField
                   label={item.field.name}
-                  title={'Enter' + item.field.name}
+                  title={'Enter ' + item.field.name}
                     multiline={false}
                     height={45}
                     type={'url'}
-                    value={placeAdInput.textValue}
+                    value={getValue(item.field.id)}
                     onChange={text => updateFieldValue(item.field.id, text)}
                     trailing={null}
                     editable={true}
@@ -171,11 +183,11 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
               onPress={() => setDateVisible(true)}>
                 <InputField
                    label={item.field.name}
-                   title={'Enter' + item.field.name}
+                   title={'Enter ' + item.field.name}
                   multiline={false}
                   height={45}
                   type={'default'}
-                  value={date}
+                  value={getValue(item.field.id)}
                   onChange={null}
                   editable={false}
                   trailing={
@@ -194,11 +206,11 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
               ) : item.field.type === 'textarea' ? (
                 <InputField
                 label={item.field.name}
-                title={'Enter' + item.field.name}
+                title={'Enter ' + item.field.name}
                   multiline={false}
                   height={80}
                   type={'default'}
-                  value={placeAdInput.textValue}
+                  value={getValue(item.field.id)}
                   onChange={text => updateFieldValue(item.field.id, text)}
                   trailing={null}
                   editable={true}
@@ -207,7 +219,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                 <Checkbox
                   label={item.field.name}
                   labelStyle={styles.fieldText}
-                  value={placeAdInput.textValue}
+                  value={getValue(item.field.id)}
                   color={'grey'}
                   containerStyle={{marginBottom: 20}}
                   onValueChange={value =>
@@ -218,7 +230,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
               : item.field.type === 'radio' ? (
                 <View marginB-20>
                 <RadioButton
-                  value={placeAdInput.textValue}
+                  value={getValue(item.field.id)}
                   label={item.field.name}
                   color={'grey'}
                   labelStyle={styles.fieldText}
@@ -227,7 +239,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                   }
                 />
                 </View>
-              ) : item.field.type === 'select' ? (
+              ) : item.field.type === 'select ' ? (
                 <View>
                 <Text style={styles.labelStyle}>{item.field.name}</Text>
                 <SelectDropdown

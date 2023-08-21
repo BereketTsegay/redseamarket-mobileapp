@@ -53,7 +53,7 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
   );
   const [fuelOption, setFuelOption] = useState([
     {
-        id: 'Petrol',
+        id: 'petrol',
         name: 'Petrol',
     },
     {
@@ -149,6 +149,8 @@ const [errors, setErrors] = useState({
       navigation.navigate(RouteNames.SellerInformation)
   }
   };
+
+  console.log(placeAdInput.fuel)
 
   return (
     <View flex backgroundColor='white' padding-20>

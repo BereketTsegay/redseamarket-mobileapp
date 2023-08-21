@@ -65,6 +65,7 @@ export class PlaceAdRequest{
 }
 
 export type Image = {
+    id: any;
     image: String;
 }
 

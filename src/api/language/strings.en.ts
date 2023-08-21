@@ -199,5 +199,8 @@ export default {
     sentCode: "We have sent the code verification to your Email",
     codeReceive: "I didn't receive a code!",
     resendCode: "Resend Code",
+    pleaseSelectCountries: 'Please select countries',
+    reject:"Rejected",
+    update: "Update"
 
 };

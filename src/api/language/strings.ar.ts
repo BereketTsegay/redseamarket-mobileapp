@@ -197,5 +197,8 @@ code: "الرمز",
 emailVerify: "تحقق من بريدك الإلكتروني",
 sentCode: "لقد قمنا بإرسال رمز التحقق إلى بريدك الإلكتروني",
 codeReceive: "لم أتلقَ رمزًا!",
-resendCode: "إعادة إرسال الرمز"
+resendCode: "إعادة إرسال الرمز",
+pleaseSelectCountries: 'يرجى اختيار البلدان',
+reject: "مرفوض",
+update: "تحديث"
 };

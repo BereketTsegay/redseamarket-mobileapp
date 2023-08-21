@@ -69,7 +69,7 @@ const SellerInformation: React.FC<Props> = () => {
   }
 
   const Create = () => {
-  if(placeAdInput.featured == 1){
+  if(placeAdInput.featured == 1 && placeAdInput.id == 0){
     if(placeAdInput.paymentMethod == 'account'){
       submit('')
     }
@@ -77,7 +77,7 @@ const SellerInformation: React.FC<Props> = () => {
     null
     }
   }
-  else if (placeAdInput.featured == 2 && placeAdInput.featuredSelect ==true){
+  else if (placeAdInput.featured == 2 && placeAdInput.featuredSelect ==true && placeAdInput.id == 0){
     if(placeAdInput.paymentMethod == 'account'){
       submit('')
     }
@@ -91,6 +91,7 @@ const SellerInformation: React.FC<Props> = () => {
   }
  
   const submit = (pay_id) => {
+    console.log(pay_id)
     const hasErrors = !placeAdInput.name || !placeAdInput.email || !placeAdInput.address || !placeAdInput.phone;
 
     if (hasErrors) {
@@ -186,7 +187,7 @@ const SellerInformation: React.FC<Props> = () => {
         if(placeAdInput.image.length != 0){
           placeAdInput.image.forEach((image) => {
             formData.append('image[]', {
-              uri: image,
+              uri: image.image,
               name: 'image.png',
               type: 'image/png',
             });
@@ -205,7 +206,7 @@ const SellerInformation: React.FC<Props> = () => {
             formData.append(`fieldValue[${i}][field_id]`, fieldValueArray[i].field_id);
             formData.append(`fieldValue[${i}][value]`, fieldValueArray[i].value);
           }
-        // console.log(formData, '-------------------------');
+          console.log(formData,'_______________')
         dispatch(createAd({requestBody: formData, url:placeAdInput.id == 0 ? 'app/customer/ads/store' : 'app/customer/ads/update'}))
         .then(() => {
           dispatch(reset());
@@ -349,9 +350,9 @@ title={strings.enterAddress}
           </TouchableOpacity>
           </View>
 
-          {(terms && placeAdInput.featured == 1)?
+          {(terms && placeAdInput.featured == 1 && placeAdInput.id == 0)?
          <PaymentType value={afterPayment}/>
-        : (terms && placeAdInput.featured == 2 && placeAdInput.featuredSelect == true) ?
+        : (terms && placeAdInput.featured == 2 && placeAdInput.featuredSelect == true && placeAdInput.id == 0) ?
          <PaymentType value={afterPayment}/>
         : <View/>}
 
@@ -365,12 +366,13 @@ title={strings.enterAddress}
           
 
           <Button
-          label={strings.create}
+          label={placeAdInput.id == 0 ? strings.create : strings.update}
           labelStyle={[styles.buttonLabelStyle,{color:'white'}]}
           style={{backgroundColor:AppColors.lightBlue,width:'48%',
-          opacity:(terms && placeAdInput.featured == 0) ? 1 : 
+          opacity:(terms && placeAdInput.featured == 0 ) ? 1 : 
           (terms && placeAdInput.featured == 2 && placeAdInput.featuredSelect == false) ? 1 :
-          (terms && placeAdInput.featured == 2 && placeAdInput.featuredSelect == true && placeAdInput.paymentMethod == 'account') ? 1 : 
+          (terms && placeAdInput.featured == 2 && placeAdInput.featuredSelect == true && placeAdInput.paymentMethod == 'account') ? 1 :
+          (terms && placeAdInput.id != 0 ) ? 1 : 
           0.5}}
           onPress={()=>{terms && Create()}}
           />
@@ -387,6 +389,3 @@ title={strings.enterAddress}
 
 export default SellerInformation;
 
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}

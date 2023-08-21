@@ -23,7 +23,7 @@ const CountryLanguageHomeModal: React.FC<CountryLanguageModalProps> = ({
     onRequestClose,
     required
   }) => {
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(data.find(item => item.code === 'English'));
     const currentLanguage = useSelector(
       (state: RootState) => state.language.currentLanguage,
     );

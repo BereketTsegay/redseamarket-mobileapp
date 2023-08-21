@@ -75,6 +75,7 @@ export type AdImage = {
 export type CustomValue = {
     id:         number;
     value:      string;
+    field_id:   number;
     file:       number;
     created_at: Date;
     updated_at: Date;
