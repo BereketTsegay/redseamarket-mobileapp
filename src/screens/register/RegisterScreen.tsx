@@ -107,7 +107,7 @@ const RegisterScreen: React.FC<Props> = () => {
       navigation.replace(RouteNames.OtpVerificationScreen,{email:email,from:'register'})
     } else if (RegisterData.status == 'error') {
       ToastAndroid.show(
-        JSON.stringify(RegisterData.message + ':' + RegisterData.errors.email),
+        JSON.stringify(RegisterData.message),
         ToastAndroid.SHORT,
       );
     }
@@ -126,7 +126,7 @@ const RegisterScreen: React.FC<Props> = () => {
     
     </View>
     <View style={styles.view}>
-      <Text style={styles.heading}>{strings.started}</Text>
+      <Text style={styles.heading}>{strings.signUp}</Text>
       
 <TextField
       fieldStyle={styles.inputLayout}

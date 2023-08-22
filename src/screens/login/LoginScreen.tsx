@@ -173,6 +173,10 @@ const LoginScreen: React.FC<Props> = () => {
         </View>
       }/>
 
+      {/* <View right marginB-20>
+        <Text style={styles.forgotText}>Forgot Password?</Text>
+      </View> */}
+
       {/* <View row center marginV-20>
         <Image source={AppImages.FACEBOOK} style={{width:26, height:26}}/>
         <Image source={AppImages.GOOGLE} style={{width:26, height:26,marginLeft:20}}/>

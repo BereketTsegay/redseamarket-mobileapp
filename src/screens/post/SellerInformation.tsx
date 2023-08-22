@@ -186,11 +186,13 @@ const SellerInformation: React.FC<Props> = () => {
 
         if(placeAdInput.image.length != 0){
           placeAdInput.image.forEach((image) => {
+            if(image.id == 0){
             formData.append('image[]', {
               uri: image.image,
               name: 'image.png',
               type: 'image/png',
             });
+          }
           });
         }
          
@@ -206,7 +208,7 @@ const SellerInformation: React.FC<Props> = () => {
             formData.append(`fieldValue[${i}][field_id]`, fieldValueArray[i].field_id);
             formData.append(`fieldValue[${i}][value]`, fieldValueArray[i].value);
           }
-          console.log(formData,'_______________')
+          // console.log(formData,'_______________')
         dispatch(createAd({requestBody: formData, url:placeAdInput.id == 0 ? 'app/customer/ads/store' : 'app/customer/ads/update'}))
         .then(() => {
           dispatch(reset());

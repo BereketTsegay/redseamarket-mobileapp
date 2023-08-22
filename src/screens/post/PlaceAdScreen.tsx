@@ -194,7 +194,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
         allowMultiSelection: true,
       });
       const selectedImageURIs = imgs.map((img, index) => ({
-        id: placeAdInput.image.length + index + 1,
+        // id: placeAdInput.image.length + index + 1,
+        id: 0,
         image: img.uri,
       }));
       setPlaceAdInput({
@@ -209,30 +210,36 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
   };
 
   const deleteImageAtIndex = (index: number, id: any) => {
-    if(placeAdInput.id != 0){
+    if (id !== 0) {
       let request = JSON.stringify({
-        id:id
-      })
+        id: id,
+      });
       apiClient('customer/ads/remove_image', 'POST', request)
-      .then(request=>{
-        ToastAndroid.show(
-          JSON.stringify(request.data.message),
-          ToastAndroid.SHORT,
-        );
-      })
+        .then((response) => {
+          ToastAndroid.show(
+            JSON.stringify(response.data.message),
+            ToastAndroid.SHORT
+          );
+        })
+        .catch((error) => {
+          console.error('Image deletion error:', error);
+        });
     }
+  
     const updatedImages = [...placeAdInput.image];
-  updatedImages.splice(index, 1);
 
-  setPlaceAdInput({
-    ...placeAdInput,
-    image: updatedImages.map((img, idx) => ({
-      id: idx + 1,
+    updatedImages.splice(index, 1);
+   
+    const newImages = updatedImages.map((img, idx) => ({
+      id: img.id,
       image: img.image,
-    })),
-  });
+    }));
+    setPlaceAdInput({
+      ...placeAdInput,
+      image: newImages,
+    });
   };
-  // console.log(placeAdInput.adsCountry,'-------')
+  // console.log(placeAdInput.image,'-------')
 
   const clearFieldsExceptCountryAndCommonCountryId = () => {
     const { category, subcategory } = placeAdInput;

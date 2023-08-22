@@ -61,7 +61,12 @@ const styles = StyleSheet.create({
         fontSize:12,
         fontFamily:AppFonts.POPPINS_REGULAR,
         alignSelf:'center'
-    }
+    },
+    forgotText:{
+      color:AppColors.primaryBlue,
+      fontSize:12,
+      fontFamily:AppFonts.POPPINS_MEDIUM,
+  }
   });
 
   export default styles;
