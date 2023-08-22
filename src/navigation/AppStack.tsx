@@ -31,6 +31,7 @@ import HiringListScreen from '../screens/category/HiringListScreen';
 import EditProfile from '../screens/menu/EditProfile';
 import HiringJobDetails from '../screens/details/HiringJobDetails';
 import SearchListScreen from '../screens/search/SearchListScreen';
+import ForgotPasswordScreen from '../screens/forgotPassword/ForgotPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,7 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.WelcomeScreen} component={WelcomeScreen}/>
         <Stack.Screen name={RouteNames.LoginScreen} component={LoginScreen}/>
         <Stack.Screen name={RouteNames.RegisterScreen} component={RegisterScreen}/>
+        <Stack.Screen name={RouteNames.ForgotPasswordScreen} component={ForgotPasswordScreen}/>
         <Stack.Screen name={RouteNames.OtpVerificationScreen} component={OtpVerificationScreen}/>
         <Stack.Screen name={RouteNames.BottomTabs} component={BottomTabs}/>
         <Stack.Screen name={RouteNames.DetailsScreen} component={DetailsScreen}/>

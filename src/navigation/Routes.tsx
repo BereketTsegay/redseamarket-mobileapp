@@ -28,5 +28,6 @@ export const RouteNames = {
   HiringListScreen:'HiringListScreen',
   EditProfile:'EditProfile',
   HiringJobDetails:'HiringJobDetails',
-  SearchListScreen: 'SearchListScreen'
+  SearchListScreen: 'SearchListScreen',
+  ForgotPasswordScreen: 'ForgotPasswordScreen'
 } as const;

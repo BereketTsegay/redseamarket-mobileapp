@@ -173,9 +173,11 @@ const LoginScreen: React.FC<Props> = () => {
         </View>
       }/>
 
-      {/* <View right marginB-20>
+      <View right marginB-20>
+        <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.ForgotPasswordScreen)}>
         <Text style={styles.forgotText}>Forgot Password?</Text>
-      </View> */}
+        </TouchableOpacity>
+      </View>
 
       {/* <View row center marginV-20>
         <Image source={AppImages.FACEBOOK} style={{width:26, height:26}}/>
