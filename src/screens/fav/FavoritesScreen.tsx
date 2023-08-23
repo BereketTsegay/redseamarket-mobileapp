@@ -10,10 +10,12 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFavList } from '../../api/favorites/FavListSlice';
-import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, FlatList, ToastAndroid, TouchableOpacity } from 'react-native';
 import AppColors from '../../constants/AppColors';
 import Header from '../../components/Header';
 import { CommonContext } from '../../api/commonContext';
+import AppStrings from '../../constants/AppStrings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export type FavoritesScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'FavoritesScreen'
@@ -42,6 +44,26 @@ const FavoritesScreen: React.FC<Props> = () => {
       (state: RootState) => state.language.resources[currentLanguage],
     );
 
+    const [selectedCountry, setSelectedCountry] = useState('');
+
+    useEffect(() => {
+      const fetchCountryFromStorage = async () => {
+        try {
+          const storedCountry = await AsyncStorage.getItem(AppStrings.COUNTRY);
+          if (storedCountry !== null) {
+            setSelectedCountry(storedCountry);
+          }
+        } catch (error) {
+          ToastAndroid.show(
+            JSON.stringify(error),
+            ToastAndroid.SHORT,
+          );
+        }
+      };
+  
+      fetchCountryFromStorage();
+    }, []);
+
     useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
         dispatch(fetchFavList({requestBody: ''}));
@@ -67,7 +89,7 @@ const FavoritesScreen: React.FC<Props> = () => {
     renderItem={({item})=>{
       return(
         <TouchableOpacity onPress={()=>{
-            navigation.navigate(RouteNames.DetailsScreen,{adId:item.ads_id,countryId:commonInput.common_country_id,edit:false})
+            navigation.navigate(RouteNames.DetailsScreen,{adId:item.ads_id,countryId:selectedCountry,edit:false})
           }}>
               <View style={styles.view}>
                  <Image source={item.ads.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ads.image[0].image}} 

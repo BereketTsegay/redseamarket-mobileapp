@@ -17,6 +17,8 @@ import AppFonts from '../../constants/AppFonts';
 import { apiClient } from '../../api/apiClient';
 import { CommonContext } from '../../api/commonContext';
 import PdfModal from '../../components/PdfModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
 export type AdsScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'AdsScreen'
@@ -46,6 +48,26 @@ const AdsScreen: React.FC<Props> = () => {
     const strings = useSelector(
       (state: RootState) => state.language.resources[currentLanguage],
     );
+
+    const [selectedCountry, setSelectedCountry] = useState('');
+
+    useEffect(() => {
+      const fetchCountryFromStorage = async () => {
+        try {
+          const storedCountry = await AsyncStorage.getItem(AppStrings.COUNTRY);
+          if (storedCountry !== null) {
+            setSelectedCountry(storedCountry);
+          }
+        } catch (error) {
+          ToastAndroid.show(
+            JSON.stringify(error),
+            ToastAndroid.SHORT,
+          );
+        }
+      };
+  
+      fetchCountryFromStorage();
+    }, []);
 
     useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
@@ -114,7 +136,7 @@ const AdsScreen: React.FC<Props> = () => {
     renderItem={({item})=>{
       return(
         <TouchableOpacity onPress={()=>{
-          navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:commonInput.common_country_id,edit:true})
+          navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:selectedCountry,edit:true})
         }}>
               <View style={[styles.view,{height:180}]}>
                  <Image source={item.image == null || item.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.image[0].image}} 

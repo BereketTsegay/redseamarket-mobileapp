@@ -56,6 +56,7 @@ const ProfileScreen: React.FC<Props> = () => {
     Linking.openURL(`tel:${number}`);
   };
 
+
   const Logout = async () => {
     await AsyncStorage.removeItem(AppStrings.ACCESS_TOKEN);
     navigation.replace(RouteNames.WelcomeScreen)
@@ -70,8 +71,7 @@ const ProfileScreen: React.FC<Props> = () => {
             <Text style={styles.title}>{name}</Text>
           </View>
           <View row centerV>
-            {number &&
-            <Text marginR-10 style={styles.title}>{number}</Text>}
+            <Text marginR-10 style={styles.title}>{number && number}</Text>
           <Image source={AppImages.RIGHT_ARROW} />
           </View>
         </View>

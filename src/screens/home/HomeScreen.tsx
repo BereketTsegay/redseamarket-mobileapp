@@ -14,6 +14,7 @@ import {
   FlatList,
   ImageBackground,
   ScrollView,
+  ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
@@ -28,6 +29,8 @@ import {CommonContext} from '../../api/commonContext';
 import HomeScreenSlider from '../../components/HomeScreenSlider';
 import CountryLanguageHomeModal from '../../components/CountryLanguageHomeModal';
 import {setLanguage} from '../../api/language/languageSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
 const {TextField} = Incubator;
 export type HomeScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -69,23 +72,59 @@ const HomeScreen: React.FC<Props> = () => {
 
   useEffect(() => {
     if (selectedCountry) {
-      setCommonInput({...commonInput, common_country_id: selectedCountry});
+      // setCommonInput({...commonInput, common_country_id: selectedCountry});
+      AsyncStorage.setItem(
+        AppStrings.COUNTRY,
+        String(selectedCountry),
+      );
     }
   }, [selectedCountry]);
 
-  useEffect(() => {
-    let request = JSON.stringify({
-      country: commonInput.common_country_id,
-    });
-    dispatch(fetchDashBoardList({requestBody: request}));
-  }, [commonInput.common_country_id]);
+  // useEffect(() => {
+  //   let request = JSON.stringify({
+  //     country: Number(AsyncStorage.getItem(AppStrings.COUNTRY)),
+  //   });
+  //   dispatch(fetchDashBoardList({requestBody: request}));
+  // }, [Num]);
+
+  // useEffect(() => {
+  //   let request = JSON.stringify({
+  //     country: commonInput.common_country_id,
+  //   });
+  //   dispatch(fetchCurrencyList({requestBody: request}));
+  // }, [commonInput.common_country_id]);
 
   useEffect(() => {
-    let request = JSON.stringify({
-      country: commonInput.common_country_id,
-    });
-    dispatch(fetchCurrencyList({requestBody: request}));
-  }, [commonInput.common_country_id]);
+    const fetchCountryFromStorage = async () => {
+      try {
+        const storedCountry = await AsyncStorage.getItem(AppStrings.COUNTRY);
+        if (storedCountry !== null) {
+          setSelectedCountry(storedCountry);
+        }
+      } catch (error) {
+        ToastAndroid.show(
+          JSON.stringify(error),
+          ToastAndroid.SHORT,
+        );
+      }
+    };
+  
+    fetchCountryFromStorage();
+  }, []);
+
+  useEffect(() => {
+  let request = JSON.stringify({
+    country: selectedCountry,
+  });
+  dispatch(fetchDashBoardList({requestBody: request}));
+}, [selectedCountry]);
+
+useEffect(() => {
+  let request = JSON.stringify({
+    country: selectedCountry,
+  });
+  dispatch(fetchCurrencyList({requestBody: request}));
+}, [selectedCountry]);
 
   useEffect(() => {
     dispatch(fetchCountryList({requestBody: ''}));
@@ -183,7 +222,7 @@ const HomeScreen: React.FC<Props> = () => {
                       navigation.navigate(RouteNames.CategoryListScreen, {
                         cat_Id: item.id,
                         name: item.name,
-                        countryId: commonInput.common_country_id,
+                        countryId: selectedCountry,
                       });
                     }
                   }}>
@@ -228,7 +267,7 @@ const HomeScreen: React.FC<Props> = () => {
                       navigation.navigate(RouteNames.CategoryListScreen, {
                         cat_Id: item.id,
                         name: item.name,
-                        countryId: commonInput.common_country_id,
+                        countryId: selectedCountry,
                       });
                     }}>
                     <Image
@@ -247,7 +286,7 @@ const HomeScreen: React.FC<Props> = () => {
                         onPress={() => {
                           navigation.navigate(RouteNames.DetailsScreen, {
                             adId: item.id,
-                            countryId: commonInput.common_country_id,
+                            countryId: selectedCountry,
                             edit: false,
                           });
                         }}>
