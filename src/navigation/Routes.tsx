@@ -29,5 +29,6 @@ export const RouteNames = {
   EditProfile:'EditProfile',
   HiringJobDetails:'HiringJobDetails',
   SearchListScreen: 'SearchListScreen',
-  ForgotPasswordScreen: 'ForgotPasswordScreen'
+  ForgotPasswordScreen: 'ForgotPasswordScreen',
+  PasswordResetScreen: 'PasswordResetScreen'
 } as const;

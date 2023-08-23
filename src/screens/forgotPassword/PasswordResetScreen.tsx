@@ -6,43 +6,43 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {ActivityIndicator, ImageBackground, Pressable, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
 import AppImages from '../../constants/AppImages';
-import AppColors from '../../constants/AppColors';
-import AppFonts from '../../constants/AppFonts';
-import styles from './styles';
-import { RootState } from '../../../store';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
+import AppColors from '../../constants/AppColors';
+import styles from '../register/styles';
 import { createLogin, reset } from '../../api/login/LoginCreateSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppStrings from '../../constants/AppStrings';
 
 const {TextField} = Incubator;
-export type LoginScreenNavigationProps = NativeStackNavigationProp<
+
+export type PasswordResetScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
-  'LoginScreen'
+  'PasswordResetScreen'
 >;
 
-export type LoginScreenRouteProps = RouteProp<
+export type PasswordResetScreenRouteProps = RouteProp<
   RootStackParams,
-  'LoginScreen'
+  'PasswordResetScreen'
 >;
 
 interface Props {}
 
-const LoginScreen: React.FC<Props> = () => {
+const PasswordResetScreen: React.FC<Props> = ({route}) => {
+    const {email} = route.params;
+  const navigation = useNavigation<PasswordResetScreenNavigationProps>();
   const currentLanguage = useSelector(
     (state: RootState) => state.language.currentLanguage,
   );
   const strings = useSelector(
     (state: RootState) => state.language.resources[currentLanguage],
   );
-  const navigation = useNavigation<LoginScreenNavigationProps>();
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirm] = useState('');
   const [error, setError] = useState('');
-  const [invalidEmail, setInvalidEmail] = useState(false);
   const [invalidPass, setInvalidPass] = useState(false);
+  const [invalidConfirm, setInvalidConfirm] = useState(false);
   const [isSecureEntry, setIsSecureEntry] = useState(true);
+  const [isSecureEntrySec, setIsSecureEntrySec] = useState(true);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {LoginData, loadingLogin, LoginError} = useSelector(
     (state: RootState) => state.loginCreate,
@@ -53,26 +53,30 @@ const LoginScreen: React.FC<Props> = () => {
     setIsSecureEntry(!isSecureEntry);
   };
 
+  const updateSecureTextEntrySec = async () => {
+    setIsSecureEntrySec(!isSecureEntrySec);
+  };
+
   function isValidate(): boolean {
-    if (email == '') {
-      setError('required field');
-      setInvalidEmail(true);
-      return false;
-    }
     if (password == '') {
       setError('required field');
       setInvalidPass(true);
       return false;
     }
+    if (password != confirmPassword) {
+      setError('mismatch');
+      setInvalidConfirm(true);
+      return false;
+    }
     return true;
   }
 
-  const Login = async () => {
+  const passwordReset = async () => {
     let request = JSON.stringify({
       email: email,
       password: password,
     });
-    dispatch(createLogin({requestBody: request, url: 'app/user/login'}))
+    dispatch(createLogin({requestBody: request, url: 'app/forgotpassword/password/reset'}))
       .then(() => {
         dispatch(reset());
       })
@@ -80,69 +84,50 @@ const LoginScreen: React.FC<Props> = () => {
   };
 
   useEffect(() => {
- 
+
+
   if (LoginData != null) {
     if (!loadingLogin && !LoginError && LoginData.status == 'success') {
       ToastAndroid.show(
         JSON.stringify(LoginData.message),
         ToastAndroid.SHORT,
       );
-      AsyncStorage.setItem(
-        AppStrings.ACCESS_TOKEN,
-        LoginData.token == null ? '' : LoginData.token,
-      );
      
-      navigation.replace(RouteNames.BottomTabs)
-    } else if (LoginData.status == 'error') {
-      if(LoginData.message == 'User Not Verified'){
+      navigation.replace(RouteNames.LoginScreen)
+    } else{
         ToastAndroid.show(
           JSON.stringify(LoginData.message),
           ToastAndroid.SHORT,
         );
-        navigation.replace(RouteNames.OtpVerificationScreen,{email:email,from:'login'})
-      }
-      else{
-        ToastAndroid.show(
-          JSON.stringify(LoginData.message),
-          ToastAndroid.SHORT,
-        );
-      }
-     
     }
   }
- }, [LoginData]);
+  }, [LoginData]);
+
 
   return (
    <ImageBackground
    source={AppImages.BG} style={styles.container}>
-    <View row centerV style={{justifyContent:'space-between'}}>
-        <View marginL-40>
-    <Text style={styles.text}>{strings.welcome}</Text>
-    <Text style={styles.text1}>{strings.back}</Text>
+<View row>
+<Image source={AppImages.PERSON2} style={{right:5}}/>
+        <View marginL-20>
+    <Text style={styles.text1}>{strings.letReset}</Text>
     </View>
-    <Image source={AppImages.PERSON1} style={{left:6}}/>
+    
     </View>
     <View style={styles.view}>
-      <Text style={styles.heading}>{strings.Login}</Text>
-      <TextField
+      <Text style={styles.heading}>{strings.resetPassword}</Text>
+
+<TextField
       fieldStyle={styles.inputLayout}
       placeholder={strings.email}
       floatingPlaceholder
       floatingPlaceholderColor={'black'}
+      color={'grey'}
       floatOnFocus="true"
       keyboardType="default"
       floatingPlaceholderStyle={styles.floatStyle}
-      marginT-30
-      value={email}
-      onChangeText={(text: React.SetStateAction<string>) => {
-        setEmail(text);
-        setInvalidEmail(false);
-      }}
-      trailingAccessory={
-        invalidEmail && (
-            <Text style={{color: 'red'}}>{error}</Text>
-        )
-      }/>
+      editable={false}
+      value={email}/>
 
 <TextField
       fieldStyle={styles.inputLayout}
@@ -174,30 +159,52 @@ const LoginScreen: React.FC<Props> = () => {
         </View>
       }/>
 
-      <View right marginB-20>
-        <TouchableOpacity onPress={()=>navigation.replace(RouteNames.ForgotPasswordScreen)}>
-        <Text style={styles.forgotText}>Forgot Password?</Text>
-        </TouchableOpacity>
-      </View>
+<TextField
+      fieldStyle={styles.inputLayout}
+      placeholder={strings.confirmPassword}
+      floatingPlaceholder
+      floatingPlaceholderColor={'black'}
+      floatOnFocus="true"
+      keyboardType="default"
+      floatingPlaceholderStyle={styles.floatStyle}
+      marginB-30
+      value={confirmPassword}
+      onChangeText={(text: React.SetStateAction<string>) =>
+        {
+          setConfirm(text);
+          setInvalidConfirm(false)
+        }}
+        secureTextEntry={isSecureEntrySec ? true : false}
+        trailingAccessory={
+          <View row center>
+            { invalidConfirm && (
+                    <Text style={{color: 'red',right:10}}>{error}</Text>
+                )}
+          <Pressable onPress={updateSecureTextEntrySec}>
+                {isSecureEntrySec ? (
+                  <Image source={AppImages.EYE_OFF} style={{height:12,width:14,right:10}}/>
+                ) : (
+                  <Image source={AppImages.EYE} style={{height:12,width:14,right:10}}/>
+                )}
+              </Pressable>
+          </View>
+        }/>
 
-      {/* <View row center marginV-20>
-        <Image source={AppImages.FACEBOOK} style={{width:26, height:26}}/>
-        <Image source={AppImages.GOOGLE} style={{width:26, height:26,marginLeft:20}}/>
-      </View> */}
+
     <TouchableOpacity onPress={() => {
             if (isValidate()) {
-              Login()
+              passwordReset()
             }
           }}
     style={styles.button}>
       {loadingLogin?
       <ActivityIndicator size={20} color={AppColors.blue} />  
     :
-      <Text style={styles.text2}>{strings.Login}</Text>}
+      <Text style={styles.text2}>{strings.reset}</Text>}
     </TouchableOpacity>
 
-    <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.RegisterScreen)}>
-    <Text style={styles.bottomText}>{strings.noAccount}</Text>
+    <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.LoginScreen)}>
+    <Text style={styles.bottomText}>{strings.haveAccount}</Text>
     </TouchableOpacity>
     </View>
 
@@ -206,7 +213,6 @@ const LoginScreen: React.FC<Props> = () => {
   );
 };
 
-export default LoginScreen;
-
+export default PasswordResetScreen;
 
 

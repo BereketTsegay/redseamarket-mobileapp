@@ -12,6 +12,7 @@ import { RootState } from '../../../store';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '../login/styles';
+import { SimpleApiClient } from '../../api/apiClient';
 
 const {TextField} = Incubator;
 export type ForgotPasswordScreenNavigationProps = NativeStackNavigationProp<
@@ -35,9 +36,44 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
   );
   const navigation = useNavigation<ForgotPasswordScreenNavigationProps>();
   const [email, setEmail] = useState('');
-  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const [isLoading, setLoading] = useState(false)
+  const [error, setError] = useState('');
+  const [invalidEmail, setInvalidEmail] = useState(false);
   useEffect(() => {
   }, []);
+
+  function isValidate(): boolean {
+    if (email == '') {
+      setError('required field');
+      setInvalidEmail(true);
+      return false;
+    }
+    return true;
+  }
+
+  const sendMail = () => {
+    setLoading(true)
+  let request = JSON.stringify({
+    email: email
+  })
+  SimpleApiClient('app/forgot/password/send/toMail', 'POST', request)
+  .then(request => {
+    if(request.data.status == 'success'){
+      ToastAndroid.show(
+        JSON.stringify(request.data.message),
+        ToastAndroid.SHORT,
+      );
+      navigation.replace(RouteNames.OtpVerificationScreen,{email:email,from:'forgot'})
+    }
+    else{
+      ToastAndroid.show(
+        JSON.stringify(request.data.message),
+        ToastAndroid.SHORT,
+      )
+    }
+    setLoading(false)
+  })
+  }
 
 
   return (
@@ -45,12 +81,12 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
    source={AppImages.BG} style={styles.container}>
     <View row centerV style={{justifyContent:'space-between'}}>
         <View marginL-40>
-    <Text style={styles.text1}>Let's fix</Text>
+    <Text style={styles.text1}>{strings.letFix}</Text>
     </View>
     <Image source={AppImages.PERSON1} style={{left:6}}/>
     </View>
     <View style={styles.view}>
-      <Text style={styles.heading}>Verify email</Text>
+      <Text style={styles.heading}>{strings.emailVerify}</Text>
       <TextField
       fieldStyle={styles.inputLayout}
       placeholder={strings.email}
@@ -63,19 +99,27 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
       value={email}
       onChangeText={(text: React.SetStateAction<string>) => {
         setEmail(text);
-        // setInvalidEmail(false);
+        setInvalidEmail(false);
       }}
-    //   trailingAccessory={
-    //     invalidEmail && (
-    //         <Text style={{color: 'red'}}>{error}</Text>
-    //     )
-    //   }
+      trailingAccessory={
+        invalidEmail && (
+            <Text style={{color: 'red'}}>{error}</Text>
+        )
+      }
       />
 
 
-    <TouchableOpacity 
+    <TouchableOpacity onPress={() => {
+            if (isValidate()) {
+              sendMail()
+            }
+          }}
     style={styles.button}>
-      <Text style={styles.text2}>Verify</Text>
+       {isLoading ?
+      <ActivityIndicator size={20} color={AppColors.blue} />  
+    :
+    <Text style={styles.text2}>{strings.verify1}</Text>}
+     
     </TouchableOpacity>
 
     <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.LoginScreen)}>

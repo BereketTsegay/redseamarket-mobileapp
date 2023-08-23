@@ -65,9 +65,9 @@ export const createRegister = async (
 
 //API FOR LOGIN
 export const createLogin = async (
-  requestBody: any,
+  requestBody: any, url: any
 ): Promise<NetworkResponse<LoginResponse>> => {
-  const response = await SimpleApiClient('app/user/login', 'POST', requestBody);
+  const response = await SimpleApiClient(url, 'POST', requestBody);
 
   if (response.status) {
     const json = await response.data;

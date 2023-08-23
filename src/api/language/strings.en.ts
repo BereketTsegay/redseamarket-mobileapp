@@ -201,6 +201,12 @@ export default {
     resendCode: "Resend Code",
     pleaseSelectCountries: 'Please select countries',
     reject:"Rejected",
-    update: "Update"
+    update: "Update",
+    letFix: "Let's fix",
+    verify1: "Verify",
+    letReset: "Let's Reset",
+    resetPassword: "Reset your password",
+    reset: "Reset"
+
 
 };

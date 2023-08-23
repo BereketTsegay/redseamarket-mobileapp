@@ -30,4 +30,5 @@ export type RootStackParams = {
   HiringJobDetails: undefined;
   SearchListScreen: undefined;
   ForgotPasswordScreen: undefined;
+  PasswordResetScreen: undefined;
 };

@@ -74,6 +74,9 @@ const OtpVerificationScreen: React.FC<Props> = ({route}) => {
       else if(from == 'login'){
         navigation.replace(RouteNames.BottomTabs)
       }
+      else if(from == 'forgot'){
+        navigation.replace(RouteNames.PasswordResetScreen,{email:email})
+      }
       else
       null;
 

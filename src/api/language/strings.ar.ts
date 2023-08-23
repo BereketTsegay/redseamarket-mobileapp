@@ -200,5 +200,10 @@ codeReceive: "لم أتلقَ رمزًا!",
 resendCode: "إعادة إرسال الرمز",
 pleaseSelectCountries: 'يرجى اختيار البلدان',
 reject: "مرفوض",
-update: "تحديث"
+update: "تحديث",
+letFix: "لنقم بالتصحيح",
+verify1: "التحقق",
+letReset: "لنقم بإعادة تعيين",
+resetPassword: "إعادة تعيين كلمة المرور",
+reset: "إعادة تعيين"
 };

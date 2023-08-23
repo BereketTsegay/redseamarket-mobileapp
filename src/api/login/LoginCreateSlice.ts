@@ -28,10 +28,10 @@ const initialState: LoginCreateState = {
 
 export const createLogin = createAsyncThunk<
   {LoginData: LoginResponse | null},
-  {requestBody: any}
->('createLogin', async ({requestBody}) => {
+  {requestBody: any, url: any}
+>('createLogin', async ({requestBody, url}) => {
   if (requestBody != null) {
-    const response = await apiInterface.createLogin(requestBody);
+    const response = await apiInterface.createLogin(requestBody, url);
     
     if (response.kind == 'success') {
       return {
