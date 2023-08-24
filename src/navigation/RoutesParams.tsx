@@ -1,4 +1,5 @@
 export type RootStackParams = {
+  SplashScreen: undefined;
   WelcomeScreen: undefined;
   LoginScreen: undefined;
   RegisterScreen: undefined;

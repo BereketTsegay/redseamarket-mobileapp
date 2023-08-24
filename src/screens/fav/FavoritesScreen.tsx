@@ -44,26 +44,6 @@ const FavoritesScreen: React.FC<Props> = () => {
       (state: RootState) => state.language.resources[currentLanguage],
     );
 
-    const [selectedCountry, setSelectedCountry] = useState('');
-
-    useEffect(() => {
-      const fetchCountryFromStorage = async () => {
-        try {
-          const storedCountry = await AsyncStorage.getItem(AppStrings.COUNTRY);
-          if (storedCountry !== null) {
-            setSelectedCountry(storedCountry);
-          }
-        } catch (error) {
-          ToastAndroid.show(
-            JSON.stringify(error),
-            ToastAndroid.SHORT,
-          );
-        }
-      };
-  
-      fetchCountryFromStorage();
-    }, []);
-
     useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
         dispatch(fetchFavList({requestBody: ''}));
@@ -89,7 +69,7 @@ const FavoritesScreen: React.FC<Props> = () => {
     renderItem={({item})=>{
       return(
         <TouchableOpacity onPress={()=>{
-            navigation.navigate(RouteNames.DetailsScreen,{adId:item.ads_id,countryId:selectedCountry,edit:false})
+            navigation.navigate(RouteNames.DetailsScreen,{adId:item.ads_id,countryId:commonInput.common_country_id,edit:false})
           }}>
               <View style={styles.view}>
                  <Image source={item.ads.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ads.image[0].image}} 

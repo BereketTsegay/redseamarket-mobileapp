@@ -59,7 +59,9 @@ const ProfileScreen: React.FC<Props> = () => {
 
   const Logout = async () => {
     await AsyncStorage.removeItem(AppStrings.ACCESS_TOKEN);
-    navigation.replace(RouteNames.WelcomeScreen)
+    await AsyncStorage.removeItem(AppStrings.COUNTRY);
+    await AsyncStorage.removeItem(AppStrings.COUNTRY_FLAG);
+    navigation.replace(RouteNames.LoginScreen)
   };
 
   const List = ({ image, name, onPress, number }: Props) => {

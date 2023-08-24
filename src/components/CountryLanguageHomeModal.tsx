@@ -12,7 +12,7 @@ interface CountryLanguageModalProps {
   isVisible: boolean;
   data: any[]; // Array of countries or languages
   onSelectItem: (item: any) => void;
-  onRequestClose: () => void;
+  onRequestClose? : () => void;
   required?: any
 }
 
@@ -35,7 +35,7 @@ const CountryLanguageHomeModal: React.FC<CountryLanguageModalProps> = ({
       if (item) {
         onSelectItem(item);
       }
-      onRequestClose();
+      // onRequestClose();
     };
 
     return (
@@ -43,7 +43,8 @@ const CountryLanguageHomeModal: React.FC<CountryLanguageModalProps> = ({
       visible={isVisible}
       animationType='none'
       transparent={true}
-      onRequestClose={()=>handleCloseModal(null)}>
+      onRequestClose={()=>handleCloseModal(null)}
+      >
       <View
         style={{
           flex: 1,

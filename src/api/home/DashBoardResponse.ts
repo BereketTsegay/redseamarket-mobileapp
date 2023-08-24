@@ -8,7 +8,7 @@ export type Data = {
     loged_user_status: boolean;
     user_name:         string;
     categories:        Categor[];
-    slider:            Slider[];
+    slider:            Slider;
     categories_ads:    Categor[];
 }
 
@@ -116,6 +116,7 @@ export type Slider = {
     status:     number;
     created_at: Date;
     updated_at: Date;
+    country_id: any;
 }
 
 

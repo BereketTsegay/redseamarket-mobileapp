@@ -9,14 +9,17 @@ const styles = StyleSheet.create({
     paddingHorizontal:10,
     paddingTop:20,
     width: screenWidth,
-    height:270,
+    height:260,
+    borderBottomRightRadius:200,
+    borderBottomLeftRadius:200,
+    bottom:5
   },
     rowContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         width:'100%',
-        top:8,
+        top:18,
       },
       dropdown1BtnStyle: {
         backgroundColor: 'white',

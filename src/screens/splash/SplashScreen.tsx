@@ -10,26 +10,38 @@ import AppImages from '../../constants/AppImages';
 import AppFonts from '../../constants/AppFonts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-export type WelcomeScreenNavigationProps = NativeStackNavigationProp<
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
+export type SplashScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
-  'WelcomeScreen'
+  'SplashScreen'
 >;
 
 export type WelcomeScreenRouteProps = RouteProp<
   RootStackParams,
-  'WelcomeScreen'
+  'SplashScreen'
 >;
 
 interface Props {}
 
-const WelcomeScreen: React.FC<Props> = () => {
-  const navigation = useNavigation<WelcomeScreenNavigationProps>();
+const SplashScreen: React.FC<Props> = () => {
+  const navigation = useNavigation<SplashScreenNavigationProps>();
   const currentLanguage = useSelector(
     (state: RootState) => state.language.currentLanguage,
   );
   const strings = useSelector(
     (state: RootState) => state.language.resources[currentLanguage],
   );
+
+  setTimeout(() => {
+    AsyncStorage.getItem(AppStrings.ACCESS_TOKEN).then(value => {
+      if (value) {
+        navigation.replace(RouteNames.BottomTabs);
+      } else {
+        navigation.replace(RouteNames.LoginScreen);
+      }
+    });
+  }, 3000);
  
 
   return (
@@ -39,17 +51,12 @@ const WelcomeScreen: React.FC<Props> = () => {
     <Text style={styles.text}>{strings.appName}</Text>
     <Text style={styles.text1}>{strings.trading}</Text>
 
-    <TouchableOpacity onPress={()=>{navigation.replace(RouteNames.LoginScreen)}}
-    style={styles.button}>
-      <Text style={styles.text2}>{strings.getStarted}</Text>
-    </TouchableOpacity>
-
    </ImageBackground>
     
   );
 };
 
-export default WelcomeScreen;
+export default SplashScreen;
 
 const styles = StyleSheet.create({
   container:{

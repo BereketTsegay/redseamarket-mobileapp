@@ -5,7 +5,6 @@ import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppImages from '../../constants/AppImages';
-import SelectDropdown from 'react-native-select-dropdown';
 import styles from './styles';
 import AppColors from '../../constants/AppColors';
 import {
@@ -24,7 +23,6 @@ import {fetchDashBoardList} from '../../api/home/DashBoardListSlice';
 import AppFonts from '../../constants/AppFonts';
 import {fetchCountryList} from '../../api/country/CountryListSlice';
 import {fetchCurrencyList} from '../../api/currency/CurrencyListSlice';
-import CountrySelectionModal from '../../components/CountrySelectionModal';
 import {CommonContext} from '../../api/commonContext';
 import HomeScreenSlider from '../../components/HomeScreenSlider';
 import CountryLanguageHomeModal from '../../components/CountryLanguageHomeModal';
@@ -50,17 +48,17 @@ const HomeScreen: React.FC<Props> = () => {
     (state: RootState) => state.language.resources[currentLanguage],
   );
   const [lang, setLang] = useState([
-    {code: 'English', name: 'UK', id: 1},
-    {code: 'Arabic', name: 'UAE', id: 2},
+    {code: 'English', name: 'English', id: 1},
+    {code: 'Arabic', name: 'Arabic', id: 2},
   ]);
   const {commonInput, setCommonInput} = useContext(CommonContext);
   const [selectedCountry, setSelectedCountry] = useState<any>(null);
   const [selectedCountryFlag, setSelectedCountryFlag] =
     useState<string>('Country');
   const [showCountryLanguageModal, setShowCountryLanguageModal] =
-    useState(true);
+    useState(false);
   const [showLanguageModal, setShowLanguageModal] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState<any>('UK');
+  const [selectedLanguage, setSelectedLanguage] = useState<any>('English');
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {dashboardLists, loadingDashBoardList} = useSelector(
     (state: RootState) => state.DashBoardList,
@@ -72,34 +70,30 @@ const HomeScreen: React.FC<Props> = () => {
 
   useEffect(() => {
     if (selectedCountry) {
-      // setCommonInput({...commonInput, common_country_id: selectedCountry});
-      AsyncStorage.setItem(
-        AppStrings.COUNTRY,
-        String(selectedCountry),
-      );
+      setCommonInput({...commonInput, common_country_id: selectedCountry});
+      AsyncStorage.setItem(AppStrings.COUNTRY, String(selectedCountry));
+      AsyncStorage.setItem(AppStrings.COUNTRY_FLAG, selectedCountryFlag);
     }
-  }, [selectedCountry]);
-
-  // useEffect(() => {
-  //   let request = JSON.stringify({
-  //     country: Number(AsyncStorage.getItem(AppStrings.COUNTRY)),
-  //   });
-  //   dispatch(fetchDashBoardList({requestBody: request}));
-  // }, [Num]);
-
-  // useEffect(() => {
-  //   let request = JSON.stringify({
-  //     country: commonInput.common_country_id,
-  //   });
-  //   dispatch(fetchCurrencyList({requestBody: request}));
-  // }, [commonInput.common_country_id]);
+  }, [selectedCountry,setSelectedCountryFlag]);
 
   useEffect(() => {
     const fetchCountryFromStorage = async () => {
       try {
         const storedCountry = await AsyncStorage.getItem(AppStrings.COUNTRY);
+        const storedFlag = await AsyncStorage.getItem(AppStrings.COUNTRY_FLAG);
+
+        console.log(storedCountry)
         if (storedCountry !== null) {
           setSelectedCountry(storedCountry);
+          setSelectedCountryFlag(storedFlag)
+        }
+        else {
+          if (showCountryLanguageModal) {
+            setShowCountryLanguageModal(false);
+          }
+          else{
+            setShowCountryLanguageModal(true);
+          }
         }
       } catch (error) {
         ToastAndroid.show(
@@ -111,6 +105,9 @@ const HomeScreen: React.FC<Props> = () => {
   
     fetchCountryFromStorage();
   }, []);
+
+
+  
 
   useEffect(() => {
   let request = JSON.stringify({
@@ -143,11 +140,11 @@ useEffect(() => {
     setCommonInput({...commonInput, language: language});
   }
 
+
   return (
     <View flex backgroundColor="#FFFFFF" paddingB-60>
       <ImageBackground
-        source={AppImages.BGIMAGE}
-        // source={dashboardLists?.data.slider != null ? { uri: 'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider[1].file } : null}
+        source={dashboardLists?.data.slider  ? { uri: 'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider.file } : AppImages.BG}
         style={styles.topBackground}
         resizeMode="stretch">
         <Text
@@ -159,8 +156,12 @@ useEffect(() => {
           }}>
           {strings.appName}
         </Text>
-
-        <HomeScreenSlider data={dashboardLists?.data.slider} />
+        <Text
+          style={{
+            fontSize:18, fontFamily:AppFonts.POPPINS_BOLD,color:'white',alignSelf:'center'
+          }}>
+          {dashboardLists?.data.slider ? dashboardLists?.data.slider.title : 'The best place to buy your house, sell your car or find a job.'}
+        </Text>
 
         <View center style={styles.rowContainer}>
           <TouchableOpacity onPress={() => setShowCountryLanguageModal(true)}>
@@ -222,7 +223,7 @@ useEffect(() => {
                       navigation.navigate(RouteNames.CategoryListScreen, {
                         cat_Id: item.id,
                         name: item.name,
-                        countryId: selectedCountry,
+                        countryId: commonInput.common_country_id,
                       });
                     }
                   }}>
@@ -267,7 +268,7 @@ useEffect(() => {
                       navigation.navigate(RouteNames.CategoryListScreen, {
                         cat_Id: item.id,
                         name: item.name,
-                        countryId: selectedCountry,
+                        countryId: commonInput.common_country_id,
                       });
                     }}>
                     <Image
@@ -286,7 +287,7 @@ useEffect(() => {
                         onPress={() => {
                           navigation.navigate(RouteNames.DetailsScreen, {
                             adId: item.id,
-                            countryId: selectedCountry,
+                            countryId: commonInput.common_country_id,
                             edit: false,
                           });
                         }}>
@@ -349,7 +350,6 @@ useEffect(() => {
           setSelectedCountryFlag(item.flag);
           setShowCountryLanguageModal(false);
         }}
-        onRequestClose={() => setShowCountryLanguageModal(false)}
         required={true}
       />
 
