@@ -53,8 +53,6 @@ const HomeScreen: React.FC<Props> = () => {
   ]);
   const {commonInput, setCommonInput} = useContext(CommonContext);
   const [selectedCountry, setSelectedCountry] = useState<any>(null);
-  const [selectedCountryFlag, setSelectedCountryFlag] =
-    useState<string>('Country');
   const [showCountryLanguageModal, setShowCountryLanguageModal] =
     useState(false);
   const [showLanguageModal, setShowLanguageModal] = useState(false);
@@ -72,28 +70,18 @@ const HomeScreen: React.FC<Props> = () => {
     if (selectedCountry) {
       setCommonInput({...commonInput, common_country_id: selectedCountry});
       AsyncStorage.setItem(AppStrings.COUNTRY, String(selectedCountry));
-      AsyncStorage.setItem(AppStrings.COUNTRY_FLAG, selectedCountryFlag);
     }
-  }, [selectedCountry,setSelectedCountryFlag]);
+  }, [selectedCountry]);
 
   useEffect(() => {
     const fetchCountryFromStorage = async () => {
       try {
         const storedCountry = await AsyncStorage.getItem(AppStrings.COUNTRY);
-        const storedFlag = await AsyncStorage.getItem(AppStrings.COUNTRY_FLAG);
-
-        console.log(storedCountry)
         if (storedCountry !== null) {
           setSelectedCountry(storedCountry);
-          setSelectedCountryFlag(storedFlag)
         }
         else {
-          if (showCountryLanguageModal) {
-            setShowCountryLanguageModal(false);
-          }
-          else{
             setShowCountryLanguageModal(true);
-          }
         }
       } catch (error) {
         ToastAndroid.show(
@@ -140,7 +128,11 @@ useEffect(() => {
     setCommonInput({...commonInput, language: language});
   }
 
-
+  const findFlagUrlById = (id) => {
+    const country = countryLists?.country?.find(country => country.id == id);
+    
+    return country ? 'https://admin-jamal.prompttechdemohosting.com/' + country.flag : null;
+  };
   return (
     <View flex backgroundColor="#FFFFFF" paddingB-60>
       <ImageBackground
@@ -168,11 +160,8 @@ useEffect(() => {
             <View row style={styles.smallDropdown}>
               {selectedCountry ? (
                 <Image
-                  source={{
-                    uri:
-                      'https://admin-jamal.prompttechdemohosting.com/' +
-                      selectedCountryFlag,
-                  }}
+                  source={
+                      findFlagUrlById(selectedCountry) == null ? AppImages.PLACEHOLDER : {uri:findFlagUrlById(selectedCountry)}}
                   style={{width: 25, height: 25}}
                 />
               ) : (
@@ -290,7 +279,8 @@ useEffect(() => {
                             countryId: commonInput.common_country_id,
                             edit: false,
                           });
-                        }}>
+                        }}
+                        key={index}>
                         <View
                           backgroundColor="white"
                           key={index}
@@ -347,7 +337,6 @@ useEffect(() => {
         data={countryLists?.country || []}
         onSelectItem={item => {
           setSelectedCountry(item.id);
-          setSelectedCountryFlag(item.flag);
           setShowCountryLanguageModal(false);
         }}
         required={true}

@@ -31,6 +31,9 @@ import FeaturedAmountSlice from './src/api/featured/FeaturedAmountSlice';
 import StripePaymentSlice from './src/api/stripe/StripePaymentSlice';
 import DirectPaymentSlice from './src/api/directPayment/DirectPaymentSlice';
 import languageSlice, { setLanguage } from './src/api/language/languageSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from './src/constants/AppStrings';
+import { ToastAndroid } from 'react-native';
 
 const rootReducer = combineReducers({
   language: languageSlice,
@@ -77,6 +80,26 @@ const store = configureStore({
     }),
 });
 
-store.dispatch(setLanguage("en"));
+// store.dispatch(setLanguage("en"));
+
+async function setInitialLanguagePreference() {
+  try {
+    const storedLanguage = await AsyncStorage.getItem(AppStrings.LANGUAGE);
+    if (storedLanguage === null) {
+      await AsyncStorage.setItem(AppStrings.LANGUAGE, 'en');
+      store.dispatch(setLanguage('en'));
+    } else {
+      store.dispatch(setLanguage(storedLanguage));
+    }
+  } catch (error) {
+    ToastAndroid.show(
+      JSON.stringify('Error setting initial language preference'),
+      ToastAndroid.SHORT,
+    );
+  }
+}
+
+// Call the setInitialLanguagePreference function to set up the initial language preference
+setInitialLanguagePreference();
 
 export default store;
