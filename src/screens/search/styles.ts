@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import AppFonts from "../../constants/AppFonts";
+import AppColors from "../../constants/AppColors";
 
 const styles = StyleSheet.create({
     circle: {
@@ -20,6 +21,11 @@ const styles = StyleSheet.create({
         fontSize:16,
         fontFamily:AppFonts.POPPINS_MEDIUM,
         left:10
+      },
+      countText:{
+fontSize:10,
+fontFamily:AppFonts.POPPINS_LIGHT,
+color:AppColors.darkBlue
       }
 })
 

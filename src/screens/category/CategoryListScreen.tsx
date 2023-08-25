@@ -112,7 +112,7 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
 
       <View row centerV style={styles.row}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(RouteNames.SearchListScreen)}>
+          onPress={() => navigation.navigate(RouteNames.SearchListScreen,{alert:true})}>
           <View row center>
             <Image
               source={AppImages.SEARCH}

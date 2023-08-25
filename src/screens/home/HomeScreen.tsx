@@ -172,7 +172,7 @@ useEffect(() => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate(RouteNames.SearchListScreen)}
+            onPress={() => navigation.navigate(RouteNames.SearchListScreen,{alert:false})}
             style={[styles.textFieldStyle, {elevation: 10}]}>
             <Image
               source={AppImages.SEARCH}

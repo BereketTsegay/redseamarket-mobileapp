@@ -43,6 +43,8 @@ const AppImages = {
     SORT: require('../images/sort.png'),
     RADIO_ON: require('../images/radioOn.png'),
     RADIO_OFF: require('../images/radiooff.png'),
+    HISTORY: require('../images/history.png'),
+    UP_ARROW: require('../images/upArrow.png'),
   };
   
   export default AppImages;
