@@ -130,13 +130,15 @@ useEffect(() => {
 
   const findFlagUrlById = (id) => {
     const country = countryLists?.country?.find(country => country.id == id);
-    
     return country ? 'https://admin-jamal.prompttechdemohosting.com/' + country.flag : null;
   };
+
+  // console.log(dashboardLists?.data)
   return (
     <View flex backgroundColor="#FFFFFF" paddingB-60>
       <ImageBackground
-        source={dashboardLists?.data.slider  ? { uri: 'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider.file } : AppImages.BG}
+        source={dashboardLists?.data.slider  ? { uri: 'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider.file } 
+        : AppImages.BG}
         style={styles.topBackground}
         resizeMode="stretch">
         <Text

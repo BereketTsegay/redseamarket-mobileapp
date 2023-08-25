@@ -60,7 +60,6 @@ const ProfileScreen: React.FC<Props> = () => {
   const Logout = async () => {
     await AsyncStorage.removeItem(AppStrings.ACCESS_TOKEN);
     await AsyncStorage.removeItem(AppStrings.COUNTRY);
-    await AsyncStorage.removeItem(AppStrings.COUNTRY_FLAG);
     navigation.replace(RouteNames.LoginScreen)
   };
 

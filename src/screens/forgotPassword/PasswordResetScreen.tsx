@@ -4,7 +4,7 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {ActivityIndicator, ImageBackground, Pressable, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, ImageBackground, Pressable, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
 import AppImages from '../../constants/AppImages';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
@@ -117,6 +117,8 @@ const PasswordResetScreen: React.FC<Props> = ({route}) => {
     <View style={styles.view}>
       <Text style={styles.heading}>{strings.resetPassword}</Text>
 
+      <ScrollView showsVerticalScrollIndicator={false}>
+      <View>
 <TextField
       fieldStyle={styles.inputLayout}
       placeholder={strings.email}
@@ -206,6 +208,8 @@ const PasswordResetScreen: React.FC<Props> = ({route}) => {
     <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.LoginScreen)}>
     <Text style={styles.bottomText}>{strings.haveAccount}</Text>
     </TouchableOpacity>
+    </View>
+    </ScrollView>
     </View>
 
    </ImageBackground>

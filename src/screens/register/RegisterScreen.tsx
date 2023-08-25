@@ -4,7 +4,7 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {ActivityIndicator, ImageBackground, Pressable, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, ImageBackground, Pressable, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
 import AppImages from '../../constants/AppImages';
 import styles from './styles';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
@@ -61,6 +61,11 @@ const RegisterScreen: React.FC<Props> = () => {
     setIsSecureEntrySec(!isSecureEntrySec);
   };
 
+  const isValidEmail = (email: string) => {
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    return emailPattern.test(email);
+  };
+
   function isValidate(): boolean {
     if (name == '') {
       setError('required field');
@@ -69,6 +74,12 @@ const RegisterScreen: React.FC<Props> = () => {
     }
     if (email == '') {
       setError('required field');
+      setInvalidEmail(true);
+      return false;
+    }
+    
+    if (!isValidEmail(email)) {
+      setError('Invalid email format');
       setInvalidEmail(true);
       return false;
     }
@@ -128,6 +139,8 @@ const RegisterScreen: React.FC<Props> = () => {
     <View style={styles.view}>
       <Text style={styles.heading}>{strings.signUp}</Text>
       
+      <ScrollView showsVerticalScrollIndicator={false}>
+      <View>
 <TextField
       fieldStyle={styles.inputLayout}
       placeholder={strings.username}
@@ -252,6 +265,9 @@ const RegisterScreen: React.FC<Props> = () => {
     <TouchableOpacity onPress={()=>navigation.navigate(RouteNames.LoginScreen)}>
     <Text style={styles.bottomText}>{strings.haveAccount}</Text>
     </TouchableOpacity>
+    </View>
+    </ScrollView>
+
     </View>
 
    </ImageBackground>
