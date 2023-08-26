@@ -120,14 +120,14 @@ const SearchListScreen: React.FC<Props> = ({route}) => {
         }
       />
       {modalVisible &&
-      <View style={{backgroundColor:'white',paddingHorizontal:20,paddingVertical:10}} marginT-4>
+      <View style={{backgroundColor:'white',paddingVertical:10}} marginT-4>
         {alertData.map((item, index)=>(
           <TouchableOpacity key={index} onPress={()=>{setSearchKey(item.search_key)
             list(item.search_key)
                                             setModalVisible(false)}}>
           <View row style={{justifyContent:'space-between'}} marginV-8 centerV>
             <Image source={AppImages.HISTORY} tintColor={'grey'} style={{width:25,height:25}}/>
-            <View flex left marginL-20>
+            <View flex left marginL-10>
         <Text >{item.search_key}</Text>
         <Text style={styles.countText}>{item.ads_count} alert</Text>
         </View>

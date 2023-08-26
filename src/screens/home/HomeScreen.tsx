@@ -74,27 +74,25 @@ const HomeScreen: React.FC<Props> = () => {
   }, [selectedCountry]);
 
   useEffect(() => {
-    const fetchCountryFromStorage = async () => {
-      try {
-        const storedCountry = await AsyncStorage.getItem(AppStrings.COUNTRY);
-        if (storedCountry !== null) {
-          setSelectedCountry(storedCountry);
-        }
-        else {
-            setShowCountryLanguageModal(true);
-        }
-      } catch (error) {
-        ToastAndroid.show(
-          JSON.stringify(error),
-          ToastAndroid.SHORT,
-        );
-      }
-    };
-  
     fetchCountryFromStorage();
   }, []);
 
-
+  const fetchCountryFromStorage = async () => {
+    try {
+      const storedCountry = await AsyncStorage.getItem(AppStrings.COUNTRY);
+      if (storedCountry !== null) {
+        setSelectedCountry(storedCountry);
+      }
+      else {
+          setShowCountryLanguageModal(true);
+      }
+    } catch (error) {
+      ToastAndroid.show(
+        JSON.stringify(error),
+        ToastAndroid.SHORT,
+      );
+    }
+  };
   
 
   useEffect(() => {
@@ -132,6 +130,12 @@ useEffect(() => {
     const country = countryLists?.country?.find(country => country.id == id);
     return country ? 'https://admin-jamal.prompttechdemohosting.com/' + country.flag : null;
   };
+
+  const setCountryId = async (item) => {
+    setSelectedCountry(item.id);
+  AsyncStorage.setItem(AppStrings.COUNTRY, String(item.id))
+    setShowCountryLanguageModal(false);
+  }
 
   // console.log(dashboardLists?.data)
   return (
@@ -338,8 +342,7 @@ useEffect(() => {
         isVisible={showCountryLanguageModal}
         data={countryLists?.country || []}
         onSelectItem={item => {
-          setSelectedCountry(item.id);
-          setShowCountryLanguageModal(false);
+         setCountryId(item)
         }}
         required={true}
       />

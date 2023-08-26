@@ -28,6 +28,8 @@ import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 import AdsCountrySelect from '../../components/AdsCountrySelect';
 import { CommonContext } from '../../api/commonContext';
 import { apiClient } from '../../api/apiClient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
 const { TextField } = Incubator;
 export type PlaceAdScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -76,6 +78,12 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
   });
 
   useEffect(() => {
+
+ valueSet()
+  }, []);
+
+  const valueSet = async () => {
+  const stored_country_id = await AsyncStorage.getItem(AppStrings.COUNTRY);
     if(editData){
       const selectedImageURIs = editData.image.map((img) => ({
         id: img.id,
@@ -98,20 +106,19 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
       name: editData.seller_information.name, email: editData.seller_information.email, phone: editData.seller_information.phone, address: editData.seller_information.address, latitude: editData.latitude, longitude: editData.longitude, 
       phone_hide: editData.seller_information.phone_hide_flag,  image: [...placeAdInput.image, ...selectedImageURIs],  adsCountry: [...placeAdInput.adsCountry, ...selectCountries], make_id: editData.category_id == 1 ? editData.motore_value.make_id : 0, model_id: editData.category_id == 1 ? editData.motore_value.model_id : 0,
       variant_id: editData.category_id == 1 ? editData.motore_value.varient_id : 0, registration_year: editData.category_id == 1 ? editData.motore_value.registration_year : '', fuel: editData.category_id == 1 ? editData.motore_value.fuel_type : '', transmission: editData.category_id == 1 ? editData.motore_value.transmission == 'Manual' ? 1 : 2 : '',
-      condition: editData.category_id == 1 ? editData.motore_value.condition == 'New' ? 1 : 2 : '', mileage: editData.category_id == 1 ? editData.motore_value.milage : 0, aircondition: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'aircondition'), gps: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'gps'),
-      security: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'security'), tire: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value === 'tire'), size: editData.category_id == 2 ? editData.property_rend.size : editData.category_id == 3 ? editData.property_sale.size : '',
+      condition: editData.category_id == 1 ? editData.motore_value.condition == 'New' ? 1 : 2 : '', mileage: editData.category_id == 1 ? editData.motore_value.milage : 0, aircondition: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value == 'aircondition'), gps: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value == 'gps'),
+      security: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value == 'security'), tire: editData.category_id == 1 && !!editData.motor_features.find(feature => feature.value == 'tire'), size: editData.category_id == 2 ? editData.property_rend.size : editData.category_id == 3 ? editData.property_sale.size : '',
       room: editData.category_id == 2 ? editData.property_rend.room : editData.category_id == 3 ? editData.property_sale.room : '', furnished: editData.category_id == 2 ? editData.property_rend.furnished == 'Yes' ? 1 : 2 : editData.category_id == 3 ? editData.property_sale.furnished == 'Yes' ? 1 : 2 : '', building: editData.category_id == 2 ? editData.property_rend.building_type : editData.category_id == 3 ? editData.property_sale.building.building_type : '',
       parking: editData.category_id == 2 ? editData.property_rend.parking : editData.category_id == 3 ? editData.property_sale.parking : '', featured: editData.featured_flag, fieldValue: customData
     });
      
   }
   else{
-    setPlaceAdInput({ ...placeAdInput, country: commonInput.common_country_id, adsCountry: [commonInput.common_country_id] });
+    setPlaceAdInput({ ...placeAdInput, country:stored_country_id , adsCountry: [Number(stored_country_id)] });
   }
- 
-  }, [editData]);
+  }
 
-  // console.log(placeAdInput.country,'____=============', commonInput.common_country_id)
+  // console.log(placeAdInput.adsCountry,'____=============', commonInput.common_country_id)
   // useEffect(() => {
   //   if (commonInput.common_country_id && !placeAdInput.country) {
   //     setPlaceAdInput({ ...placeAdInput, country: commonInput.common_country_id });
@@ -247,14 +254,14 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
 
     for (const key in placeAdInput) {
       if (key !== 'category' && key !== 'subcategory') {
-        newPlaceAdInput[key] = typeof placeAdInput[key] === 'number' ? 0 : '';
+        newPlaceAdInput[key] = typeof placeAdInput[key] == 'number' ? 0 : '';
       }
     }
 
     setPlaceAdInput(newPlaceAdInput);
   };
 
-  // console.log(placeAdInput.image)
+  // console.log(placeAdInput.city)
 
   return (
     <View flex backgroundColor="white" padding-20>
@@ -502,7 +509,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
           
           <View>
             <Text style={styles.labelStyle}>{strings.viewCountries}</Text>
-          <AdsCountrySelect countryLists={countryLists?.country} Id={editData ? editData.mapCountry.map((item) => Number(item.country_id)) : [commonInput.common_country_id]} />
+          <AdsCountrySelect countryLists={countryLists?.country} Id={editData ? editData.mapCountry.map((item) => Number(item.country_id)) : [Number(commonInput.common_country_id)]} />
 </View>
           <Checkbox
             label={strings.negotiable}

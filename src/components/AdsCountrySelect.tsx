@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
 const AdsCountrySelect = ({ countryLists, Id }) => {
- 
+//  console.log(Id,'----')
   const currentLanguage = useSelector(
     (state: RootState) => state.language.currentLanguage,
   );

@@ -60,7 +60,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
 
   const updateFieldValue = (fieldId, value) => {
     const existingIndex = placeAdInput.fieldValue.findIndex(
-      field => field.field_id === fieldId,
+      field => field.field_id == fieldId,
     );
 
     if (existingIndex >= 0) {
@@ -142,7 +142,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
         <View marginV-20>
           {customLists?.data.category_field.map(item => (
             <>
-              {item.field.type === 'text' ? (
+              {item.field.type == 'text' ? (
                 <InputField
                 label={item.field.name}
                   title={'Enter ' + item.field.name}
@@ -154,7 +154,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                   trailing={null}
                   editable={true}
                 />
-              ) : item.field.type === 'number' ? (
+              ) : item.field.type == 'number' ? (
                 <InputField
                 label={item.field.name}
                   title={'Enter ' + item.field.name}
@@ -166,7 +166,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                   trailing={null}
                   editable={true}
                 />
-                ) : item.field.type === 'url' ? (
+                ) : item.field.type == 'url' ? (
                   <InputField
                   label={item.field.name}
                   title={'Enter ' + item.field.name}
@@ -178,7 +178,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                     trailing={null}
                     editable={true}
                   />
-              ) : item.field.type === 'date' ? (
+              ) : item.field.type == 'date' ? (
                 <TouchableOpacity
               onPress={() => setDateVisible(true)}>
                 <InputField
@@ -203,7 +203,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                     </View>
                   }
                 /></TouchableOpacity>
-              ) : item.field.type === 'textarea' ? (
+              ) : item.field.type == 'textarea' ? (
                 <InputField
                 label={item.field.name}
                 title={'Enter ' + item.field.name}
@@ -215,7 +215,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                   trailing={null}
                   editable={true}
                 />
-              ) : item.field.type === 'checkbox' ? (
+              ) : item.field.type == 'checkbox' ? (
                 <Checkbox
                   label={item.field.name}
                   labelStyle={styles.fieldText}
@@ -227,7 +227,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                   }
                 />
               )
-              : item.field.type === 'radio' ? (
+              : item.field.type == 'radio' ? (
                 <View marginB-20>
                 <RadioButton
                   value={getValue(item.field.id)}
@@ -239,7 +239,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                   }
                 />
                 </View>
-              ) : item.field.type === 'select ' ? (
+              ) : item.field.type == 'select ' ? (
                 <View>
                 <Text style={styles.labelStyle}>{item.field.name}</Text>
                 <SelectDropdown
@@ -265,7 +265,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                 rowTextStyle={AppStyles.dropdown1RowTxtStyle}
               />
               </View>
-              ) : item.field.type === 'file' ? (
+              ) : item.field.type == 'file' ? (
                 <View marginB-20>
                 <TouchableOpacity onPress={()=>placeAdInput.image.length <= 4 ? openDocumentFile(item.field.id) : null}>
                 <View

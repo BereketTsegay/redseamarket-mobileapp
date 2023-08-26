@@ -16,7 +16,7 @@ import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {PlaceAdContext} from '../api/placeAd/PlaceAdContext';
 import InputField from './InputField';
 import AppColors from '../constants/AppColors';
-import {ToastAndroid} from 'react-native';
+import {ActivityIndicator, ToastAndroid} from 'react-native';
 import {createPayment, reset} from '../api/stripe/StripePaymentSlice';
 
 const PaymentDetails = ({amount, value}) => {
@@ -30,6 +30,9 @@ const PaymentDetails = ({amount, value}) => {
   const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext);
   const {paymentData, loadingPayment, paymentError} = useSelector(
     (state: RootState) => state.StripePayment,
+  );
+  const {loadingPlaceAd} = useSelector(
+    (state: RootState) => state.PlaceAd,
   );
   const [cardNumber, setCardNumber] = useState('');
   const [month, setMonth] = useState('');
@@ -111,7 +114,7 @@ const PaymentDetails = ({amount, value}) => {
       if (!loadingPayment && !paymentError && paymentData.status) {
         value(paymentData.payment_id);
         ToastAndroid.show(
-          JSON.stringify(paymentData.message),
+          JSON.stringify('Payment' + paymentData.message),
           ToastAndroid.SHORT,
         );
       } else {
@@ -224,7 +227,10 @@ const PaymentDetails = ({amount, value}) => {
       </View>
 
       <Button
-        label={strings.proceed}
+        label={loadingPayment ? 
+          <ActivityIndicator color={AppColors.darkBlue} size={20}/> : 
+          loadingPlaceAd ? <ActivityIndicator color={AppColors.darkBlue} size={20}/> : 
+           strings.proceed}
         style={{backgroundColor: '#28a745', borderRadius: 5}}
         onPress={Proceed}
       />
