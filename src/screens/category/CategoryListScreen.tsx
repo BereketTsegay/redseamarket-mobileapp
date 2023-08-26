@@ -155,6 +155,10 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
             data={categoryLists?.ads}
             countryId={countryId}
             categoryName={name}
+            close={()=>{
+             setFilterOpen(false)
+             setSortOpen(false)
+            }}
           />
         )}
       </View>

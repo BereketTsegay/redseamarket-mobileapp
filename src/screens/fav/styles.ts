@@ -1,6 +1,8 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import AppColors from "../../constants/AppColors";
 import AppFonts from "../../constants/AppFonts";
+
+const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     container:{
@@ -44,12 +46,12 @@ const styles = StyleSheet.create({
     fontFamily:AppFonts.POPPINS_LIGHT
  },
  view:{
-    borderRadius:4,
-    elevation:4,
-    width:106,
-    margin:5,
-    backgroundColor:'white',
-    height:140
+   borderRadius: 4,
+   elevation: 4,
+   width: screenWidth / 3 - 20,
+   margin: 5,
+   backgroundColor: 'white',
+   height: 140,
  }
 })
 export default styles;

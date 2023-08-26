@@ -13,10 +13,11 @@ import { CommonContext } from '../api/commonContext';
 interface props {
   data : any;
   countryId? : any;
-  categoryName? : any
+  categoryName? : any;
+  close?  : any
 }
 
-const CategoryListComponent = ({data, countryId, categoryName} : props) => {
+const CategoryListComponent = ({data, countryId, categoryName, close} : props) => {
   const currentLanguage = useSelector(
     (state: RootState) => state.language.currentLanguage,
   );
@@ -40,6 +41,7 @@ const CategoryListComponent = ({data, countryId, categoryName} : props) => {
                      countryId: countryId,
                      edit:false
                    });
+                 close();
                  }}>
                 <View style={styles.view1}>
                   <View style={styles.rowView}>

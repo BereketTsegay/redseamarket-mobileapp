@@ -139,6 +139,7 @@ useEffect(() => {
 
   // console.log(dashboardLists?.data)
   return (
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
     <View flex backgroundColor="#FFFFFF" paddingB-60>
       <ImageBackground
         source={dashboardLists?.data.slider  ? { uri: 'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider.file } 
@@ -358,6 +359,7 @@ useEffect(() => {
         onRequestClose={() => setShowLanguageModal(false)}
       />
     </View>
+    </ScrollView>
   );
 };
 

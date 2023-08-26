@@ -149,6 +149,9 @@ const SearchListScreen: React.FC<Props> = ({route}) => {
           <CategoryListComponent
             data={searchData}
             countryId={commonInput.common_country_id}
+            close={()=>{
+              null
+            }}
           />
         </View>
       )}

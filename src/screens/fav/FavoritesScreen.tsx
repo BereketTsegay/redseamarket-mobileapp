@@ -10,7 +10,7 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFavList } from '../../api/favorites/FavListSlice';
-import { ActivityIndicator, FlatList, ToastAndroid, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, ToastAndroid, TouchableOpacity } from 'react-native';
 import AppColors from '../../constants/AppColors';
 import Header from '../../components/Header';
 import { CommonContext } from '../../api/commonContext';
@@ -27,6 +27,8 @@ export type FavoritesScreenRouteProps = RouteProp<
 >;
 
 interface Props {}
+
+const screenWidth = Dimensions.get('window').width;
 
 const FavoritesScreen: React.FC<Props> = () => {
   const navigation = useNavigation<FavoritesScreenNavigationProps>();
@@ -56,7 +58,7 @@ const FavoritesScreen: React.FC<Props> = () => {
     <View flex backgroundColor='#FFFFFF'>
        <Header/>
 
-        <View paddingH-30 paddingT-10 paddingB-70 flex>
+       <View flex paddingH-10 style={{width:screenWidth,alignItems:'center'}}>
           <Text style={styles.text}>{strings.favorites}</Text>
 
           {loadingFavLists ?
@@ -66,6 +68,7 @@ const FavoritesScreen: React.FC<Props> = () => {
     data={favLists?.favourite}
     numColumns={3}
     showsVerticalScrollIndicator={false}
+    contentContainerStyle={{ paddingBottom: 70 }}
     renderItem={({item})=>{
       return(
         <TouchableOpacity onPress={()=>{
@@ -73,7 +76,7 @@ const FavoritesScreen: React.FC<Props> = () => {
           }}>
               <View style={styles.view}>
                  <Image source={item.ads.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.ads.image[0].image}} 
-                 resizeMode={'contain'} style={{height:70,width:'100%',borderTopLeftRadius:4,borderTopRightRadius:4}}/>
+                 resizeMode={'contain'} style={{width:'100%',borderTopLeftRadius:4,borderTopRightRadius:4,height:70}}/>
                  <View margin-3>
                  <Text numberOfLines={1} ellipsizeMode='tail' style={styles.priceText}>{currencyLists == null ? 'USD ' + item.ads.price.toFixed()
                   : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.ads.price).toFixed().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))}</Text>

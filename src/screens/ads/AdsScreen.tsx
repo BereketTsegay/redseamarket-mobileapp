@@ -6,7 +6,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import styles from '../fav/styles';
 import AppImages from '../../constants/AppImages';
-import { ActivityIndicator, FlatList, ToastAndroid, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, ToastAndroid, TouchableOpacity } from 'react-native';
 import AppColors from '../../constants/AppColors';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,6 +30,8 @@ export type AdsScreenRouteProps = RouteProp<
 >;
 
 interface Props {}
+
+const screenWidth = Dimensions.get('window').width;
 
 const AdsScreen: React.FC<Props> = () => {
   const navigation = useNavigation<AdsScreenNavigationProps>();
@@ -103,7 +105,7 @@ const AdsScreen: React.FC<Props> = () => {
     <View flex backgroundColor='#FFFFFF'>
       <Header/>
 
-        <View paddingH-20 paddingT-10 paddingB-70 flex>
+        <View flex paddingH-10 style={{width:screenWidth,alignItems:'center'}}>
           <Text style={styles.text}>{strings.myAds}</Text>
 
           {loadingAdLists ?
@@ -113,6 +115,7 @@ const AdsScreen: React.FC<Props> = () => {
     data={adLists?.ads}
     numColumns={3}
     showsVerticalScrollIndicator={false}
+    contentContainerStyle={{ paddingBottom: 70}}
     renderItem={({item})=>{
       return(
         <TouchableOpacity onPress={()=>{
