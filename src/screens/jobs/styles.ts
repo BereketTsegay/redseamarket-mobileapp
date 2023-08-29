@@ -102,9 +102,7 @@ const styles =StyleSheet .create({
       button:{
         backgroundColor:AppColors.lightBlue,
         width:'30%',
-        position:'absolute',
-        bottom:20,
-        marginHorizontal:20
+        bottom:10
       },
       companyView:{
         flexDirection:'row',

@@ -121,7 +121,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                 />
               </View>
             </TouchableOpacity>
-            <View style={styles.circle}></View>
+            {/* <View style={styles.circle}></View> */}
           </View>
 
           <View flex>
@@ -233,7 +233,8 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                     </View>
                   )}
 
-                {dashboardDetails?.ads[0].category.name == 'Jobs' &&
+                {dashboardDetails?.ads[0].category && 
+                dashboardDetails?.ads[0].category.name == 'Jobs' &&
                   dashboardDetails.ads[0].status == 1 && (
                     <Button
                       label={
@@ -276,10 +277,13 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                   {dashboardDetails?.ads[0].city_name},{' '}
                   {dashboardDetails?.ads[0].country_name}
                 </Text>
+
+                {dashboardDetails?.ads[0].latitude && dashboardDetails?.ads[0].longitude &&
                 <MapComponent
                   latitudes={dashboardDetails?.ads[0].latitude}
                   longitudes={dashboardDetails?.ads[0].longitude}
-                />
+                />}
+
               </View>
             </ScrollView>
 

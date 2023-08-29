@@ -137,7 +137,7 @@ const AdsScreen: React.FC<Props> = () => {
                  </TouchableOpacity>
                  </View>
 
-                 {(item.category.name == 'Jobs' && item.status == 1) &&
+                 {(item.category && item.category.name == 'Jobs' && item.status == 1) &&
                  <TouchableOpacity onPress={()=>Documents(item.id)}>
                   <Text style={[styles.titleText,{color:'#007bff'}]}>{strings.viewDocuments}</Text>
                  </TouchableOpacity>}

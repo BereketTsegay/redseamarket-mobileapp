@@ -77,7 +77,7 @@ const MyJobDetails: React.FC<Props> = () => {
             />
           </View>
         </TouchableOpacity>
-        <View style={styles.circle}></View>
+        {/* <View style={styles.circle}></View> */}
       </View>
 
       <View
@@ -170,8 +170,16 @@ const MyJobDetails: React.FC<Props> = () => {
           </View>
           </ScrollView>
 
+         <View centerV style={{flexDirection:'row',justifyContent:'space-between'}}>
           <Button label={strings.edit} style={styles.button} onPress={()=>{setJobInput({...jobInput, jobprofile_id: jobProfileList?.data.id})
             navigation.navigate('JobProfile',{screen: RouteNames.MyJobProfile})}}/>
+
+
+            <View row>
+              <Image source={AppImages.EYE} style={{width:20,height:20,marginRight:5}}/>
+            <Text  style={styles.text}>{jobProfileList?.profile_view}</Text>
+            </View>
+            </View>
         </View>
 }
       </View>

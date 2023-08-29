@@ -139,7 +139,7 @@ useEffect(() => {
 
   // console.log(dashboardLists?.data)
   return (
-    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+    
     <View flex backgroundColor="#FFFFFF" paddingB-60>
       <ImageBackground
         source={dashboardLists?.data.slider  ? { uri: 'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider.file } 
@@ -198,8 +198,8 @@ useEffect(() => {
           </TouchableOpacity>
         </View>
       </ImageBackground>
-
-      <View padding-20 marginT-10>
+<ScrollView style={{marginTop:30 }}>
+      <View paddingH-20 paddingB-20>
         <Text style={styles.categoryText}>{strings.category}</Text>
         <FlatList
           data={dashboardLists?.data.categories}
@@ -333,12 +333,13 @@ useEffect(() => {
                     ))}
                   </View>
                 </ScrollView>
+
               </View>
             );
           }}
         />
       )}
-
+  </ScrollView>
       <CountryLanguageHomeModal
         isVisible={showCountryLanguageModal}
         data={countryLists?.country || []}
@@ -359,7 +360,7 @@ useEffect(() => {
         onRequestClose={() => setShowLanguageModal(false)}
       />
     </View>
-    </ScrollView>
+  
   );
 };
 

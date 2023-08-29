@@ -80,7 +80,7 @@ const BottomTabs: React.FC<Props> = () => {
       <Image
         source={icon}
         tintColor={routeName === selectedTab ? '#0052BE' : AppColors.lightBlue}
-        style={{width:19,height:20}}
+        style={{width:21,height:21}}
       />
       <Text style={{fontSize:7,color:AppColors.lightBlue,fontFamily:AppFonts.POPPINS_MEDIUM}}>{name}</Text>
       </View>

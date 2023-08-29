@@ -18,6 +18,7 @@ import {
   Details_Ad,
 } from './home/DashBoardResponse';
 import { JobApplyResponse } from './jobApply/JobApplySlice';
+import { HiringJobDetailsResponse } from './jobs/HiringJobDetailsSlice';
 import { HiringJobResponse } from './jobs/HiringJobSlice';
 import { JobSaveResponse } from './jobs/JobProfileSaveSlice';
 import { JobUpdateResponse } from './jobs/JobProfileUpdateSlice';
@@ -605,6 +606,28 @@ export const fetchHiringJobList = async (
 ): Promise<NetworkResponse<HiringJobResponse | null>> => {
   const response = await apiClient(
     'app/get/jobprofile/list',
+    'POST',
+    requestBody,
+  );
+  if (response.status) {
+    const json = await response.data;
+    return {
+      kind: 'success',
+      body: json,
+    };
+  } else {
+    return {
+      kind: 'failure',
+    };
+  }
+};
+
+//API FOR LISTING HIRING JOB DETAILS
+export const fetchHiringJobDetails = async (
+  requestBody: any,
+): Promise<NetworkResponse<HiringJobDetailsResponse | null>> => {
+  const response = await apiClient(
+    'app/get/jobprofile/detail',
     'POST',
     requestBody,
   );

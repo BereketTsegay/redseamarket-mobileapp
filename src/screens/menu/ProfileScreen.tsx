@@ -66,8 +66,8 @@ const ProfileScreen: React.FC<Props> = () => {
   const List = ({ image, name, onPress, number }: Props) => {
     return (
       <TouchableOpacity onPress={onPress}>
-        <View row paddingV-5 centerV style={{ justifyContent: 'space-between' }}>
-          <Image source={image} style={{width:20,height:20}}/>
+        <View row paddingV-8 centerV style={{ justifyContent: 'space-between' }}>
+          <Image source={image} style={{width:25,height:27}}/>
           <View flex left marginL-20>
             <Text style={styles.title}>{name}</Text>
           </View>
@@ -90,7 +90,7 @@ const ProfileScreen: React.FC<Props> = () => {
 
           <List image={AppImages.MYADS} name={strings.myAds} onPress={() => navigation.navigate(RouteNames.AdsScreen)} number={profileDetails?.data.myads}/>
 
-          <List image={AppImages.HEART} name={strings.myJobProfile} onPress={() => {
+          <List image={AppImages.BRIEF} name={strings.myJobProfile} onPress={() => {
             jobProfileList?.data ?
             navigation.navigate('JobProfile',{screen:RouteNames.MyJobDetails})
             :
@@ -100,7 +100,7 @@ const ProfileScreen: React.FC<Props> = () => {
           <List image={AppImages.HEART} name={strings.favorites} onPress={() => navigation.navigate(RouteNames.FavoritesScreen)} number={profileDetails?.data.myfavourite}/>
 
           <View row paddingV-5 centerV style={{ justifyContent: 'space-between' }}>
-          <Image source={AppImages.BANKING} style={{width:20,height:20}}/>
+          <Image source={AppImages.WALLET} style={{width:20,height:20}}/>
           <View flex left marginL-20>
             <Text style={styles.title}>{strings.wallet}</Text>
           </View>
@@ -125,12 +125,12 @@ const ProfileScreen: React.FC<Props> = () => {
           <Text style={styles.subHeading}>{strings.others}</Text>
           <List image={AppImages.SUPPORT} name={strings.policy} onPress={()=>Linking.openURL('https://jamal.prompttechdemohosting.com/#/privacy/policy')}/>
 
-          <List image={AppImages.HEART} name={strings.terms} onPress={() => navigation.navigate(RouteNames.TermsAndConditions)} />
+          <List image={AppImages.TERMS} name={strings.terms} onPress={() => navigation.navigate(RouteNames.TermsAndConditions)} />
           
           {profileDetails?.data.user.phone &&
           <List image={AppImages.CALL} name={strings.callUs} onPress={()=>openCall(profileDetails?.data.user.phone)} />}
 
-          <List image={AppImages.HEART} name={strings.logout} onPress={Logout} />
+          <List image={AppImages.LOGOUT} name={strings.logout} onPress={Logout} />
         </View>
       </View>
     </View>

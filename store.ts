@@ -34,6 +34,7 @@ import languageSlice, { setLanguage } from './src/api/language/languageSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from './src/constants/AppStrings';
 import { ToastAndroid } from 'react-native';
+import HiringJobDetailsSlice from './src/api/jobs/HiringJobDetailsSlice';
 
 const rootReducer = combineReducers({
   language: languageSlice,
@@ -64,6 +65,7 @@ const rootReducer = combineReducers({
   JobProfileUpdate: JobProfileUpdateSlice,
   JobApply: JobApplySlice,
   HiringJob: HiringJobSlice,
+  HiringJobDetails: HiringJobDetailsSlice,
   ProfileEdit: ProfileEditSlice,
   FeaturedAmount: FeaturedAmountSlice,
   StripePayment: StripePaymentSlice,

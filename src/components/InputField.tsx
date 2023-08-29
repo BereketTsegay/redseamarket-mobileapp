@@ -16,9 +16,10 @@ type Props = {
   trailing? : any;
   editable? : any;
   lead? : any
+  onFocus? : any;
 }
 
-const InputField = ({label,ref, title,multiline,height,width,type,value,onChange,trailing,editable, lead}: Props) => {
+const InputField = ({label,ref, title,multiline,height,width,type,value,onChange,trailing,editable, lead, onFocus}: Props) => {
     return(
       <TextField
       ref={ref}
@@ -38,6 +39,7 @@ const InputField = ({label,ref, title,multiline,height,width,type,value,onChange
           trailingAccessory={trailing}
           editable={editable}
           leadingAccessory={lead}
+          onFocus={onFocus}
           />
     )
   }

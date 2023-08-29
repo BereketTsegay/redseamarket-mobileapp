@@ -78,7 +78,7 @@ const HiringListScreen: React.FC<Props> = ({}) => {
                 <>
                      <TouchableOpacity
                      onPress={() => {
-                       navigation.navigate(RouteNames.HiringJobDetails,{index:index});
+                       navigation.navigate(RouteNames.HiringJobDetails,{index:item.id});
                      }}>
                     <View style={styles.view1}>
                       {/* <View style={styles.rowView}>

@@ -27,6 +27,9 @@ const SuccessPage: React.FC<Props> = ({route}) => {
    if(status == 'PostAd'){
     setTitle('Ad request has been placed successfully')
    }
+   else if(status == 'UpdateAd'){
+    setTitle("Ad has been updated successfully")
+   }
    else if(status == 'JobApply'){
     setTitle("Job applied successfully")
    }
@@ -45,7 +48,7 @@ const SuccessPage: React.FC<Props> = ({route}) => {
   }
 
   const letGo = () => {
-  if(status == 'PostAd'){
+  if(status == 'PostAd' || status == 'UpdateAd'){
     navigation.replace(RouteNames.BottomTabs, {screen: RouteNames.AdsScreen})
         resetStackAndNavigate(navigation, 'PostListScreen');
   }

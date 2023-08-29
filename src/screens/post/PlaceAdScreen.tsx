@@ -49,6 +49,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const { placeAdInput, setPlaceAdInput } = useContext(PlaceAdContext)
   const { commonInput, setCommonInput } = useContext(CommonContext)
+  const [stateDropdownTouched, setStateDropdownTouched] = useState(false);
+  const [cityDropdownTouched, setCityDropdownTouched] = useState(false);
   const [priceValue, setPriceValue] = useState('')
   const { countryLists } = useSelector((state: RootState) => state.CountryList);
   const { stateLists } = useSelector((state: RootState) => state.StateList);
@@ -261,7 +263,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
     setPlaceAdInput(newPlaceAdInput);
   };
 
-  // console.log(placeAdInput.city)
+
 
   return (
     <View flex backgroundColor="white" padding-20>
@@ -293,9 +295,9 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
             height={45}
             type={'default'}
             value={placeAdInput.title}
-            onChange={(text) => {
+            onChange={(text)=>{
               setPlaceAdInput({ ...placeAdInput, title: text, canonical_name: text });
-              setErrors({ ...errors, title: false });
+    setErrors({ ...errors, title: false });
             }}
             trailing={
               errors.title &&
@@ -380,6 +382,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
               data={countryLists?.country}
               add={setCountry}
               dropdownType={strings.country}
+              error={stateDropdownTouched && !placeAdInput.country}
             />
 
           </View>
@@ -452,6 +455,8 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
               data={stateLists?.state}
               add={setState}
               dropdownType={strings.state}
+              onBlur={() => setStateDropdownTouched(true)} 
+              error={cityDropdownTouched && !placeAdInput.state}
             />
           </View>
 
@@ -464,6 +469,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
               data={cityLists?.city}
               add={setCity}
               dropdownType={strings.city}
+              onBlur={() => setCityDropdownTouched(true)} 
             />
           </View>
 

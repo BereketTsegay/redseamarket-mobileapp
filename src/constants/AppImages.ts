@@ -45,6 +45,10 @@ const AppImages = {
     RADIO_OFF: require('../images/radiooff.png'),
     HISTORY: require('../images/history.png'),
     UP_ARROW: require('../images/upArrow.png'),
+    LOGOUT: require('../images/logout.png'),
+    TERMS: require('../images/terms.png'),
+    BRIEF: require('../images/briefCase.png'),
+    WALLET: require('../images/wallet.png'),
   };
   
   export default AppImages;

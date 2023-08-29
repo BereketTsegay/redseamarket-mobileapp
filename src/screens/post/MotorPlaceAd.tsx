@@ -150,7 +150,6 @@ const [errors, setErrors] = useState({
   }
   };
 
-  console.log(placeAdInput.fuel)
 
   return (
     <View flex backgroundColor='white' padding-20>

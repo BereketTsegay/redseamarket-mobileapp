@@ -13,6 +13,8 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import AppFonts from '../../constants/AppFonts';
 import Pdf from 'react-native-pdf';
 import PdfModal from '../../components/PdfModal';
+import { fetchHiringJobDetails } from '../../api/jobs/HiringJobDetailsSlice';
+import AppColors from '../../constants/AppColors';
 export type HiringJobDetailsNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'HiringJobDetails'
@@ -28,8 +30,9 @@ interface Props { }
 const HiringJobDetails: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<HiringJobDetailsNavigationProps>();
   const [showPdf, setShowPdf] = useState(false);
-  const {hiringJobList, loadingHiringJobList, hiringJobListError} = useSelector(
-    (state: RootState) => state.HiringJob,
+  const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+  const {hiringJobDetails, loadingHiringJobDetails, hiringJobDetailsError} = useSelector(
+    (state: RootState) => state.HiringJobDetails,
   );
   const currentLanguage = useSelector(
     (state: RootState) => state.language.currentLanguage,
@@ -40,7 +43,19 @@ const HiringJobDetails: React.FC<Props> = ({route}) => {
   const {index} = route.params;
 
   useEffect(() => {
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      Details()
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  const Details = () => {
+    let request = JSON.stringify({
+      profile_id: index
+    });
+    dispatch(fetchHiringJobDetails({requestBody: request}));
+  };
 
   const openCall = number => {
     Linking.openURL(`tel:${number}`);
@@ -80,18 +95,22 @@ const HiringJobDetails: React.FC<Props> = ({route}) => {
             />
           </View>
         </TouchableOpacity>
-        <View style={styles.circle}></View>
+        {/* <View style={styles.circle}></View> */}
       </View>
 
       <View flex backgroundColor='white' padding-20>
+      {loadingHiringJobDetails ? <ActivityIndicator color={AppColors.darkBlue} size={30}/>
+      :
+      <>
+      
       <View row marginB-20>
         <Image 
-        source={hiringJobList?.data[index].user.image ? {uri:'https://admin-jamal.prompttechdemohosting.com/' + hiringJobList?.data[index].user.image} : AppImages.PLACEHOLDER} 
-        style={{width:70, height:70}}/>
+        source={hiringJobDetails?.data.user.image ? {uri:'https://admin-jamal.prompttechdemohosting.com/' + hiringJobDetails?.data.user.image} : AppImages.PLACEHOLDER} 
+        style={{width:70, height:70,borderRadius:40}}/>
 
         <View marginL-20>
-            <Text style={styles.priceText}>{hiringJobList?.data[index].user.name}</Text>
-            <Text style={styles.titleText}>{hiringJobList?.data[index].title}</Text>
+            <Text style={styles.priceText}>{hiringJobDetails?.data.user.name}</Text>
+            <Text style={styles.titleText}>{hiringJobDetails?.data.title}</Text>
             <Button
                 label={'View Resume'}
                 onPress={handleViewResume}
@@ -108,27 +127,27 @@ const HiringJobDetails: React.FC<Props> = ({route}) => {
       <Text style={styles.subHeading}>{strings.details}</Text>
             <View style={styles.row}>
               <Text style={styles.motorText}>{strings.workExperience}</Text>
-              <Text style={styles.motorText1}>{hiringJobList?.data[index].work_experience} years</Text>
+              <Text style={styles.motorText1}>{hiringJobDetails?.data.work_experience} years</Text>
             </View>
 
             <View style={styles.row}>
               <Text style={styles.motorText}>{strings.education}</Text>
-              <Text style={styles.motorText1}>{hiringJobList?.data[index].education}</Text>
+              <Text style={styles.motorText1}>{hiringJobDetails?.data.education}</Text>
             </View>
 
             <View style={styles.row}>
               <Text style={styles.motorText}>{strings.certificates}</Text>
-              <Text style={styles.motorText1}>{hiringJobList?.data[index].certificate}</Text>
+              <Text style={styles.motorText1}>{hiringJobDetails?.data.certificate}</Text>
             </View>
 
             <View style={styles.row}>
               <Text style={styles.motorText}>{strings.lang}</Text>
-              <Text style={styles.motorText1}>{hiringJobList?.data[index].language}</Text>
+              <Text style={styles.motorText1}>{hiringJobDetails?.data.language}</Text>
             </View>
 
             <View style={styles.row}>
               <Text style={styles.motorText}>{strings.skills}</Text>
-              <Text style={styles.motorText1}>{hiringJobList?.data[index].skils}</Text>
+              <Text style={styles.motorText1}>{hiringJobDetails?.data.skils}</Text>
             </View>
 
             <Text style={[styles.subHeading,{marginTop:20}]}>{strings.description}</Text>
@@ -137,24 +156,24 @@ const HiringJobDetails: React.FC<Props> = ({route}) => {
                     styles.subHeading,
                     {fontFamily: AppFonts.POPPINS_REGULAR},
                   ]}>
-                  {hiringJobList?.data[index].overview}
+                  {hiringJobDetails?.data.overview}
                 </Text>
                 {showPdf && (
           <PdfModal
           visible={showPdf}
-          pdfUrl={'https://admin-jamal.prompttechdemohosting.com/' + hiringJobList?.data[index].cv_file}
+          pdfUrl={'https://admin-jamal.prompttechdemohosting.com/' + hiringJobDetails?.data.cv_file}
           onClose={handleClosePdf}
           jobStatus={false}
         />
       )}
-                
+       </>}         
       </View>
      
       <View style={styles.buttonView}>
               <Button
                 label={strings.call}
                 onPress={() =>
-                  openCall(hiringJobList?.data[index].user.phone)
+                  openCall(hiringJobDetails?.data.user.phone)
                 }
                 labelStyle={{
                   color: 'white',
@@ -166,7 +185,7 @@ const HiringJobDetails: React.FC<Props> = ({route}) => {
               <Button
                 label={strings.mail}
                 onPress={() =>
-                  openMail(hiringJobList?.data[index].user.email)
+                  openMail(hiringJobDetails?.data.user.email)
                 }
                 labelStyle={{
                   color: 'black',

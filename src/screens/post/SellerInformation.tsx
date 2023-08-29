@@ -63,6 +63,7 @@ const SellerInformation: React.FC<Props> = () => {
 
   const locationSet = (value) => {
     setPlaceAdInput({ ...placeAdInput, latitude: value.latitude, longitude: value.longitude })
+    console.log(value,'+++++++++')
   }
 
   const afterPayment = (id) => {
@@ -220,6 +221,8 @@ const SellerInformation: React.FC<Props> = () => {
     }
   }
 
+  useEffect(()=>{
+
   if (PlaceAdData != null) {
     if (!loadingPlaceAd && !PlaceAdError && PlaceAdData.status == 'success') {
       ToastAndroid.show(
@@ -227,7 +230,7 @@ const SellerInformation: React.FC<Props> = () => {
         ToastAndroid.SHORT,
       );
       // console.log(PlaceAdData,'success')
-      navigation.navigate(RouteNames.SuccessPage, { status: 'PostAd' })
+      navigation.navigate(RouteNames.SuccessPage, { status: placeAdInput.id == 0 ? 'PostAd' : 'UpdateAd' })
     } else {
       // console.log(PlaceAdData,'failure')
       ToastAndroid.show(
@@ -237,6 +240,7 @@ const SellerInformation: React.FC<Props> = () => {
     }
 
   }
+},[PlaceAdData])
 
   return (
     <View flex backgroundColor='white' padding-20>

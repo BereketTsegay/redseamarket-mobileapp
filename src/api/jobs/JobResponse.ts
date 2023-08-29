@@ -1,6 +1,7 @@
 export type JobResponse = {
     status: string;
     data:   Data;
+    profile_view:  number;
 }
 
 export type Data = {
