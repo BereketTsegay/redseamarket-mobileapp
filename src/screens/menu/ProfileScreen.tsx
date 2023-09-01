@@ -72,7 +72,12 @@ const ProfileScreen: React.FC<Props> = () => {
             <Text style={styles.title}>{name}</Text>
           </View>
           <View row centerV>
-            <Text marginR-10 style={styles.title}>{number && number}</Text>
+            {number ?
+            <View paddingH-10 center marginR-10 backgroundColor={AppColors.lightBlue}>
+            <Text style={[styles.title,{color:AppColors.white}]}>{number && number}</Text>
+            </View>
+            :
+            <View/> }
           <Image source={AppImages.RIGHT_ARROW} />
           </View>
         </View>
@@ -100,12 +105,13 @@ const ProfileScreen: React.FC<Props> = () => {
           <List image={AppImages.HEART} name={strings.favorites} onPress={() => navigation.navigate(RouteNames.FavoritesScreen)} number={profileDetails?.data.myfavourite}/>
 
           <View row paddingV-5 centerV style={{ justifyContent: 'space-between' }}>
-          <Image source={AppImages.WALLET} style={{width:20,height:20}}/>
+          <Image source={AppImages.WALLET} style={{width:25,height:27}}/>
           <View flex left marginL-20>
             <Text style={styles.title}>{strings.wallet}</Text>
           </View>
-       
-            <Text marginR-10 style={styles.title}>{profileDetails?.data.user.wallet ? profileDetails?.data.user.wallet : 0} USD</Text>
+          <View paddingH-10 center backgroundColor={AppColors.lightBlue}>
+            <Text style={[styles.title,{color:AppColors.white}]}>{profileDetails?.data.user.wallet ? profileDetails?.data.user.wallet : 0} USD</Text>
+            </View>
         </View>
         </View>
 

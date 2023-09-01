@@ -81,8 +81,8 @@ const MapComponent = ({latitudes, longitudes, onPress} : props) => {
         region={{
           latitude: location?.latitude || 0, // Default latitude (or any value)
           longitude: location?.longitude || 0, // Default longitude (or any value)
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitudeDelta: 0.0122,
+          longitudeDelta: 0.0061,
         }}
          onPress={handleMapPress}>
         {location && <Marker coordinate={location} />}

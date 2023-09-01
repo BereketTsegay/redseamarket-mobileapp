@@ -18,7 +18,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        top:18,
+        bottom:20,
+        position:'relative',
+        marginHorizontal:10
       },
       dropdown1BtnStyle: {
         backgroundColor: 'white',
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
         fontSize:14,
         fontFamily:AppFonts.POPPINS_SEMIBOLD,
         color:'black',
-        textAlign:'left'
+        textAlign:'left',
       },
       priceText:{
         fontSize:12,

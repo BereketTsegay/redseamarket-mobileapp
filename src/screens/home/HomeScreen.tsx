@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 import {Image, Incubator, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
@@ -10,6 +10,7 @@ import AppColors from '../../constants/AppColors';
 import {
   ActivityIndicator,
   Alert,
+  Animated,
   FlatList,
   ImageBackground,
   ScrollView,
@@ -41,6 +42,8 @@ interface Props {}
 
 const HomeScreen: React.FC<Props> = () => {
   const navigation = useNavigation<HomeScreenNavigationProps>();
+  const scrollYRef = useRef(0);
+  const [visibleBanner, setVisibleBanner] = useState(1);
   const currentLanguage = useSelector(
     (state: RootState) => state.language.currentLanguage,
   );
@@ -137,15 +140,45 @@ useEffect(() => {
     setShowCountryLanguageModal(false);
   }
 
-  // console.log(dashboardLists?.data)
-  return (
+ const  handleScroll = (event: { nativeEvent: { contentOffset: { y: any; }; }; }) => {
+    const { y } = event.nativeEvent.contentOffset;
+    const prevScrollY = scrollYRef.current;
     
-    <View flex backgroundColor="#FFFFFF" paddingB-60>
-      <ImageBackground
-        source={dashboardLists?.data.slider  ? { uri: 'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider.file } 
-        : AppImages.BG}
-        style={styles.topBackground}
-        resizeMode="stretch">
+    // Compare the current scroll position with the previous one to determine the direction.
+    // if (y > prevScrollY && visibleBanner) {
+    //   // Scrolling down
+    //     setVisibleBanner(0)
+    //     console.log(y,prevScrollY,'scroll down')
+    // } 
+    //  if (y < prevScrollY && ! visibleBanner) {
+    //    // Scrolling up
+    //         setVisibleBanner(1)
+
+    //   console.log(y,prevScrollY,'Scrolling up');
+    // }
+   
+    if (y > prevScrollY && visibleBanner) {
+      // Scrolling down
+      setVisibleBanner(0)
+    } else if (y < prevScrollY && !visibleBanner && y < 100) {
+      // Scrolling up and scrolled less than 100 units
+      setVisibleBanner(1)
+    }
+
+    scrollYRef.current = y;
+
+  };
+
+
+
+  return (
+
+    <View flex backgroundColor={AppColors.white}  paddingB-60>
+        {visibleBanner ?
+          <ImageBackground
+            source={dashboardLists?.data.slider ? { uri: 'https://admin-jamal.prompttechdemohosting.com/' + dashboardLists.data.slider.file } : AppImages.BG}
+            style={styles.topBackground}
+            resizeMode="stretch">
         <Text
           style={{
             fontSize: 15,
@@ -155,14 +188,23 @@ useEffect(() => {
           }}>
           {strings.appName}
         </Text>
+        <View flex center>
         <Text
           style={{
-            fontSize:18, fontFamily:AppFonts.POPPINS_BOLD,color:'white',alignSelf:'center'
+            fontSize:18, fontFamily:AppFonts.POPPINS_BOLD,color:'white'
           }}>
           {dashboardLists?.data.slider ? dashboardLists?.data.slider.title : 'The best place to buy your house, sell your car or find a job.'}
         </Text>
+</View>
+    
+      
+      </ImageBackground>
 
-        <View center style={styles.rowContainer}>
+      : 
+      <View marginV-20/>
+}
+
+<View center style={styles.rowContainer}>
           <TouchableOpacity onPress={() => setShowCountryLanguageModal(true)}>
             <View row style={styles.smallDropdown}>
               {selectedCountry ? (
@@ -197,10 +239,14 @@ useEffect(() => {
             </View>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
-<ScrollView style={{marginTop:30 }}>
-      <View paddingH-20 paddingB-20>
-        <Text style={styles.categoryText}>{strings.category}</Text>
+ 
+<ScrollView
+        onScroll={handleScroll}
+        scrollEventThrottle={16}>
+
+      
+      <View paddingB-20>
+        <Text style={[styles.categoryText,{marginHorizontal:10}]}>{strings.category}</Text>
         <FlatList
           data={dashboardLists?.data.categories}
           horizontal={true}
@@ -254,8 +300,8 @@ useEffect(() => {
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
             return (
-              <View marginH-20>
-                <View row centerV style={{justifyContent: 'space-between'}}>
+              <View>
+                <View row centerV marginH-10 style={{justifyContent: 'space-between'}}>
                   <Text style={styles.categoryText}>
                     {strings.popular} {commonInput.language == 'ar' ? item.arabic_name : item.name}
                   </Text>
@@ -291,7 +337,7 @@ useEffect(() => {
                         <View
                           backgroundColor="white"
                           key={index}
-                          marginR-20
+                          marginH-10
                           style={{elevation: 4, width: 125, height: 145}}>
                           <Image
                             source={
@@ -339,7 +385,9 @@ useEffect(() => {
           }}
         />
       )}
-  </ScrollView>
+
+</ScrollView>
+
       <CountryLanguageHomeModal
         isVisible={showCountryLanguageModal}
         data={countryLists?.country || []}
@@ -360,7 +408,7 @@ useEffect(() => {
         onRequestClose={() => setShowLanguageModal(false)}
       />
     </View>
-  
+
   );
 };
 
