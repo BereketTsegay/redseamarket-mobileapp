@@ -206,7 +206,8 @@ export default {
     verify1: "Verify",
     letReset: "Let's Reset",
     resetPassword: "Reset your password",
-    reset: "Reset"
+    reset: "Reset",
+    defaultText: "The best place to buy your house, sell your car or find a job."
 
 
 };
