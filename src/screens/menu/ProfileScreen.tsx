@@ -78,7 +78,8 @@ const ProfileScreen: React.FC<Props> = () => {
                 paddingH-10
                 center
                 marginR-10
-                backgroundColor={AppColors.lightBlue}>
+                backgroundColor={AppColors.lightBlue}
+                style={{borderRadius:10}}>
                 <Text style={[styles.title, {color: AppColors.white}]}>
                   {number && number}
                 </Text>
@@ -182,7 +183,7 @@ const ProfileScreen: React.FC<Props> = () => {
             <View flex left marginL-20>
               <Text style={styles.title}>{strings.wallet}</Text>
             </View>
-            <View paddingH-10 center backgroundColor={AppColors.lightBlue}>
+            <View paddingH-10 center backgroundColor={AppColors.lightBlue} style={{borderRadius:10}}>
               <Text style={[styles.title, {color: AppColors.white}]}>
                 {profileDetails?.data.user.wallet
                   ? profileDetails?.data.user.wallet

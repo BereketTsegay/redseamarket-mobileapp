@@ -167,10 +167,10 @@ const HomeScreen: React.FC<Props> = React.memo(() => {
                     'https://admin-jamal.prompttechdemohosting.com/' +
                     dashboardLists.data.slider.file,
                 }
-              : AppImages.BG
+              : AppImages.BGIMAGE
           }
           style={styles.topBackground}
-          resizeMode="stretch">
+          resizeMode="cover">
           <Text
             style={{
               fontSize: 15,

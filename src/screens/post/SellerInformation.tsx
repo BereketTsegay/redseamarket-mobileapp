@@ -387,6 +387,7 @@ const SellerInformation: React.FC<Props> = () => {
                     (terms && placeAdInput.featured == 2 && placeAdInput.featuredSelect == false) ? 1 :
                       (terms && placeAdInput.featured == 2 && placeAdInput.featuredSelect == true && placeAdInput.paymentMethod == 'account') ? 1 :
                         (terms && placeAdInput.id != 0) ? 1 :
+                        (terms && placeAdInput.featured == 1 ) ? 1 :
                           0.5
                 }}
                 onPress={() => { terms && Create() }}

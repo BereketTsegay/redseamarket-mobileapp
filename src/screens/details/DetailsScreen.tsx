@@ -85,6 +85,8 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
     });
   };
 
+  console.log(dashboardDetails?.ads[0])
+
   return (
     <>
       {dashboardDetails?.status == 'error' && (

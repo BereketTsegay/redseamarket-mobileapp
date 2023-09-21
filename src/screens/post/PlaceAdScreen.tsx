@@ -78,8 +78,6 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
     priceValue: false,
     country: false,
     state: false,
-    city: false,
-    area: false,
   });
 
   useEffect(() => {
@@ -269,9 +267,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
       !placeAdInput.titleinArabic ||
       !placeAdInput.descriptioninArabic ||
       !priceValue ||
-      !placeAdInput.state ||
-      !placeAdInput.city ||
-      !placeAdInput.area;
+      !placeAdInput.state 
 
     if (hasErrors) {
       setErrors({
@@ -281,9 +277,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
         descriptioninArabic: !placeAdInput.descriptioninArabic,
         priceValue: !priceValue,
         country: !placeAdInput.country,
-        state: !placeAdInput.state,
-        city: !placeAdInput.city,
-        area: !placeAdInput.area,
+        state: !placeAdInput.state
       });
       return;
     } else {
@@ -682,11 +676,6 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
           </View>
 
           <View>
-            {errors.city && (
-              <Text color={'red'} style={{alignSelf: 'flex-end'}}>
-                {strings.requiredField}
-              </Text>
-            )}
             <Text style={styles.labelStyle}>{strings.city}</Text>
             <ItemDropdown
               value={placeAdInput.city}
@@ -706,11 +695,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
             value={placeAdInput.area}
             onChange={text => {
               setPlaceAdInput({...placeAdInput, area: text});
-              setErrors({...errors, area: false});
             }}
-            trailing={
-              errors.area && <Text color={'red'}>{strings.requiredField}</Text>
-            }
             editable={true}
           />
 
