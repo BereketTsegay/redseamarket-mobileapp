@@ -207,7 +207,8 @@ export default {
     letReset: "Let's Reset",
     resetPassword: "Reset your password",
     reset: "Reset",
-    defaultText: "The best place to buy your house, sell your car or find a job."
+    defaultText: "The best place to buy your house, sell your car or find a job.",
+    ForgotPassword: "Forgot Password?"
 
 
 };

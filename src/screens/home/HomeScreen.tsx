@@ -95,10 +95,12 @@ const HomeScreen: React.FC<Props> = React.memo(() => {
   }, []);
 
   useEffect(() => {
+    if (selectedCountry !== null) {
     let request = JSON.stringify({
       country: selectedCountry,
     });
     dispatch(fetchDashBoardList({requestBody: request}));
+  }
   }, [selectedCountry]);
 
   useEffect(() => {

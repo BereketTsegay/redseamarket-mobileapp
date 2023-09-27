@@ -179,7 +179,7 @@ const LoginScreen: React.FC<Props> = () => {
 
       <View right marginB-20>
         <TouchableOpacity onPress={()=>navigation.replace(RouteNames.ForgotPasswordScreen)}>
-        <Text style={styles.forgotText}>Forgot Password?</Text>
+        <Text style={styles.forgotText}>{strings.ForgotPassword}</Text>
         </TouchableOpacity>
       </View>
 

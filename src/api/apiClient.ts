@@ -1,7 +1,7 @@
 import axios, {AxiosRequestConfig} from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../constants/AppStrings';
-import { ToastAndroid } from 'react-native';
+import { Alert, ToastAndroid } from 'react-native';
 
 const BASE_URL = "https://admin-jamal.prompttechdemohosting.com/api/"
 
@@ -22,8 +22,9 @@ export const apiClient = async (
           'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
       },
     },
-  );
+  );  
   return response;
+
 } 
 
 export const SimpleApiClient = async (

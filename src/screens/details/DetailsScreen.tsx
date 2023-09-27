@@ -85,7 +85,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
     });
   };
 
-  console.log(dashboardDetails?.ads[0])
+  console.log(dashboardDetails)
 
   return (
     <>

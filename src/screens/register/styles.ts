@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
       paddingVertical:5,
       borderRadius:8,
       alignItems:'center',
-      justifyContent:'center'
+      justifyContent:'center',
+      marginVertical:10
     },
     inputLayout:{
         borderBottomWidth:1,

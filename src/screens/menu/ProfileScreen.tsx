@@ -15,6 +15,7 @@ import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchJobProfileList} from '../../api/jobs/JobProfileListSlice';
+import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
 export type ProfileScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'ProfileScreen'
@@ -48,6 +49,14 @@ const ProfileScreen: React.FC<Props> = () => {
   const strings = useSelector(
     (state: RootState) => state.language.resources[currentLanguage],
   );
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(fetchProfileDetails({requestBody: ''}));
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     dispatch(fetchJobProfileList({requestBody: ''}));
