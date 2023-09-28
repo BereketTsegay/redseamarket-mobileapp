@@ -100,7 +100,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
       );
       const customData = editData.custom_value.map(item => ({
         field_id: item.field_id,
-        value: item.value,
+        value:  item.value.startsWith('storage/') ? 'https://admin-jamal.prompttechdemohosting.com/' + item.value : item.value,
       }));
       setPriceValue(editData.price);
       setPlaceAdInput({

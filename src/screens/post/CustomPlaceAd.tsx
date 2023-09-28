@@ -62,6 +62,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
     (state: RootState) => state.language.resources[currentLanguage],
   );
 
+
   useEffect(() => {}, []);
 
   const updateFieldValue = (fieldId, value) => {
@@ -84,11 +85,12 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
     }
   };
 
+
   const openDocumentFile = async id => {
     try {
       const imgs = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles && DocumentPicker.types.images],
-        allowMultiSelection: true,
+        allowMultiSelection: false,
       });
       setImage(imgs[0].uri);
       updateFieldValue(id, imgs[0].uri);
@@ -99,8 +101,26 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
     }
   };
 
-  const deleteImageAtIndex = () => {
-    setImage('');
+  const deleteImageAtIndex = (fieldIdToDelete) => {
+    // Find the index of the item with the specified field_id
+    const indexToDelete = placeAdInput.fieldValue.findIndex(
+      (field) => field.field_id === fieldIdToDelete
+    );
+  
+    if (indexToDelete !== -1) {
+      // Create a new array without the item to be deleted
+      const updatedFieldValue = [
+        ...placeAdInput.fieldValue.slice(0, indexToDelete),
+        ...placeAdInput.fieldValue.slice(indexToDelete + 1),
+      ];
+  
+      // Update placeAdInput with the new array
+      setPlaceAdInput({
+        ...placeAdInput,
+        fieldValue: updatedFieldValue,
+      });
+      setImage('')
+    }
   };
 
   const DateConfirm = (date, id) => {
@@ -228,11 +248,12 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                 <Checkbox
                   label={item.field.name}
                   labelStyle={styles.fieldText}
-                  value={getValue(item.field.id)}
+                  value={getValue(item.field.id) == 'true' ? true : false}
                   color={'grey'}
                   containerStyle={{marginBottom: 20}}
-                  onValueChange={value =>
-                    updateFieldValue(item.field.id, value)
+                  onValueChange={value =>{
+                    updateFieldValue(item.field.id, value ? 'true' : 'false')
+                  }
                   }
                 />
               ) : item.field.type == 'radio' ? (
@@ -258,7 +279,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                   ))}
           </RadioGroup>
                 </View>
-              ) : item.field.type == 'select ' ? (
+              ) : item.field.type == 'select' ? (
                 <View>
                   <Text style={styles.labelStyle}>{item.field.name}</Text>
                   <SelectDropdown
@@ -266,12 +287,12 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                     onSelect={(selectedItem, index) => {
                       updateFieldValue(item.field.id, selectedItem.value);
                     }}
-                    defaultButtonText={item.field.name}
+                    defaultButtonText={getValue(item.field.id)}
                     buttonTextAfterSelection={(selectedItem, index) => {
-                      return selectedItem.name;
+                      return selectedItem.value;
                     }}
                     rowTextForSelection={(item, index) => {
-                      return item.name;
+                      return item.value;
                     }}
                     buttonStyle={AppStyles.dropdown1BtnStyle}
                     buttonTextStyle={AppStyles.dropdown1BtnTxtStyle}
@@ -287,10 +308,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
               ) : item.field.type == 'file' ? (
                 <View marginB-20>
                   <TouchableOpacity
-                    onPress={() =>
-                      placeAdInput.image.length <= 4
-                        ? openDocumentFile(item.field.id)
-                        : null
+                    onPress={() =>openDocumentFile(item.field.id)
                     }>
                     <View
                       paddingH-15
@@ -304,7 +322,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                         },
                       ]}>
                       <Text style={styles.fieldText}>
-                        Upload {item.field.name}
+                        {item.field.name}
                       </Text>
                       <Image
                         source={AppImages.UPLOAD}
@@ -312,10 +330,10 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                       />
                     </View>
                   </TouchableOpacity>
-                  {image != '' && (
-                    <TouchableOpacity onPress={() => deleteImageAtIndex()}>
+                  {getValue(item.field.id) && (
+                    <TouchableOpacity onPress={() => deleteImageAtIndex(item.field.id)}>
                       <ImageBackground
-                        source={{uri: image}}
+                        source={{uri: getValue(item.field.id)}}
                         style={{width: 60, height: 60, marginHorizontal: 5}}>
                         <Image
                           source={AppImages.DELETE}
@@ -326,7 +344,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
                         />
                       </ImageBackground>
                     </TouchableOpacity>
-                  )}
+                 )} 
                 </View>
               ) : null)}
             </>
