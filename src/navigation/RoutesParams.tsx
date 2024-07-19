@@ -3,7 +3,7 @@ export type RootStackParams = {
   WelcomeScreen: undefined;
   LoginScreen: undefined;
   RegisterScreen: undefined;
-  OtpVerificationScreen: undefined;
+  OtpVerificationScreen: {email: any, from: any};
   BottomTabs: undefined;
   AdsScreen:undefined;
   FavoritesScreen:undefined;
@@ -31,5 +31,5 @@ export type RootStackParams = {
   HiringJobDetails: undefined;
   SearchListScreen: undefined;
   ForgotPasswordScreen: undefined;
-  PasswordResetScreen: undefined;
+  PasswordResetScreen: {email: any};
 };

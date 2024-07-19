@@ -2,6 +2,7 @@ import axios, {AxiosRequestConfig} from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../constants/AppStrings';
 import { Alert, ToastAndroid } from 'react-native';
+import { showToast } from '../constants/commonUtils';
 
 const BASE_URL = "https://admin-jamal.prompttechdemohosting.com/api/"
 
@@ -10,6 +11,7 @@ export const apiClient = async (
   method: string,
   requestBody: any,
 ) => {
+  try{
   const response = await axios(
     BASE_URL + endPoint,
     {
@@ -22,8 +24,22 @@ export const apiClient = async (
           'Bearer ' + (await AsyncStorage.getItem(AppStrings.ACCESS_TOKEN)),
       },
     },
-  );  
+  );
   return response;
+} catch (error: any) {
+  if (error.code === 'ERR_NETWORK') {
+    showToast('Request timed out');
+  } else if (error.response) {
+    // Update UI accordingly
+    showToast(error.response.data.message);
+    console.log(error.response.data);
+  } else if (error.request) {
+    showToast(error.request);
+  } else {
+    showToast(`Error message: ${error.message}`);
+  }
+  throw error; // Rethrow the error to propagate it to the calling code
+}
 
 } 
 
@@ -45,12 +61,19 @@ export const SimpleApiClient = async (
     },
   );
   return response;
-} catch (error) {
-  ToastAndroid.show(
-    JSON.stringify('Error in API call:' + error),
-    ToastAndroid.SHORT,
-  );
-  throw error; // Rethrow the error or handle it as needed.
+} catch (error: any) {
+  if (error.code === 'ERR_NETWORK') {
+    showToast('Request timed out');
+  } else if (error.response) {
+    // Update UI accordingly
+    showToast(error.response.data.message);
+    console.log(error.response.data);
+  } else if (error.request) {
+    showToast(error.request);
+  } else {
+    showToast(`Error message: ${error.message}`);
+  }
+  throw error; // Rethrow the error to propagate it to the calling code
 }
 }
 
@@ -70,12 +93,19 @@ try {
     },
   });
   return response;
-} catch (error) {
-  ToastAndroid.show(
-    JSON.stringify('Error in API call:' + error),
-    ToastAndroid.SHORT,
-  );
-  throw error; // Rethrow the error or handle it as needed.
+} catch (error: any) {
+  if (error.code === 'ERR_NETWORK') {
+    showToast('Request timed out');
+  } else if (error.response) {
+    // Update UI accordingly
+    showToast(error.response.data.message);
+    console.log(error.response.data);
+  } else if (error.request) {
+    showToast(error.request);
+  } else {
+    showToast(`Error message: ${error.message}`);
+  }
+  throw error; // Rethrow the error to propagate it to the calling code
 }
 }
 
