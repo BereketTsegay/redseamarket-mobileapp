@@ -13,6 +13,7 @@ const MotorDetails = ({ features, details }) => {
   const strings = useSelector(
     (state: RootState) => state.language.resources[currentLanguage],
   );
+  console.log(features, 'motors')
 
   return (
     <View marginT-10>

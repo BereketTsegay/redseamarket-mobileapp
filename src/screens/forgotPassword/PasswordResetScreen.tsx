@@ -4,7 +4,7 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {ActivityIndicator, ImageBackground, Pressable, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, ImageBackground, Pressable, ScrollView, TouchableOpacity} from 'react-native';
 import AppImages from '../../constants/AppImages';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AppColors from '../../constants/AppColors';
 import styles from '../register/styles';
 import { createLogin, reset } from '../../api/login/LoginCreateSlice';
+import { showToast } from '../../constants/commonUtils';
 
 const {TextField} = Incubator;
 
@@ -88,17 +89,11 @@ const PasswordResetScreen: React.FC<Props> = ({route}) => {
 
   if (LoginData != null) {
     if (!loadingLogin && !LoginError && LoginData.status == 'success') {
-      ToastAndroid.show(
-        JSON.stringify(LoginData.message),
-        ToastAndroid.SHORT,
-      );
+      showToast(LoginData.message)
      
       navigation.replace(RouteNames.LoginScreen)
     } else{
-        ToastAndroid.show(
-          JSON.stringify(LoginData.message),
-          ToastAndroid.SHORT,
-        );
+      showToast(LoginData.message)
     }
   }
   }, [LoginData]);
@@ -117,7 +112,7 @@ const PasswordResetScreen: React.FC<Props> = ({route}) => {
     <View style={styles.view}>
       <Text style={styles.heading}>{strings.resetPassword}</Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
       <View>
 <TextField
       fieldStyle={styles.inputLayout}

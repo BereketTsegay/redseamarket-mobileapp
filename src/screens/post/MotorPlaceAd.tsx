@@ -176,7 +176,7 @@ const MotorPlaceAd: React.FC<Props> = ({route}) => {
         {strings.tellUs} {name}
       </Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
         <View marginV-20>
           <View>
             {errors.make_id && (

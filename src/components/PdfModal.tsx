@@ -1,10 +1,11 @@
 import React from 'react';
-import { Alert, Modal, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity } from 'react-native';
+import { Alert, Modal, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import Pdf from 'react-native-pdf';
 import { Button, Image, Text, View } from 'react-native-ui-lib';
 import AppFonts from '../constants/AppFonts';
 import RNFS from 'react-native-fs'
 import AppImages from '../constants/AppImages';
+import { showToast } from '../constants/commonUtils';
 
 interface Props {
     visible: any;
@@ -29,21 +30,12 @@ const PdfModal = ({ visible, pdfUrl, onClose, jobStatus}: Props) => {
           const result = await RNFS.downloadFile(options).promise;
     
           if (result.statusCode === 200) {
-            ToastAndroid.show(
-                JSON.stringify('PDF Downloaded Successfully!' + 'Downloaded File Path:' + pdfFilePath),
-                ToastAndroid.SHORT,
-              );
+              showToast('PDF Downloaded Successfully!' + 'Downloaded File Path:' + pdfFilePath);
           } else {
-            ToastAndroid.show(
-                JSON.stringify('Failed to download PDF!'),
-                ToastAndroid.SHORT,
-              );
+           showToast('Failed to download PDF!')
           }
         } catch (error) {
-          ToastAndroid.show(
-            JSON.stringify('Error while downloading PDF:' + error),
-            ToastAndroid.SHORT,
-          );
+         showToast('Error while downloading PDF:' + error)
         }
       };
   return (

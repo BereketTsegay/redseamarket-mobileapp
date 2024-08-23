@@ -132,7 +132,7 @@ const SaleRentPlaceAd: React.FC<Props> = ({route}) => {
 
       <Text style={styles.AdTitle}>{strings.tellUs} {name}</Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
         <View marginV-20>
           <InputField
           label={strings.size}

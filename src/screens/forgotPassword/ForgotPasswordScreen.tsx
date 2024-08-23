@@ -4,7 +4,7 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {ActivityIndicator, ImageBackground, Pressable, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, ImageBackground, TouchableOpacity} from 'react-native';
 import AppImages from '../../constants/AppImages';
 import AppColors from '../../constants/AppColors';
 import AppFonts from '../../constants/AppFonts';
@@ -13,6 +13,7 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from '../login/styles';
 import { SimpleApiClient } from '../../api/apiClient';
+import { showToast } from '../../constants/commonUtils';
 
 const {TextField} = Incubator;
 export type ForgotPasswordScreenNavigationProps = NativeStackNavigationProp<
@@ -59,17 +60,11 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
   SimpleApiClient('app/forgot/password/send/toMail', 'POST', request)
   .then(request => {
     if(request.data.status == 'success'){
-      ToastAndroid.show(
-        JSON.stringify(request.data.message),
-        ToastAndroid.SHORT,
-      );
+    showToast(request.data.message)
       navigation.replace(RouteNames.OtpVerificationScreen,{email:email,from:'forgot'})
     }
     else{
-      ToastAndroid.show(
-        JSON.stringify(request.data.message),
-        ToastAndroid.SHORT,
-      )
+      showToast(request.data.message)
     }
     setLoading(false)
   })

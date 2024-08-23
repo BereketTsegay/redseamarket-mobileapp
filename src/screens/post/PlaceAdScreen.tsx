@@ -15,7 +15,6 @@ import {
   FlatList,
   ImageBackground,
   ScrollView,
-  ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
@@ -36,6 +35,7 @@ import {CommonContext} from '../../api/commonContext';
 import {SimpleApiClient, apiClient} from '../../api/apiClient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
+import { showToast } from '../../constants/commonUtils';
 const {TextField} = Incubator;
 export type PlaceAdScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -334,10 +334,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
       });
       apiClient('customer/ads/remove_image', 'POST', request)
         .then(response => {
-          ToastAndroid.show(
-            JSON.stringify(response.data.message),
-            ToastAndroid.SHORT,
-          );
+        showToast(response.data.message)
         })
         .catch(error => {
           console.error('Image deletion error:', error);
@@ -471,7 +468,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
         {strings.tellUs} {placeAdInput.category_Name}
       </Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
         <View marginV-20>
           <InputField
             label={strings.engTitle}

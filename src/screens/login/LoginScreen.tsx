@@ -4,7 +4,7 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {ActivityIndicator, ImageBackground, Pressable, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, ImageBackground, Pressable, ScrollView, TouchableOpacity} from 'react-native';
 import AppImages from '../../constants/AppImages';
 import AppColors from '../../constants/AppColors';
 import AppFonts from '../../constants/AppFonts';
@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createLogin, reset } from '../../api/login/LoginCreateSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
+import { showToast } from '../../constants/commonUtils';
 
 const {TextField} = Incubator;
 export type LoginScreenNavigationProps = NativeStackNavigationProp<
@@ -83,29 +84,25 @@ const LoginScreen: React.FC<Props> = () => {
  
   if (LoginData != null) {
     if (!loadingLogin && !LoginError && LoginData.status == 'success') {
-      ToastAndroid.show(
-        JSON.stringify(LoginData.message),
-        ToastAndroid.SHORT,
-      );
+    showToast(LoginData.message);
       AsyncStorage.setItem(
         AppStrings.ACCESS_TOKEN,
         LoginData.token == null ? '' : LoginData.token,
+      );
+
+      AsyncStorage.setItem(
+        AppStrings.USER_EMAIL,
+        LoginData.email == null ? '' : LoginData.email,
       );
      
       navigation.replace(RouteNames.BottomTabs)
     } else if (LoginData.status == 'error') {
       if(LoginData.message == 'User Not Verified'){
-        ToastAndroid.show(
-          JSON.stringify(LoginData.message),
-          ToastAndroid.SHORT,
-        );
+        showToast(LoginData.message);
         navigation.replace(RouteNames.OtpVerificationScreen,{email:email,from:'login'})
       }
       else{
-        ToastAndroid.show(
-          JSON.stringify(LoginData.message),
-          ToastAndroid.SHORT,
-        );
+        showToast(LoginData.message);
       }
      
     }
@@ -125,7 +122,7 @@ const LoginScreen: React.FC<Props> = () => {
     <View style={styles.view}>
       <Text style={styles.heading}>{strings.Login}</Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
       <View>
       <TextField
       fieldStyle={styles.inputLayout}

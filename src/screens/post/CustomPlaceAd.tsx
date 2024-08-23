@@ -165,7 +165,7 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
         {strings.tellUs} {name}
       </Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
         <View marginV-20>
           {customLists?.data.category_field.map(item => (
             <>

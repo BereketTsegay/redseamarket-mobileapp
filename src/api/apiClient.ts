@@ -27,12 +27,12 @@ export const apiClient = async (
   );
   return response;
 } catch (error: any) {
+  console.log(error, endPoint)
   if (error.code === 'ERR_NETWORK') {
     showToast('Request timed out');
   } else if (error.response) {
     // Update UI accordingly
     showToast(error.response.data.message);
-    console.log(error.response.data);
   } else if (error.request) {
     showToast(error.request);
   } else {
@@ -62,12 +62,12 @@ export const SimpleApiClient = async (
   );
   return response;
 } catch (error: any) {
+  console.log(error, endPoint)
   if (error.code === 'ERR_NETWORK') {
     showToast('Request timed out');
   } else if (error.response) {
     // Update UI accordingly
     showToast(error.response.data.message);
-    console.log(error.response.data);
   } else if (error.request) {
     showToast(error.request);
   } else {
@@ -94,12 +94,12 @@ try {
   });
   return response;
 } catch (error: any) {
+  console.log(error, endPoint)
   if (error.code === 'ERR_NETWORK') {
     showToast('Request timed out');
   } else if (error.response) {
     // Update UI accordingly
     showToast(error.response.data.message);
-    console.log(error.response.data);
   } else if (error.request) {
     showToast(error.request);
   } else {

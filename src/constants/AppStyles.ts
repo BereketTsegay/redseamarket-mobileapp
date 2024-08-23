@@ -11,7 +11,8 @@ const AppStyles = StyleSheet.create({
         paddingHorizontal: 15,
         backgroundColor:'white',
         width:'100%',
-        marginBottom:10
+        marginBottom:10,
+        marginTop:4
         
       },
       dropdown1BtnTxtStyle: {   fontSize:12,

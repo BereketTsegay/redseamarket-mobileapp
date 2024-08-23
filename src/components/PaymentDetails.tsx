@@ -16,8 +16,9 @@ import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {PlaceAdContext} from '../api/placeAd/PlaceAdContext';
 import InputField from './InputField';
 import AppColors from '../constants/AppColors';
-import {ActivityIndicator, ToastAndroid} from 'react-native';
+import {ActivityIndicator} from 'react-native';
 import {createPayment, reset} from '../api/stripe/StripePaymentSlice';
+import { showToast } from '../constants/commonUtils';
 
 const PaymentDetails = ({amount, value}) => {
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
@@ -113,15 +114,9 @@ const PaymentDetails = ({amount, value}) => {
       // console.log(paymentData);
       if (!loadingPayment && !paymentError && paymentData.status) {
         value(paymentData.payment_id);
-        ToastAndroid.show(
-          JSON.stringify('Payment' + paymentData.message),
-          ToastAndroid.SHORT,
-        );
+        showToast('Payment' + paymentData.message);
       } else {
-        ToastAndroid.show(
-          JSON.stringify(paymentData.message),
-          ToastAndroid.SHORT,
-        );
+        showToast(paymentData.message);
       }
     }
   }, [paymentData]);

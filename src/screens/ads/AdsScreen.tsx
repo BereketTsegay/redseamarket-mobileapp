@@ -6,7 +6,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import styles from '../fav/styles';
 import AppImages from '../../constants/AppImages';
-import { ActivityIndicator, Dimensions, FlatList, ToastAndroid, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import AppColors from '../../constants/AppColors';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +19,7 @@ import { CommonContext } from '../../api/commonContext';
 import PdfModal from '../../components/PdfModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
+import { showToast } from '../../constants/commonUtils';
 export type AdsScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'AdsScreen'
@@ -71,16 +72,11 @@ const AdsScreen: React.FC<Props> = () => {
       .then(response=>{
         if(response.data.status == 'success'){
           list()
-          ToastAndroid.show(
-            JSON.stringify(response.data.message),
-            ToastAndroid.SHORT,
-          );
+       showToast(response.data.message)
         }
         else{
-          ToastAndroid.show(
-            JSON.stringify(response.data.message),
-            ToastAndroid.SHORT,
-          );
+        
+          showToast(response.data.message)
         }
       })
     }

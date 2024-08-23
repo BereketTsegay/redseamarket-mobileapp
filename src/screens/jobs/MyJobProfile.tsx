@@ -16,8 +16,6 @@ import {
   ImageBackground,
   Modal,
   ScrollView,
-  TextInput,
-  ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
@@ -41,6 +39,7 @@ import {
   UpdateReset,
   updateJobProfile,
 } from '../../api/jobs/JobProfileUpdateSlice';
+import { showToast } from '../../constants/commonUtils';
 const {TextField} = Incubator;
 export type MyJobProfileNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -240,14 +239,11 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
   if (jobSaveData != null) {
     // console.log(jobSaveData)
     if (!loadingSavedJob && !jobSaveError && jobSaveData.status == 'success') {
-      ToastAndroid.show(
-        JSON.stringify('Profile Added Successfully'),
-        ToastAndroid.SHORT,
-      );
+    showToast('Profile Added Successfully')
       navigation.replace('JobProfile', {screen: RouteNames.MyJobDetails});
     } else {
       // console.log(jobSaveData,'failure')
-      ToastAndroid.show(JSON.stringify('error'), ToastAndroid.SHORT);
+      showToast(JSON.stringify('error'))
     }
   }
 
@@ -257,13 +253,10 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
       !jobUpdateError &&
       jobUpdateData.status == 'success'
     ) {
-      ToastAndroid.show(
-        JSON.stringify('Profile Updated Successfully'),
-        ToastAndroid.SHORT,
-      );
+      showToast('Profile Updated Successfully')
       navigation.replace('JobProfile', {screen: RouteNames.MyJobDetails});
     } else {
-      ToastAndroid.show(JSON.stringify('error'), ToastAndroid.SHORT);
+      showToast(JSON.stringify('error'))
     }
   }
 
@@ -285,7 +278,7 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
 
       <Text style={styles.AdTitle}>{strings.addJobProfile}</Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
         <View marginV-20>
           <InputField
             label={strings.jobTitle}

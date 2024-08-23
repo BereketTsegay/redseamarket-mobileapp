@@ -15,7 +15,6 @@ import {
   ActivityIndicator,
   FlatList,
   ScrollView,
-  ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
 import AppImages from '../../constants/AppImages';
@@ -30,6 +29,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {PlaceAdRequest} from '../../api/placeAd/PlaceAdRequest';
 import MapComponent from '../../components/MapComponent';
 import PaymentType from '../../components/PaymentType';
+import { showToast } from '../../constants/commonUtils';
 const {TextField} = Incubator;
 export type SellerInformationNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -278,20 +278,14 @@ const SellerInformation: React.FC<Props> = () => {
   useEffect(() => {
     if (PlaceAdData != null) {
       if (!loadingPlaceAd && !PlaceAdError && PlaceAdData.status == 'success') {
-        ToastAndroid.show(
-          JSON.stringify(PlaceAdData.message),
-          ToastAndroid.SHORT,
-        );
+   showToast(PlaceAdData.message)
         // console.log(PlaceAdData,'success')
         navigation.navigate(RouteNames.SuccessPage, {
           status: placeAdInput.id == 0 ? 'PostAd' : 'UpdateAd',
         });
       } else {
         // console.log(PlaceAdData,'failure')
-        ToastAndroid.show(
-          JSON.stringify(PlaceAdData.message),
-          ToastAndroid.SHORT,
-        );
+        showToast(PlaceAdData.message)
       }
     }
   }, [PlaceAdData]);
@@ -314,7 +308,7 @@ const SellerInformation: React.FC<Props> = () => {
 
       <Text style={styles.AdTitle}>{strings.seller}</Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
         <View marginV-20>
           <InputField
             label={strings.name}

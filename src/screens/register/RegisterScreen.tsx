@@ -4,7 +4,7 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {ActivityIndicator, ImageBackground, Pressable, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, ImageBackground, Pressable, ScrollView, TouchableOpacity} from 'react-native';
 import AppImages from '../../constants/AppImages';
 import styles from './styles';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
@@ -12,6 +12,7 @@ import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { createRegister, reset } from '../../api/register/RegisterCreateSlice';
 import AppColors from '../../constants/AppColors';
+import { showToast } from '../../constants/commonUtils';
 
 const {TextField} = Incubator;
 
@@ -111,16 +112,10 @@ const RegisterScreen: React.FC<Props> = () => {
 
   if (RegisterData != null) {
     if (!loadingRegister && !RegisterError && RegisterData.status == 'success') {
-      ToastAndroid.show(
-        JSON.stringify(RegisterData.message),
-        ToastAndroid.SHORT,
-      );
+      showToast(RegisterData.message)
       navigation.replace(RouteNames.OtpVerificationScreen,{email:email,from:'register'})
     } else if (RegisterData.status == 'error') {
-      ToastAndroid.show(
-        JSON.stringify(RegisterData.message),
-        ToastAndroid.SHORT,
-      );
+      showToast(RegisterData.message)
     }
   }
 
@@ -139,7 +134,7 @@ const RegisterScreen: React.FC<Props> = () => {
     <View style={styles.view}>
       <Text style={styles.heading}>{strings.signUp}</Text>
       
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
       <View>
 <TextField
       fieldStyle={styles.inputLayout}

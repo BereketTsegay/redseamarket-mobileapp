@@ -18,7 +18,6 @@ import {
   Modal,
   ScrollView,
   TextInput,
-  ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
 import AppImages from '../../constants/AppImages';
@@ -31,6 +30,7 @@ import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {JobApplyRequest} from '../../api/jobApply/JobApplyRequest';
 import {applyJob, reset} from '../../api/jobApply/JobApplySlice';
+import { showToast } from '../../constants/commonUtils';
 const {TextField} = Incubator;
 export type JobApplyNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -155,14 +155,11 @@ const JobApply: React.FC<Props> = ({id}) => {
       !jobApplyError &&
       jobApplyData.status == 'success'
     ) {
-      ToastAndroid.show(
-        JSON.stringify('Job Applied Successfully'),
-        ToastAndroid.SHORT,
-      );
+     showToast('Job Applied Successfully')
       navigation.replace(RouteNames.SuccessPage,{status:'JobApply'});
     } else {
       // console.log(jobSaveData,'failure')
-      ToastAndroid.show(JSON.stringify('error'), ToastAndroid.SHORT);
+     showToast(JSON.stringify('error'))
     }
   }
 
@@ -184,7 +181,7 @@ const JobApply: React.FC<Props> = ({id}) => {
 
       <Text style={styles.AdTitle}>{strings.moreAbout}</Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
         <View marginV-20>
           <InputField
           label={strings.totalExp}

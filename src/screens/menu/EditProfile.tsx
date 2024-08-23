@@ -18,7 +18,6 @@ import {
   Modal,
   ScrollView,
   TextInput,
-  ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
 import AppImages from '../../constants/AppImages';
@@ -32,6 +31,7 @@ import {ProfileEditRequest} from '../../api/profile/ProfileEditRequest';
 import ItemDropdown from '../../components/ItemDropdown';
 import {UpdateProfile, reset} from '../../api/profile/ProfileEditSlice';
 import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
+import { showToast } from '../../constants/commonUtils';
 const {TextField} = Incubator;
 export type EditProfileNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -149,11 +149,11 @@ const EditProfile: React.FC<Props> = () => {
   if (EditData != null) {
     // console.log(jobSaveData)
     if (!loadingEdit && !EditingError && EditData.status == 'success') {
-      ToastAndroid.show(JSON.stringify(EditData.message), ToastAndroid.SHORT);
+      showToast(JSON.stringify(EditData.message))
       navigation.goBack();
     } else {
       // console.log(jobSaveData,'failure')
-      ToastAndroid.show(EditData.message, ToastAndroid.SHORT);
+      showToast(EditData.message)
     }
   }
 
@@ -175,7 +175,7 @@ const EditProfile: React.FC<Props> = () => {
 
       <Text style={styles.AdTitle}>{strings.editProfile}</Text>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
         <View marginV-10>
           <TouchableOpacity onPress={openDocumentFile}>
             <View style={styles.imageView}>

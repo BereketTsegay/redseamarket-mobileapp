@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ToastAndroid, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { Image, View } from "react-native-ui-lib";
 import AppColors from "../constants/AppColors";
 import AppImages from "../constants/AppImages";
@@ -8,6 +8,7 @@ import { RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { createFavorite, reset } from "../api/favorites/FavCreateSlice";
 import styles from "../screens/details/styles";
+import { showToast } from "../constants/commonUtils";
 
 const FavoriteComponent = ({id,status}) => {
     const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
@@ -33,7 +34,7 @@ const FavoriteComponent = ({id,status}) => {
               dispatch(reset());
             })
         } catch (error) {
-          ToastAndroid.show('An error occurred', ToastAndroid.SHORT);
+          showToast('An error occurred');
         }
       };
 
@@ -41,16 +42,10 @@ const FavoriteComponent = ({id,status}) => {
     
       if (FavData != null) {
         if (!loadingFav && !FavError && FavData.status == 'success') {
-          ToastAndroid.show(
-            JSON.stringify(FavData.message),
-            ToastAndroid.SHORT,
-          );
+          showToast(FavData.message);
         }
           else{
-            ToastAndroid.show(
-              JSON.stringify(FavData.message),
-              ToastAndroid.SHORT,
-            );
+            showToast(FavData.message);
           }
          
         }

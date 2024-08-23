@@ -9,7 +9,6 @@ import {
   Alert,
   Linking,
   ScrollView,
-  ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
@@ -29,6 +28,8 @@ import moment from 'moment';
 import MapComponent from '../../components/MapComponent';
 import DirectPaymentModal from '../../components/DirectPaymentModal';
 import {CommonContext} from '../../api/commonContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppStrings from '../../constants/AppStrings';
 export type DetailsScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'DetailsScreen'
@@ -57,6 +58,7 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
     (state: RootState) => state.DashBoardDetails,
   );
   const {currencyLists} = useSelector((state: RootState) => state.CurrencyList);
+  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -66,7 +68,11 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
     return unsubscribe;
   }, [navigation]);
 
-  const list = () => {
+  const list = async () => {
+    const email = await AsyncStorage.getItem(AppStrings.USER_EMAIL);
+    if (email != null) {
+      setUserEmail(email);
+    }
     let request = JSON.stringify({
       ads_id: adId,
       country_id: countryId,
@@ -84,8 +90,6 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
       Alert.alert('No email app found on the device');
     });
   };
-
-  console.log(dashboardDetails)
 
   return (
     <>
@@ -107,33 +111,35 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
 
       {loadingDashBoardDetail ? (
         <View flex center>
-        <ActivityIndicator color={AppColors.blue} size={30} />
+          <ActivityIndicator color={AppColors.blue} size={30} />
         </View>
       ) : (
         dashboardDetails?.ads.length != 0 && (
           <View flex backgroundColor="#FFFFFF">
-            <CarouselView data={dashboardDetails?.ads[0].image} />
-            <View
-              row
-              padding-20
-              style={{
-                justifyContent: 'space-between',
-                width: '100%',
-                position: 'absolute',
-              }}>
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <View style={styles.circle}>
-                  <Image
-                    source={AppImages.ARROW_LEFT}
-                    style={{width: 25, height: 25}}
-                  />
-                </View>
-              </TouchableOpacity>
-              {/* <View style={styles.circle}></View> */}
+            <View style={{flex: 0.35}}>
+              <CarouselView data={dashboardDetails?.ads[0].image} />
+              <View
+                row
+                padding-20
+                style={{
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  position: 'absolute',
+                }}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <View style={styles.circle}>
+                    <Image
+                      source={AppImages.ARROW_LEFT}
+                      style={{width: 25, height: 25}}
+                    />
+                  </View>
+                </TouchableOpacity>
+                {/* <View style={styles.circle}></View> */}
+              </View>
             </View>
 
             <View flex>
-              <ScrollView>
+              <ScrollView contentContainerStyle={{flexGrow: 1}}>
                 <View paddingH-20 paddingB-85>
                   <View row centerV style={{justifyContent: 'space-between'}}>
                     <Text style={styles.priceText}>
@@ -252,7 +258,9 @@ const DetailsScreen: React.FC<Props> = ({route}) => {
                       </View>
                     )}
 
-                  {dashboardDetails?.ads[0].category &&
+                  {dashboardDetails?.ads[0].seller_information.email !=
+                    userEmail &&
+                    dashboardDetails?.ads[0].category &&
                     dashboardDetails?.ads[0].category.name == 'Jobs' &&
                     dashboardDetails.ads[0].status == 1 && (
                       <Button

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import { PermissionsAndroid, Platform, StyleSheet, ToastAndroid, View } from 'react-native';
+import { PermissionsAndroid, Platform, StyleSheet, View } from 'react-native';
+import { showToast } from '../constants/commonUtils';
 
 interface props {
   latitudes? : any;
@@ -31,16 +32,10 @@ const MapComponent = ({latitudes, longitudes, onPress} : props) => {
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
           );
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            ToastAndroid.show(
-              JSON.stringify('Location permission granted'),
-              ToastAndroid.SHORT,
-            );
+            showToast('Location permission granted');
             getCurrentLocation();
           } else {
-            ToastAndroid.show(
-              JSON.stringify('Location permission denied'),
-              ToastAndroid.SHORT,
-            );
+            showToast('Location permission denied');
           }
         } catch (err) {
           console.warn(err);

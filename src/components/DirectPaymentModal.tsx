@@ -1,6 +1,6 @@
 // CountrySelectionModal.tsx
 import React, { useState } from 'react';
-import {Modal, FlatList, TouchableOpacity, Image, ToastAndroid, ScrollView, ImageBackground} from 'react-native';
+import {Modal, FlatList, TouchableOpacity, Image, ScrollView, ImageBackground} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import InputField from './InputField';
 import AppStyles from '../constants/AppStyles';
@@ -11,6 +11,7 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { UploadPaymentDocument, reset } from '../api/directPayment/DirectPaymentSlice';
+import { showToast } from '../constants/commonUtils';
 
 interface Props {
   isVisible: boolean;
@@ -107,13 +108,10 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
       !directPaymentError &&
       directPaymentData.status == 'success'
     ) {
-      ToastAndroid.show(
-        JSON.stringify(directPaymentData.message),
-        ToastAndroid.SHORT,
-      );
+      showToast(directPaymentData.message);
     } else {
       // console.log(jobSaveData,'failure')
-      ToastAndroid.show(JSON.stringify(directPaymentData.message), ToastAndroid.SHORT);
+      showToast(directPaymentData.message);
     }
   }
   return (

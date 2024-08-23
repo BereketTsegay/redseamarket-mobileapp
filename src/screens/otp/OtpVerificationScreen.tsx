@@ -4,7 +4,7 @@ import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {ActivityIndicator, ImageBackground, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, ImageBackground,  TouchableOpacity} from 'react-native';
 import AppImages from '../../constants/AppImages';
 import OTPTextView from 'react-native-otp-textinput'
 import styles from './styles';
@@ -14,6 +14,7 @@ import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { VerifyOtp, reset } from '../../api/otp/OtpVerificationSlice';
 import { ResendOtp, ResendReset } from '../../api/otp/OtpResendSlice';
+import { showToast } from '../../constants/commonUtils';
 
 const {TextField} = Incubator;
 export type OtpVerificationScreenNavigationProps = NativeStackNavigationProp<
@@ -65,10 +66,7 @@ const OtpVerificationScreen: React.FC<Props> = ({route}) => {
   if (OtpData != null) {
     if (!loadingOtp && !OtpError && OtpData.status == 'success') {
       
-      ToastAndroid.show(
-        JSON.stringify(OtpData.message),
-        ToastAndroid.SHORT,
-      );
+    showToast(OtpData.message)
       if(from == 'register'){
       navigation.replace(RouteNames.LoginScreen)}
       else if(from == 'login'){
@@ -82,10 +80,7 @@ const OtpVerificationScreen: React.FC<Props> = ({route}) => {
 
     } else if (OtpData.status == 'error') {
       
-      ToastAndroid.show(
-        JSON.stringify(OtpData.message),
-        ToastAndroid.SHORT,
-      );
+      showToast(OtpData.message)
     }
   }
 
@@ -102,15 +97,9 @@ const OtpVerificationScreen: React.FC<Props> = ({route}) => {
 
     if (OtpResendData != null) {
     if (!loadingOtpResend && !OtpResendError && OtpResendData.status == 'success') {
-      ToastAndroid.show(
-        JSON.stringify(OtpResendData.message),
-        ToastAndroid.SHORT,
-      );
+      showToast(OtpResendData.message)
     } else if (OtpResendData.status == 'error') {
-      ToastAndroid.show(
-        JSON.stringify(OtpResendData.message),
-        ToastAndroid.SHORT,
-      );
+      showToast(OtpResendData.message)
     }
   }
 

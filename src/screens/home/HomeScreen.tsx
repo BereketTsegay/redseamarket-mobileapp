@@ -15,7 +15,6 @@ import {
   ImageBackground,
   LayoutAnimation,
   ScrollView,
-  ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
@@ -31,6 +30,7 @@ import CountryLanguageHomeModal from '../../components/CountryLanguageHomeModal'
 import {setLanguage} from '../../api/language/languageSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
+import { showToast } from '../../constants/commonUtils';
 const {TextField} = Incubator;
 export type HomeScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -87,7 +87,7 @@ const HomeScreen: React.FC<Props> = React.memo(() => {
           setShowCountryLanguageModal(true);
         }
       } catch (error) {
-        ToastAndroid.show(JSON.stringify(error), ToastAndroid.SHORT);
+        showToast(JSON.stringify(error))
       }
     };
   
@@ -105,7 +105,7 @@ const HomeScreen: React.FC<Props> = React.memo(() => {
 
   useEffect(() => {
     let request = JSON.stringify({
-      country: selectedCountry,
+      country: selectedCountry ? selectedCountry : 229,
     });
     dispatch(fetchCurrencyList({requestBody: request}));
   }, [selectedCountry]);

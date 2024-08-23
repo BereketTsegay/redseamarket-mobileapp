@@ -10,7 +10,7 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFavList } from '../../api/favorites/FavListSlice';
-import { ActivityIndicator, Dimensions, FlatList, ToastAndroid, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import AppColors from '../../constants/AppColors';
 import Header from '../../components/Header';
 import { CommonContext } from '../../api/commonContext';
