@@ -1,7 +1,9 @@
 export class PlaceAdRequest{
     category: Number = 0;
     subcategory: Number = 0;
+    innercategory: Number = 0;
     category_Name: String = '';
+    categoryPath: [] = [];
     //first place add screen
     title: String = '';
     titleinArabic: String = '';

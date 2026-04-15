@@ -1,7 +1,7 @@
 // CountrySelectionModal.tsx
 import React, { useState } from 'react';
 import {Modal, FlatList, TouchableOpacity, Image, ScrollView, ImageBackground} from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
+import { pick, types } from '@react-native-documents/picker';
 import InputField from './InputField';
 import AppStyles from '../constants/AppStyles';
 import AppColors from '../constants/AppColors';
@@ -39,12 +39,13 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
 
   const openDocumentFiles = async () => {
     try {
-      const files = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-        // allowMultiSelection: true,
+      const files = await pick({
+        mode: 'open',
+        // allowMultiSelection: multi === true,
+        type: [types.allFiles],
       });
 
-      const selectedImages = files.map(file => ({
+      const selectedImages = files[0].map(file => ({
         uri: file.uri,
         type: file.type,
         name: file.name,
@@ -53,9 +54,8 @@ const DirectPaymentModal: React.FC<Props> = ({ isVisible, ad_id, onRequestClose 
       setImages([...images, ...selectedImages]);
       setErrors({ ...errors, images: false });
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        throw err;
-      }
+     console.log('Picker error:', err);
+    showToast('User cancelled picker cancelled');
     }
   };
 

@@ -4,7 +4,7 @@ import AppStrings from '../constants/AppStrings';
 import { Alert, ToastAndroid } from 'react-native';
 import { showToast } from '../constants/commonUtils';
 
-const BASE_URL = "https://admin-jamal.prompttechdemohosting.com/api/"
+const BASE_URL = "https://demo.redsea-market.com/api/v1/"
 
 export const apiClient = async (
   endPoint: string,

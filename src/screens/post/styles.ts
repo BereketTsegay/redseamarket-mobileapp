@@ -3,24 +3,69 @@ import AppFonts from '../../constants/AppFonts';
 import AppColors from '../../constants/AppColors';
 
 const styles = StyleSheet.create({
-  circle: {
-    height: 25,
-    width: 25,
-    borderRadius: 20,
+  backBtn: {
+    height: 42,
+    width: 42,
+    borderRadius: 14,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
     elevation: 3,
   },
+
   heading: {
     fontSize: 20,
     fontFamily: AppFonts.POPPINS_SEMIBOLD,
-    color: 'black',
+    color: '#111',
   },
+
   subHeading: {
-    fontSize: 10,
-    fontFamily: AppFonts.POPPINS_LIGHT,
-    color: 'black',
+    fontSize: 12,
+    fontFamily: AppFonts.POPPINS_REGULAR,
+    color: '#8A8A8A',
+    marginTop: 2,
+  },
+
+  container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+
+  // 🔥 NEW TILE DESIGN (KEY UPGRADE)
+  tile: {
+    width: '48%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    paddingVertical: 10,
+    marginBottom: 18,
+    alignItems: 'center',
+  },
+
+  tileIconBg: {
+    width: 58,
+    height: 58,
+    borderRadius: 14,
+    backgroundColor: '#F0F4FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+
+  tileIcon: {
+    width: 35,
+    height: 35,
+    resizeMode: 'contain',
+  },
+
+  tileText: {
+    fontSize: 13,
+    fontFamily: AppFonts.POPPINS_MEDIUM,
+    color: '#222',
+    textAlign: 'center',
   },
   AdTitle: {
     fontSize: 18,
@@ -28,23 +73,6 @@ const styles = StyleSheet.create({
     color: 'black',
     alignSelf:'center',
     marginVertical:10
-  },
-  container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    flex:1,
-    marginVertical:30
-  },
-  itemContainer: {
-    width: '50%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  title:{
-    fontSize: 12,
-    fontFamily: AppFonts.POPPINS_REGULAR,
-    color: 'black',
   },
   fieldStyle:{
     borderWidth:1,
@@ -96,6 +124,20 @@ color:'black'
     color:'black',
     top:2,
     left:2
-  }
+  },
+
+categoryBadge: {
+  alignSelf: 'flex-start',
+  backgroundColor: '#E6F0FF', // light blue background
+  paddingHorizontal: 12,
+  paddingVertical: 6,
+  borderRadius: 20,
+},
+
+categoryText: {
+  fontSize: 14,
+  color: '#1A73E8', // primary blue
+  fontFamily: AppFonts.POPPINS_SEMIBOLD,
+},
 });
 export default styles;

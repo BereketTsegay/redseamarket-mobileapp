@@ -73,7 +73,7 @@ const LoginScreen: React.FC<Props> = () => {
       email: email,
       password: password,
     });
-    dispatch(createLogin({requestBody: request, url: 'app/user/login'}))
+    dispatch(createLogin({requestBody: request, url: 'login'}))
       .then(() => {
         dispatch(reset());
       })
@@ -83,7 +83,7 @@ const LoginScreen: React.FC<Props> = () => {
   useEffect(() => {
  
   if (LoginData != null) {
-    if (!loadingLogin && !LoginError && LoginData.status == 'success') {
+    if (!loadingLogin && !LoginError && LoginData.status) {
     showToast(LoginData.message);
       AsyncStorage.setItem(
         AppStrings.ACCESS_TOKEN,
@@ -92,11 +92,11 @@ const LoginScreen: React.FC<Props> = () => {
 
       AsyncStorage.setItem(
         AppStrings.USER_EMAIL,
-        LoginData.email == null ? '' : LoginData.email,
+        LoginData.user.email == null ? '' : LoginData.user.email,
       );
      
       navigation.replace(RouteNames.BottomTabs)
-    } else if (LoginData.status == 'error') {
+    } else if (LoginData.status == false) {
       if(LoginData.message == 'User Not Verified'){
         showToast(LoginData.message);
         navigation.replace(RouteNames.OtpVerificationScreen,{email:email,from:'login'})

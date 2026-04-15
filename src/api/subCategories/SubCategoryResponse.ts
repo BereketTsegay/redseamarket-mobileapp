@@ -1,35 +1,16 @@
 export type SubCategoryResponse = {
-    status:        string;
-    message:       string;
-    code:          number;
-    subcategories: Subcategory[];
+    success: boolean;
+    data:    Datum[];
 }
 
-export type Subcategory = {
-    id:                number;
-    parent_id:         number;
-    name:              string;
-    canonical_name:    string;
-    image:             string;
-    description:       string;
-    created_at:        Date;
-    updated_at:        Date;
-    subcategory_child: SubcategoryChild[];
-}
-
-export type SubcategoryChild = {
-    id:             number;
-    category_id:    number;
-    parent_id:      number;
-    name:           string;
-    canonical_name: string;
-    image:          string;
-    description:    string;
-    type:           number;
-    percentage:     number;
-    status:         number;
-    sort_order:     number;
-    delete_status:  number;
-    created_at:     Date;
-    updated_at:     Date;
+export type Datum = {
+    status:      string;
+    name:        string;
+    description: null | string;
+    slug:        string;
+    parent_id:   string;
+    image?:      string;
+    updated_at:  Date;
+    created_at:  Date;
+    id:          string;
 }

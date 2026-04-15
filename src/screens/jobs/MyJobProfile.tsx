@@ -18,7 +18,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
+import { pick, types } from '@react-native-documents/picker';
 import RNFS from 'react-native-fs';
 import AppImages from '../../constants/AppImages';
 import AppColors from '../../constants/AppColors';
@@ -120,8 +120,9 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
 
   const openDocumentFile = async () => {
     try {
-      const file = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
+      const file = await pick({
+        mode: 'open',
+        type: [types.pdf],
         allowMultiSelection: true,
       });
       const maxSizeInBytes = 500 * 1024; // 500kb in bytes
@@ -133,9 +134,8 @@ const MyJobProfile: React.FC<Props> = ({route}) => {
         setJobInput({...jobInput, cv_file: file[0].uri});
       }
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        throw err;
-      }
+      console.log('File picker error:', err);
+      showToast('User cancelled file picker');
     }
   };
 

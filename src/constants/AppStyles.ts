@@ -26,10 +26,12 @@ const AppStyles = StyleSheet.create({
       },
       dropdown1RowTxtStyle: { color: 'black', textAlign: 'left' , fontFamily: AppFonts.POPPINS_MEDIUM, fontSize:14},
       fieldStyle:{
-        borderWidth:1,
-        borderColor:AppColors.lightBlue,
-        height:45,
-        borderRadius:4
+        height: 50,
+          borderColor: '#ccc',
+          borderWidth: 1,
+          borderRadius: 8,
+          paddingHorizontal: 10,
+          backgroundColor: '#fff',
       },
       fieldText:{
         fontSize:12,

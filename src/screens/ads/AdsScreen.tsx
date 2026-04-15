@@ -1,159 +1,357 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {Image, Text, View} from 'react-native-ui-lib';
-import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
-import styles from '../fav/styles';
-import AppImages from '../../constants/AppImages';
-import { ActivityIndicator, Dimensions, FlatList, TouchableOpacity } from 'react-native';
-import AppColors from '../../constants/AppColors';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import {
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
+import { Image, Text, View } from 'react-native-ui-lib';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParams, RouteNames } from '../../navigation';
+
+import { useDispatch } from 'react-redux';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { fetchAdList } from '../../api/ads/AdListSlice';
+
+import AppColors from '../../constants/AppColors';
+import AppImages from '../../constants/AppImages';
 import Header from '../../components/Header';
-import AppFonts from '../../constants/AppFonts';
-import { apiClient } from '../../api/apiClient';
 import { CommonContext } from '../../api/commonContext';
-import PdfModal from '../../components/PdfModal';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppStrings from '../../constants/AppStrings';
-import { showToast } from '../../constants/commonUtils';
-export type AdsScreenNavigationProps = NativeStackNavigationProp<
-  RootStackParams,
-  'AdsScreen'
->;
+import { styles } from './styles';
+import { fetchAdList } from '../../api/ads/AdListSlice';
+import AppFonts from '../../constants/AppFonts';
 
-export type AdsScreenRouteProps = RouteProp<
-  RootStackParams,
-  'AdsScreen'
->;
+export type AdsScreenNavigationProps =
+  NativeStackNavigationProp<RootStackParams, 'AdsScreen'>;
 
-interface Props {}
+/* ✅ UI TABS (Label + API VALUE) */
+const TABS = [
+  { label: 'Live', value: 'live' },
+  { label: 'Draft', value: 'draft' },
+  { label: 'Pending Payment', value: 'pending-payment' },
+  { label: 'Under Review', value: 'under-review' },
+  { label: 'Rejected', value: 'rejected' },
+  { label: 'Expired', value: 'expired' },
+  { label: 'Stopped', value: 'stopped' },
+];
 
-const screenWidth = Dimensions.get('window').width;
-
-const AdsScreen: React.FC<Props> = () => {
+const AdsScreen: React.FC = () => {
   const navigation = useNavigation<AdsScreenNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const [request_Document, setDocument] = useState([])
-  const [showPdf, setShowPdf] = useState(false);
-  const {commonInput, setCommonInput} = useContext(CommonContext)
-  const {adLists, loadingAdLists} = useSelector(
-    (state: RootState) => state.AdList)
-    const {currencyLists} = useSelector(
-      (state: RootState) => state.CurrencyList,
-    );
-    const currentLanguage = useSelector(
-      (state: RootState) => state.language.currentLanguage,
-    );
-    const strings = useSelector(
-      (state: RootState) => state.language.resources[currentLanguage],
-    );
+  const { commonInput } = useContext(CommonContext);
 
-    useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
-        list()
+  const [selectedTab, setSelectedTab] = useState('live');
+  const tabRef = useRef<FlatList>(null);
+
+  const [ads, setAds] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+
+  const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const [hasMore, setHasMore] = useState(true);
+
+  useEffect(() => {
+    const index = TABS.findIndex(t => t.value === selectedTab);
+
+    if (index !== -1) {
+      tabRef.current?.scrollToIndex({
+        index,
+        animated: true,
+        viewPosition: 0.5, // 👈 center it nicely
       });
-  
-      return unsubscribe;
-    }, [navigation]);
-
-    const list = () => {
-      dispatch(fetchAdList({requestBody: ''}));
     }
+  }, [selectedTab]);
 
-    const AdsDelete = (id) => {
-      let request = JSON.stringify({
-        ads_id: id
-      })
-      apiClient( 'app/customer/ad/delete','POST',request)
-      .then(response=>{
-        if(response.data.status == 'success'){
-          list()
-       showToast(response.data.message)
+  /* ================= API ================= */
+
+  const PER_PAGE = 10;
+
+  const fetchAds = async (
+    tab = selectedTab,
+    pageNo = 1,
+    isLoadMore = false
+  ) => {
+    try {
+      isLoadMore ? setLoadingMore(true) : setLoading(true);
+
+      const request = JSON.stringify({
+        status: tab,
+        page: pageNo,
+        per_page: PER_PAGE,
+      });
+
+      const res: any = await dispatch(fetchAdList({ requestBody: request }));
+      const response = res?.payload?.adLists;
+
+      if (response?.success) {
+        const newAds = response?.data?.ads || [];
+
+        // ✅ CORE FIX
+        if (newAds.length < PER_PAGE) {
+          setHasMore(false); // last page
+        } else {
+          setHasMore(true);
         }
-        else{
-        
-          showToast(response.data.message)
+
+        if (isLoadMore) {
+          setAds(prev => [...prev, ...newAds]);
+        } else {
+          setAds(newAds);
         }
-      })
+      }
+    } catch (e) {
+      console.log('ERROR', e);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
     }
+  };
 
-    const Documents = (ad_id) => {
-      let request = JSON.stringify({
-        ads_id: ad_id
-      })
-      apiClient('app/customer/get/ad-cvdocuments', 'POST', request)
-      .then(response=>{
-        setDocument(response.data.data)
-        setShowPdf(true)
-      })
+  /* ================= EFFECT ================= */
+
+  useEffect(() => {
+    setPage(1);
+    setAds([]);
+    setHasMore(true); // ✅ IMPORTANT
+    fetchAds(selectedTab, 1, false);
+  }, [selectedTab]);
+
+  /* ================= PAGINATION ================= */
+
+  const loadMore = () => {
+    if (loadingMore || !hasMore) return;
+
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchAds(selectedTab, nextPage, true);
+  };
+
+  /* ================= HELPERS ================= */
+
+  const getTitle = (item: any) =>
+    item?.fields?.['Title'] ||
+    item?.fields?.['Head Line'] ||
+    item?.fields?.['title'] ||
+    item?.fields?.['Job title'] ||
+    'Untitled Ad';
+
+  const getImage = (item: any) =>
+    item?.images?.length > 0
+      ? { uri: item.images[0] }
+      : AppImages.PLACEHOLDER;
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'live':
+        return { bg: '#E8F8F0', text: '#27AE60' };
+      case 'rejected':
+        return { bg: '#FDECEC', text: '#EB5757' };
+      case 'expired':
+        return { bg: '#F2F2F2', text: '#999999' };
+      case 'draft':
+        return { bg: '#FFF8E1', text: '#F2C94C' };
+      case 'pending-payment':
+        return { bg: '#FFF3E0', text: '#F2994A' };
+      case 'under-review':
+        return { bg: '#EAF2FF', text: '#2F80ED' };
+      case 'stopped':
+        return { bg: '#F3EFFF', text: '#6C5CE7' };
+      default:
+        return { bg: '#EAF2FF', text: '#2F80ED' };
     }
+  };
 
-  
-    const handleClosePdf = () => {
-      setShowPdf(false);
-    };
+  const getDescription = (item: any) =>
+    item?.fields?.['Description'] ||
+    item?.fields?.['Job Description'] ||
+    item?.fields?.['Describe your property'] ||
+    '';
+
+  /* ================= UI ================= */
+
+  const renderItem = ({ item }: any) => (
+    <View style={styles.card}>
+      <Image source={getImage(item)} style={styles.image} />
+
+      {/* STATUS */}
+      <View
+        style={[
+          styles.statusBadge,
+          { backgroundColor: getStatusColor(item.status).bg },
+        ]}>
+        <Text style={{ color: getStatusColor(item.status).text, fontSize: 11, fontFamily: AppFonts.POPPINS_MEDIUM }}>
+          {item.status.toUpperCase()}
+        </Text>
+      </View>
+
+      <View style={styles.content}>
+        <View gap-4>
+          <Text style={styles.title} numberOfLines={1}>
+            {getTitle(item)}
+          </Text>
+
+          {/* 🔥 REF */}
+          <Text>
+            📌 Ref: <Text style={styles.meta}>{item.ref_no}</Text>
+          </Text>
+
+          {/* 🔥 CATEGORY */}
+          <Text style={styles.meta}>
+            🏷 {item.category || 'No Category'}
+          </Text>
+
+          {/* 🔥 DESCRIPTION */}
+          {getDescription(item) ? (
+            <Text style={styles.desc} numberOfLines={2}>
+              📝 {getDescription(item)}
+            </Text>
+          ) : null}
+
+          {/* 🔥 DATE */}
+          <Text style={styles.date}>
+            📅 {item.created_at?.split('T')[0]}
+          </Text>
+        </View>
+
+        <View bottom style={{ borderTopColor: '#EEE', borderTopWidth: 1 }}>
+          {item.status === 'live' && (
+            <TouchableOpacity
+              style={styles.viewBtn}
+              onPress={() =>
+                navigation.navigate(RouteNames.DetailsScreen, {
+                  adId: item.id,
+                  countryId: commonInput.common_country_id,
+                  edit: true,
+                })
+              }>
+              <Text style={styles.viewText}>View Live Ad</Text>
+            </TouchableOpacity>
+          )}
+
+          {item.status === 'live' && (
+            <TouchableOpacity style={styles.stopBtn}>
+              <Text style={styles.stopText}>⏸ Stop Sharing</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    </View>
+  );
 
   return (
-    <View flex backgroundColor='#FFFFFF'>
-      <Header/>
+    <View flex backgroundColor={AppColors.white} paddingB-80>
+      <Header />
 
-        <View flex paddingH-10 style={{width:screenWidth,alignItems:'center'}}>
-          <Text style={styles.text}>{strings.myAds}</Text>
+      {/* ================= TABS ================= */}
+      <View>
+        <FlatList
+          ref={tabRef}
+          horizontal
+          data={TABS}
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.value}
+          contentContainerStyle={{
+            paddingHorizontal: 12,
+            paddingVertical: 12,
+          }}
+          ItemSeparatorComponent={() => <View width={10} />}
+          renderItem={({ item }) => {
+            const isActive = selectedTab === item.value;
 
-          {loadingAdLists ?
-    <ActivityIndicator color={AppColors.blue} size={30}/>
-:
-    <FlatList
-    data={adLists?.ads}
-    numColumns={3}
-    showsVerticalScrollIndicator={false}
-    contentContainerStyle={{ paddingBottom: 70}}
-    renderItem={({item})=>{
-      return(
-        <TouchableOpacity onPress={()=>{
-          navigation.navigate(RouteNames.DetailsScreen,{adId:item.id,countryId:commonInput.common_country_id,edit:true})
-        }}>
-              <View style={[styles.view,{height:180}]}>
-                 <Image source={item.image == null || item.image.length == 0 ? AppImages.PLACEHOLDER : {uri:'https://admin-jamal.prompttechdemohosting.com/' + item.image[0].image}} 
-                 resizeMode={'contain'} style={{height:70,width:'100%',borderTopLeftRadius:4,borderTopRightRadius:4}}/>
-                 <View margin-3>
-                 <Text numberOfLines={1} ellipsizeMode='tail' style={styles.priceText}>{currencyLists == null ? 'USD ' + item.price.toFixed()
-                  : (currencyLists?.currency.currency_code + ' ' + (currencyLists?.currency.value * item.price).toFixed().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))}</Text>
-                 <Text numberOfLines={1} ellipsizeMode='tail' style={styles.titleText}>{commonInput.language == 'ar' ? item.title_arabic ? item.title_arabic : item.title : item.title}</Text>
-                 <Text style={styles.cityText}>{item.area}</Text>
-                 <View row centerV style={{justifyContent:'space-between'}}>
-                 <Text style={[styles.titleText,{fontFamily:AppFonts.POPPINS_SEMIBOLD}]}>
-                 {item.status == 5 || item.status == 0 ? <Text color={'grey'}> {strings.pending}</Text> : item.status == 2 ? <Text color={'red'}> {strings.reject}</Text> : ''}</Text>
-                 <TouchableOpacity onPress={()=>AdsDelete(item.id)}>
-                 <Image source={AppImages.DELETE} style={{width:18,height:18}}/>
-                 </TouchableOpacity>
-                 </View>
+            return (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => setSelectedTab(item.value)}
+                style={{
+                  paddingVertical: 8,
+                  paddingHorizontal: 14,
+                  borderRadius: 15,
+                  backgroundColor: isActive ? AppColors.blue : '#F5F7FA',
+                  borderWidth: isActive ? 0 : 1,
+                  borderColor: '#E4E7EC',
+                  flexDirection: 'row',
+                  alignItems: 'center',
 
-                 {(item.category && item.category.name == 'Jobs' && item.status == 1) &&
-                 <TouchableOpacity onPress={()=>Documents(item.id)}>
-                  <Text style={[styles.titleText,{color:'#007bff'}]}>{strings.viewDocuments}</Text>
-                 </TouchableOpacity>}
-                 </View>
+                  // subtle shadow
+                  shadowColor: '#000',
+                  shadowOpacity: isActive ? 0.15 : 0.05,
+                  shadowRadius: 6,
+                  elevation: isActive ? 4 : 1,
+                }}
+              >
+                {/* LABEL */}
+                <Text
+                  style={{
+                    color: isActive ? '#FFF' : '#344054',
+                    fontSize: 13,
+                    fontFamily: AppFonts.POPPINS_REGULAR
+                  }}
+                >
+                  {item.label}
+                </Text>
+
+                {/* COUNT BADGE */}
+                <View
+                  style={{
+                    marginLeft: 6,
+                    borderRadius: 9,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingHorizontal: 5,
+
+                    backgroundColor: isActive ? '#FFFFFF33' : '#E4E7EC',
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      fontWeight: '700',
+                      color: isActive ? '#FFF' : '#667085',
+                    }}
+                  >
+                    0
+                  </Text>
                 </View>
-                </TouchableOpacity>
-      )
-    }}/>}
-        </View>
-
-        {showPdf && (
-          <PdfModal
-          visible={showPdf}
-          pdfUrl={request_Document}
-          onClose={handleClosePdf}
-          jobStatus={true}
+              </TouchableOpacity>
+            );
+          }}
         />
-      )}
-        </View>
-    
+      </View>
+      <View flex>
+
+        {/* ================= LIST ================= */}
+        {loading ? (
+          <ActivityIndicator size="large" color={AppColors.blue} />
+        ) : (
+          <FlatList
+            data={ads}
+            numColumns={2}
+            keyExtractor={(item, index) => item.id + index}
+            renderItem={renderItem}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.5}
+            showsVerticalScrollIndicator={false}
+
+            ListEmptyComponent={
+              <Text style={{ textAlign: 'center', marginTop: 40 }}>
+                No Ads Found
+              </Text>
+            }
+
+            ListFooterComponent={
+              loadingMore ? (
+                <ActivityIndicator size="small" color={AppColors.blue} />
+              ) : !hasMore ? (
+                <Text style={{ textAlign: 'center', padding: 10 }}>
+                  --End--
+                </Text>
+              ) : null
+            }
+          />
+        )}
+      </View>
+    </View>
   );
 };
 

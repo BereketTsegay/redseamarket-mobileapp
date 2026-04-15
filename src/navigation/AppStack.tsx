@@ -34,6 +34,7 @@ import HiringJobDetails from '../screens/details/HiringJobDetails';
 import SearchListScreen from '../screens/search/SearchListScreen';
 import ForgotPasswordScreen from '../screens/forgotPassword/ForgotPasswordScreen';
 import PasswordResetScreen from '../screens/forgotPassword/PasswordResetScreen';
+import NotificationScreen from '../screens/notify/NotificationScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -69,6 +70,7 @@ const AppStack = () => {
         <Stack.Screen name={RouteNames.EditProfile} component={EditProfile}/>
         <Stack.Screen name={RouteNames.HiringJobDetails} component={HiringJobDetails}/>
         <Stack.Screen name={RouteNames.SearchListScreen} component={SearchListScreen}/>
+        <Stack.Screen name={RouteNames.NotificationScreen} component={NotificationScreen}/>
      
     </Stack.Navigator>
     </CommonProvider>

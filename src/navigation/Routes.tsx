@@ -31,5 +31,6 @@ export const RouteNames = {
   HiringJobDetails:'HiringJobDetails',
   SearchListScreen: 'SearchListScreen',
   ForgotPasswordScreen: 'ForgotPasswordScreen',
-  PasswordResetScreen: 'PasswordResetScreen'
+  PasswordResetScreen: 'PasswordResetScreen',
+  NotificationScreen: 'NotificationScreen'
 } as const;

@@ -1,6 +1,6 @@
 const AppColors = {
     blue:'#002BB7',
-    white:'#FFFFFF',
+    white:'#F7F7F7',
     darkBlue: '#0052BE',
     darkishBlue: '#0052BF',
     lightBlue:'#4394FF',

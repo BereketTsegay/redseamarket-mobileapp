@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
-import { SafeAreaView } from 'react-native';
 import { Navigation } from './src/navigation';
 import { Provider } from 'react-redux';
 import store from './store';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const App = () => {
 

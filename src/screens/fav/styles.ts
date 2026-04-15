@@ -10,12 +10,12 @@ const styles = StyleSheet.create({
   borderBottomWidth:4
     },
  image:{
-    height:50,
-    width:50,
-    borderRadius:25,
+    height:40,
+    width:40,
+    borderRadius:20,
  },
  nameText:{
-    fontSize:14,
+    fontSize:13,
     fontFamily:AppFonts.POPPINS_MEDIUM,
     color:'black'
  },

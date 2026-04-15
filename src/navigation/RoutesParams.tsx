@@ -32,4 +32,5 @@ export type RootStackParams = {
   SearchListScreen: undefined;
   ForgotPasswordScreen: undefined;
   PasswordResetScreen: {email: any};
+  NotificationScreen: undefined;
 };

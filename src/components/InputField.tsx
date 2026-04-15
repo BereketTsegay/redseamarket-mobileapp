@@ -29,8 +29,7 @@ const InputField = ({label,ref, title,multiline,height,width,type,value,onChange
           placeholderTextColor={"#000000"}
           color={"#000000"}
           style={AppStyles.fieldText}
-          fieldStyle={[AppStyles.fieldStyle,{height:height, width:width}]}
-          paddingH-15
+          fieldStyle={[AppStyles.fieldStyle,{width:width, height: height || 50, paddingVertical: multiline ? 10 : 0}]}
           marginB-10
           multiline={multiline}
           keyboardType={type}
@@ -40,6 +39,7 @@ const InputField = ({label,ref, title,multiline,height,width,type,value,onChange
           editable={editable}
           leadingAccessory={lead}
           onFocus={onFocus}
+          textAlignVertical={multiline ? 'top' : 'center'}
           />
     )
   }

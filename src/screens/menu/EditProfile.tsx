@@ -1,263 +1,373 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
+import {Button, Image, Text, View} from 'react-native-ui-lib';
 import {
-  Button,
-  Checkbox,
-  Image,
-  Incubator,
-  Text,
-  View,
-} from 'react-native-ui-lib';
-import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import DocumentPicker from 'react-native-document-picker';
-import {useNavigation} from '@react-navigation/native';
-import {
-  FlatList,
-  ImageBackground,
-  Modal,
   ScrollView,
+  StyleSheet,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParams} from '../../navigation';
 import AppImages from '../../constants/AppImages';
 import AppColors from '../../constants/AppColors';
-import InputField from '../../components/InputField';
-import styles from './styles';
-import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
-import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../store';
 import {ProfileEditRequest} from '../../api/profile/ProfileEditRequest';
-import ItemDropdown from '../../components/ItemDropdown';
 import {UpdateProfile, reset} from '../../api/profile/ProfileEditSlice';
-import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
-import { showToast } from '../../constants/commonUtils';
-const {TextField} = Incubator;
-export type EditProfileNavigationProps = NativeStackNavigationProp<
-  RootStackParams,
-  'EditProfile'
->;
+import {showToast} from '../../constants/commonUtils';
+import {pick, types} from '@react-native-documents/picker';
+import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 
-export type EditProfileRouteProps = RouteProp<RootStackParams, 'EditProfile'>;
+// ✅ NEW LIB
+import {CountryPicker} from 'react-native-country-codes-picker';
 
-interface Props {}
+export type EditProfileNavigationProps =
+  NativeStackNavigationProp<RootStackParams, 'EditProfile'>;
 
-const EditProfile: React.FC<Props> = () => {
+const EditProfile: React.FC = () => {
   const navigation = useNavigation<EditProfileNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const [EditInput, setEditInput] = useState<ProfileEditRequest>(
-    new ProfileEditRequest(),
-  );
-  const {countryLists} = useSelector((state: RootState) => state.CountryList);
+
+  const [EditInput, setEditInput] = useState(new ProfileEditRequest());
+
+  const [showPicker, setShowPicker] = useState(false);
+
+  const [selectedCountry, setSelectedCountry] = useState<any>({
+    name: 'UAE',
+    dial_code: '+971',
+    code: 'AE',
+  });
+
   const {EditData, loadingEdit, EditingError} = useSelector(
     (state: RootState) => state.ProfileEdit,
   );
+
   const {profileDetails} = useSelector(
     (state: RootState) => state.ProfileDetails,
   );
-  const currentLanguage = useSelector(
-    (state: RootState) => state.language.currentLanguage,
-  );
+
   const strings = useSelector(
-    (state: RootState) => state.language.resources[currentLanguage],
+    (state: RootState) =>
+      state.language.resources[state.language.currentLanguage],
   );
-  const [errors, setErrors] = useState({
-    name: false,
-    email: false,
-    phone: false,
-    nationality: false,
-  });
+
+  // ✅ LOAD DATA
   useEffect(() => {
-    setItems();
-  }, []);
+    if (profileDetails?.data) {
+      const item = profileDetails.data;
 
-  const setItems = () => {
-    const item = profileDetails?.data.user;
-    setEditInput({
-      ...EditInput,
-      name: item?.name,
-      email: item?.email,
-      phone: item?.phone && item.phone,
-      nationality: item?.nationality_id && Number(item.nationality_id),
-      image:
-        item?.image &&
-        'https://admin-jamal.prompttechdemohosting.com/' + item.image,
-    });
-  };
+      const code = item?.phone_code || '971';
 
+      setEditInput({
+        name: item?.name || '',
+        email: item?.email || '',
+        phone_code: code,
+        phone_number: String(item?.phone_number || ''),
+        nationality: item?.nationality || '',
+        image: item?.profile_picture || null,
+      });
+
+      setSelectedCountry({
+        name: item?.nationality || 'UAE',
+        dial_code: `${code}`,
+        code: 'AE',
+      });
+    }
+  }, [profileDetails]);
+
+  // ✅ TOAST
+  useEffect(() => {
+    if (!loadingEdit && EditData) {
+      if (!EditingError && EditData.status === 'success') {
+        showToast(EditData.message);
+        dispatch(reset());
+        navigation.goBack();
+      } else {
+        showToast(EditData.message);
+      }
+    }
+  }, [EditData]);
+
+  // ✅ IMAGE PICKER
   const openDocumentFile = async () => {
     try {
-      const img = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images],
-        allowMultiSelection: true,
-      });
+      const img = await pick({type: [types.images]});
       setEditInput({...EditInput, image: img[0].uri});
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        throw err;
-      }
+    } catch {
+      showToast('User cancelled image picker');
     }
   };
 
-  const setCountry = (value: any) => {
-    setEditInput({...EditInput, nationality: value});
-    setErrors({...errors, nationality: false});
-  };
-
+  // ✅ UPDATE
   const Update = () => {
-    const hasErrors =
+    if (
       !EditInput.name ||
       !EditInput.email ||
-      !EditInput.phone ||
-      !EditInput.nationality;
-
-    if (hasErrors) {
-      setErrors({
-        name: !EditInput.name,
-        email: !EditInput.email,
-        phone: !EditInput.phone,
-        nationality: !EditInput.nationality,
-      });
+      !EditInput.phone_number ||
+      !EditInput.nationality
+    ) {
+      showToast('Please fill all fields');
       return;
-    } else {
-      const formData = new FormData();
-      formData.append('name', EditInput.name);
-      formData.append('email', EditInput.email);
-      formData.append('phone', EditInput.phone);
-      formData.append('nationality', EditInput.nationality);
-
-      if (EditInput.image) {
-        formData.append('image', {
-          uri: EditInput.image,
-          name: 'image.png',
-          type: 'image/png',
-        });
-      } else {
-        formData.append('image', '');
-      }
-      // console.log(formData, '-------------------------');
-      dispatch(UpdateProfile({requestBody: formData}))
-        .then(() => {
-          dispatch(reset());
-          dispatch(fetchProfileDetails({requestBody: ''}));
-          setEditInput(new ProfileEditRequest());
-        })
-        .catch((err: any) => console.log(err));
     }
+
+    const formData = new FormData();
+    formData.append('name', EditInput.name);
+    formData.append('email', EditInput.email);
+    formData.append('phone', EditInput.phone_number);
+    formData.append('phone_code', EditInput.phone_code);
+    formData.append('nationality', EditInput.nationality);
+
+    if (EditInput.image) {
+      formData.append('image', {
+        uri: EditInput.image,
+        name: 'image.jpg',
+        type: 'image/jpeg',
+      } as any);
+    }
+
+    dispatch(UpdateProfile({requestBody: formData}));
   };
 
-  if (EditData != null) {
-    // console.log(jobSaveData)
-    if (!loadingEdit && !EditingError && EditData.status == 'success') {
-      showToast(JSON.stringify(EditData.message))
-      navigation.goBack();
-    } else {
-      // console.log(jobSaveData,'failure')
-      showToast(EditData.message)
-    }
-  }
-
   return (
-    <View flex backgroundColor="white" padding-20>
-      <View row centerV>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <View style={styles.circle}>
-            <Image
-              source={AppImages.ARROW_LEFT}
-              style={{width: 25, height: 25}}
-            />
+    <View style={styles.container}>
+      {/* HEADER */}
+      <View style={styles.headerRow}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <View style={styles.backBtn}>
+            <Image source={AppImages.ARROW_LEFT} style={{width: 20, height: 20}} />
           </View>
         </TouchableOpacity>
+        <Text style={styles.header}>{strings.editProfile}</Text>
       </View>
 
-      <Text style={styles.AdTitle}>{strings.editProfile}</Text>
-
-      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
-        <View marginV-10>
-          <TouchableOpacity onPress={openDocumentFile}>
-            <View style={styles.imageView}>
+      <ScrollView>
+        <View style={styles.card}>
+          {/* IMAGE */}
+          <TouchableOpacity 
+          // onPress={openDocumentFile}
+          >
+            <View style={styles.avatarWrapper}>
               <Image
                 source={
                   EditInput.image
                     ? {uri: EditInput.image}
                     : AppImages.PLACEHOLDER
                 }
-                style={{width: 80, height: 80, borderRadius: 40}}
+                style={styles.avatar}
               />
+              {/* <View style={styles.editBadge}>
+                <Text style={{color: '#fff'}}>✏️</Text>
+              </View> */}
             </View>
           </TouchableOpacity>
-          <View marginT-20>
-            <InputField
-              label={strings.name}
-              title={strings.enterName}
-              height={45}
-              type={'default'}
-              value={EditInput.name}
-              onChange={text => {
-                setEditInput({...EditInput, name: text});
-                setErrors({...errors, name: false});
-              }}
-              trailing={
-                errors.name && <Text color={'red'}>{strings.requiredField}</Text>
-              }
-            />
 
-            <InputField
-              label={strings.email}
-              title={strings.enterEmail}
-              height={45}
-              type={'default'}
-              value={EditInput.email}
-              onChange={text => {
-                setEditInput({...EditInput, email: text});
-                setErrors({...errors, email: false});
-              }}
-              trailing={
-                errors.email && <Text color={'red'}>{strings.requiredField}</Text>
-              }
-            />
+          {/* NAME */}
+          <Text style={styles.label}>{strings.name}</Text>
+          <TextInput
+            style={styles.input}
+            value={EditInput.name}
+            onChangeText={text =>
+              setEditInput({...EditInput, name: text})
+            }
+          />
 
-            <InputField
-              label={strings.phone}
-              title={strings.enterPhone}
-              height={45}
-              type={'numeric'}
-              value={EditInput.phone}
-              onChange={text => {
-                setEditInput({...EditInput, phone: text});
-                setErrors({...errors, phone: false});
-              }}
-              trailing={
-                errors.phone && <Text color={'red'}>{strings.requiredField}</Text>
+          {/* EMAIL */}
+          <Text style={styles.label}>{strings.email}</Text>
+          <TextInput
+            style={[styles.input, {backgroundColor: '#f0f0f0'}]}
+            value={EditInput.email}
+            editable={false}
+            // onChangeText={text =>
+            //   setEditInput({...EditInput, email: text})
+            // }
+          />
+
+          {/* PHONE */}
+          <Text style={styles.label}>{strings.phone}</Text>
+
+          <View  style={styles.phoneInput}>
+            <TouchableOpacity
+              style={styles.codeBox}
+              onPress={() => setShowPicker(true)}>
+              <Text>{selectedCountry.dial_code}</Text>
+            </TouchableOpacity>
+
+            <TextInput
+             
+              keyboardType="number-pad"
+              value={EditInput.phone_number}
+              onChangeText={text =>
+                setEditInput({...EditInput, phone_number: text})
               }
             />
-            <View>
-              {errors.nationality && (
-                <Text style={{alignSelf: 'flex-end'}} color={'red'}>
-                  {strings.requiredField}
-                </Text>
-              )}
-              <Text style={styles.labelStyle}>{strings.country}</Text>
-              <ItemDropdown
-                value={EditInput.nationality}
-                data={countryLists?.country}
-                add={setCountry}
-                dropdownType={strings.nationality}
-              />
-            </View>
           </View>
+
+          {/* COUNTRY */}
+          <Text style={styles.label}>{strings.country}</Text>
+          <TouchableOpacity
+            onPress={() => setShowPicker(true)}
+            style={styles.dropdown}>
+            <Text>{EditInput.nationality || 'Select Country'}</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-      <Button
-        label={strings.submit}
-        style={{backgroundColor: AppColors.lightBlue}}
-        onPress={Update}
+
+      {/* COUNTRY PICKER MODAL */}
+      <CountryPicker
+        show={showPicker}
+        lang='en'
+        pickerButtonOnPress={item => {
+          setSelectedCountry(item);
+
+          setEditInput({
+            ...EditInput,
+            nationality: item.name.en,
+            phone_code: item.dial_code.replace('+', ''),
+          });
+
+          setShowPicker(false);
+        }}
+          inputPlaceholder="Search country"
+
+          // Text styles
+          style={{
+            modal: {
+              backgroundColor: 'white',
+              height: '60%',
+            },
+            countryName: {
+              color: 'black',
+            },
+            dialCode: {
+              color: 'black',
+            },
+            searchMessageText: {
+              color: 'black',
+            },
+            textInput: {
+              color: 'black',
+            },
+          }}
+          onBackdropPress={() => setShowPicker(false)}
       />
+
+      {/* BUTTON */}
+      <View style={styles.submitContainer}>
+        <Button
+          label={strings.submit}
+          style={styles.submitBtn}
+          onPress={Update}
+        />
+      </View>
     </View>
   );
 };
 
 export default EditProfile;
+
+/* ================= STYLES ================= */
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F4F6FA',
+  },
+
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+  },
+
+  header: {
+    fontSize: 22,
+    marginLeft: 15,
+    fontWeight: '700',
+  },
+
+  backBtn: {
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 12,
+    elevation: 3,
+  },
+
+  card: {
+    margin: 16,
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    elevation: 5,
+  },
+
+  avatarWrapper: {
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+
+  avatar: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+  },
+
+  editBadge: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    backgroundColor: '#1E88E5',
+    borderRadius: 12,
+    padding: 5,
+  },
+
+  label: {
+    marginTop: 15,
+    marginBottom: 5,
+    fontSize: 12,
+    color: '#666',
+  },
+
+  input: {
+    backgroundColor: '#F5F7FB',
+    borderRadius: 12,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+
+  codeBox: {
+    backgroundColor: '#F5F7FB',
+    padding: 15,
+    borderRadius: 12,
+    marginRight: 10,
+    borderRightWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+
+  phoneInput: {
+    flexDirection: 'row',
+    backgroundColor: '#F5F7FB',
+    borderRadius: 12,
+      borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+
+  dropdown: {
+    backgroundColor: '#F5F7FB',
+    padding: 15,
+    borderRadius: 12,
+      borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+
+  submitContainer: {
+    padding: 20,
+  },
+
+  submitBtn: {
+    backgroundColor: '#1E88E5',
+    borderRadius: 14,
+    height: 55,
+  },
+});

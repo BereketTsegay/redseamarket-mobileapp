@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import {
   Button,
   Checkbox,
@@ -7,36 +7,38 @@ import {
   Text,
   View,
 } from 'react-native-ui-lib';
-import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
+import { RootStackParams, RouteNames } from '../../navigation';
+import { RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import {
+  BackHandler,
   FlatList,
   ImageBackground,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
+import { pick, types } from '@react-native-documents/picker';
 import AppImages from '../../constants/AppImages';
 import styles from './styles';
 import AppColors from '../../constants/AppColors';
 import ItemDropdown from '../../components/ItemDropdown';
 import InputField from '../../components/InputField';
-import {RootState} from '../../../store';
-import {useDispatch, useSelector} from 'react-redux';
-import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
-import {fetchStateList} from '../../api/country/StateListSlice';
-import {fetchCityList} from '../../api/country/CityListSlice';
-import {fetchCustomField} from '../../api/customField/CustomFieldSlice';
-import {PlaceAdContext} from '../../api/placeAd/PlaceAdContext';
+import { RootState } from '../../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { fetchStateList } from '../../api/country/StateListSlice';
+import { fetchCityList } from '../../api/country/CityListSlice';
+import { fetchCustomField } from '../../api/customField/CustomFieldSlice';
+import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 import AdsCountrySelect from '../../components/AdsCountrySelect';
-import {CommonContext} from '../../api/commonContext';
-import {SimpleApiClient, apiClient} from '../../api/apiClient';
+import { CommonContext } from '../../api/commonContext';
+import { SimpleApiClient, apiClient } from '../../api/apiClient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
 import { showToast } from '../../constants/commonUtils';
-const {TextField} = Incubator;
+import { fetchSubCategoryList } from '../../api/subCategories/SubCategoryListSlice';
+const { TextField } = Incubator;
 export type PlaceAdScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'PlaceAdScreen'
@@ -47,23 +49,24 @@ export type PlaceAdScreenRouteProps = RouteProp<
   'PlaceAdScreen'
 >;
 
-interface Props {}
+interface Props { }
 
-const PlaceAdScreen: React.FC<Props> = ({editData}) => {
+const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
   const navigation = useNavigation<PlaceAdScreenNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-  const {placeAdInput, setPlaceAdInput} = useContext(PlaceAdContext);
-  const {commonInput, setCommonInput} = useContext(CommonContext);
+  const { placeAdInput, setPlaceAdInput } = useContext(PlaceAdContext);
+  const { commonInput, setCommonInput } = useContext(CommonContext);
   const [stateDropdownTouched, setStateDropdownTouched] = useState(false);
   const [cityDropdownTouched, setCityDropdownTouched] = useState(false);
   const [priceValue, setPriceValue] = useState('');
-  const {countryLists} = useSelector((state: RootState) => state.CountryList);
-  const {stateLists} = useSelector((state: RootState) => state.StateList);
-  const {cityLists} = useSelector((state: RootState) => state.CityList);
-  const {currencyLists} = useSelector((state: RootState) => state.CurrencyList);
-  const {customLists} = useSelector(
+  const [customValues, setCustomValues] = useState<any[]>([]);
+  const { countryLists } = useSelector((state: RootState) => state.CountryList);
+  const { stateLists } = useSelector((state: RootState) => state.StateList);
+  const { cityLists } = useSelector((state: RootState) => state.CityList);
+  const { customLists } = useSelector(
     (state: RootState) => state.CustomFieldList,
   );
+const [innerSubCategories, setInnerSubCategories] = useState([]);
   const currentLanguage = useSelector(
     (state: RootState) => state.language.currentLanguage,
   );
@@ -81,6 +84,34 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
   });
 
   useEffect(() => {
+    if (placeAdInput.subcategory) {
+      let request = JSON.stringify({
+        parent_id: placeAdInput.subcategory,
+      });
+      dispatch(fetchSubCategoryList({ requestBody: request })).then((res: any) => {
+        setInnerSubCategories(res.payload.subCategoryLists.data);    
+      });
+    }
+  }, []);
+
+
+  const handleBackPress = () => {
+    navigation.goBack();
+    clearFieldsExceptCountryAndCommonCountryId();
+    return true;
+  };
+
+  useEffect(() => {
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+    return () => backHandler.remove();
+
+  }, []);
+
+  useEffect(() => {
     valueSet();
   }, []);
 
@@ -89,7 +120,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
     if (editData) {
       const selectedImageURIs = editData.image.map(img => ({
         id: img.id,
-        image: 'https://admin-jamal.prompttechdemohosting.com/' + img.image,
+        image: img.image,
       }));
       setPlaceAdInput({
         ...placeAdInput,
@@ -100,7 +131,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
       );
       const customData = editData.custom_value.map(item => ({
         field_id: item.field_id,
-        value:  item.value.startsWith('storage/') ? 'https://admin-jamal.prompttechdemohosting.com/' + item.value : item.value,
+        value: item.value.startsWith('storage/') ? 'https://admin-jamal.prompttechdemohosting.com/' + item.value : item.value,
       }));
       setPriceValue(editData.price);
       setPlaceAdInput({
@@ -174,36 +205,36 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
           editData.category_id == 2
             ? editData.property_rend.size
             : editData.category_id == 3
-            ? editData.property_sale.size
-            : '',
+              ? editData.property_sale.size
+              : '',
         room:
           editData.category_id == 2
             ? editData.property_rend.room
             : editData.category_id == 3
-            ? editData.property_sale.room
-            : '',
+              ? editData.property_sale.room
+              : '',
         furnished:
           editData.category_id == 2
             ? editData.property_rend.furnished == 'Yes'
               ? 1
               : 2
             : editData.category_id == 3
-            ? editData.property_sale.furnished == 'Yes'
-              ? 1
-              : 2
-            : '',
+              ? editData.property_sale.furnished == 'Yes'
+                ? 1
+                : 2
+              : '',
         building:
           editData.category_id == 2
             ? editData.property_rend.building_type
             : editData.category_id == 3
-            ? editData.property_sale.building.building_type
-            : '',
+              ? editData.property_sale.building.building_type
+              : '',
         parking:
           editData.category_id == 2
             ? editData.property_rend.parking
             : editData.category_id == 3
-            ? editData.property_sale.parking
-            : '',
+              ? editData.property_sale.parking
+              : '',
         featured: editData.featured_flag,
         fieldValue: customData,
       });
@@ -225,39 +256,40 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
 
   useEffect(() => {
     let request = JSON.stringify({
-      country: placeAdInput.country,
+      country_id: placeAdInput.country,
     });
-    dispatch(fetchStateList({requestBody: request}));
+    dispatch(fetchStateList({ requestBody: request }));
   }, [placeAdInput.country]);
 
   useEffect(() => {
     let request = JSON.stringify({
-      state: placeAdInput.state,
+      state_id: placeAdInput.state,
     });
-    dispatch(fetchCityList({requestBody: request}));
+    dispatch(fetchCityList({ requestBody: request }));
   }, [placeAdInput.state]);
 
   useEffect(() => {
     let request = JSON.stringify({
-      category: placeAdInput.category,
-      subcategory: placeAdInput.subcategory,
+      category_id: placeAdInput.subcategory,
     });
-    dispatch(fetchCustomField({requestBody: request}));
-  }, [placeAdInput.category, placeAdInput.subcategory]);
+    dispatch(fetchCustomField({ requestBody: request }));
+  }, [placeAdInput.subcategory]);
 
   const setCountry = value => {
-    setPlaceAdInput({...placeAdInput, country: value});
-    setErrors({...errors, country: false});
+    setPlaceAdInput({ ...placeAdInput, country: value });
+    setErrors({ ...errors, country: false });
   };
 
   const setState = value => {
-    setPlaceAdInput({...placeAdInput, state: value});
-    setErrors({...errors, state: false});
+    setPlaceAdInput({ ...placeAdInput, state: value });
+    setErrors({ ...errors, state: false });
   };
   const setCity = value => {
-    setPlaceAdInput({...placeAdInput, city: value});
-    setErrors({...errors, city: false});
+    setPlaceAdInput({ ...placeAdInput, city: value });
+    setErrors({ ...errors, city: false });
   };
+
+  console.log('place ad input', placeAdInput);
 
   const nextScreen = () => {
     const hasErrors =
@@ -267,7 +299,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
       !placeAdInput.titleinArabic ||
       !placeAdInput.descriptioninArabic ||
       !priceValue ||
-      !placeAdInput.state 
+      !placeAdInput.state
 
     if (hasErrors) {
       setErrors({
@@ -307,8 +339,9 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
 
   const openDocumentFile = async () => {
     try {
-      const imgs = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images],
+      const imgs = await pick({
+        mode: 'open',
+        type: [types.images],
         allowMultiSelection: true,
       });
       const selectedImageURIs = imgs.map((img, index) => ({
@@ -321,9 +354,8 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
         image: [...placeAdInput.image, ...selectedImageURIs],
       });
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        throw err;
-      }
+      console.log('Image picker error:', err);
+      showToast('User cancelled image picker');
     }
   };
 
@@ -334,7 +366,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
       });
       apiClient('customer/ads/remove_image', 'POST', request)
         .then(response => {
-        showToast(response.data.message)
+          showToast(response.data.message)
         })
         .catch(error => {
           console.error('Image deletion error:', error);
@@ -357,16 +389,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
   // console.log(placeAdInput.image,'-------')
 
   const clearFieldsExceptCountryAndCommonCountryId = () => {
-    const {category, subcategory} = placeAdInput;
-    const newPlaceAdInput = {category, subcategory};
-
-    for (const key in placeAdInput) {
-      if (key !== 'category' && key !== 'subcategory') {
-        newPlaceAdInput[key] = typeof placeAdInput[key] == 'number' ? 0 : '';
-      }
-    }
-
-    setPlaceAdInput(newPlaceAdInput);
+    const { category } = placeAdInput;
   };
 
   const handleTitleChange = text => {
@@ -375,7 +398,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
       title: text,
       canonical_name: text,
     }));
-    setErrors(prevErrors => ({...prevErrors, title: false}));
+    setErrors(prevErrors => ({ ...prevErrors, title: false }));
     handleArabChange(text, 'title');
   };
 
@@ -384,7 +407,7 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
       ...prevPlaceAdInput,
       description: text,
     }));
-    setErrors(prevErrors => ({...prevErrors, description: false}));
+    setErrors(prevErrors => ({ ...prevErrors, description: false }));
     handleArabChange(text, 'description');
   };
 
@@ -443,104 +466,162 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
       });
   };
 
+  const handleCustomChange = (fieldIndex: number, value: any) => {
+    setCustomValues(prev => {
+      const updated = [...prev];
+      const index = updated.findIndex(f => f.field_id === fieldIndex);
 
-  return (
-    <View flex backgroundColor="white" padding-20>
-      <View row centerV>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-            clearFieldsExceptCountryAndCommonCountryId();
-          }}>
-          <View style={styles.circle}>
-            <Image
-              source={AppImages.ARROW_LEFT}
-              style={{width: 25, height: 25}}
+      if (index > -1) {
+        updated[index].value = value;
+      } else {
+        updated.push({ field_id: fieldIndex, value });
+      }
+
+      return updated;
+    });
+  };
+
+  const getValue = (fieldIndex: number) => {
+    const item = customValues.find(f => f.field_id === fieldIndex);
+    return item ? item.value : '';
+  };
+
+  const renderCustomField = (field: any, index: number) => {
+    const value = getValue(index);
+
+    switch (field.type) {
+
+      // ✅ TEXT INPUT
+      case 'text':
+        return (
+          <InputField
+            key={index}
+            label={field.label}
+            title={`Enter ${field.label}`}
+            value={value}
+            onChange={(text: string) => handleCustomChange(index, text)}
+          />
+        );
+
+      // ✅ TEXTAREA
+      case 'textarea':
+        const limit = field.word_limit || 200;
+        const currentLength = value ? value.length : 0;
+
+        return (
+          <View key={index} style={{ marginBottom: 15 }}>
+            <InputField
+              label={field.label}
+              title={`Enter ${field.label}`}
+              multiline={true}
+              height={80}
+              value={value}
+              onChange={(text: string) => {
+                if (text.length <= limit) {
+                  handleCustomChange(index, text);
+                }
+              }}
+            />
+
+            {/* ✅ Counter */}
+            <Text
+              style={{
+                fontSize: 12,
+                color: currentLength >= limit ? 'red' : '#888',
+                marginTop: -8,
+              }}
+            >
+              {currentLength}/{limit} letters
+            </Text>
+          </View>
+        );
+
+      // ✅ RADIO BUTTON
+      case 'radio':
+        return (
+          <View key={index} marginB-15>
+            <Text style={styles.labelStyle}>{field.label}</Text>
+
+            <View row style={{ flexWrap: 'wrap', marginTop: 10 }}>
+              {field.radio_options?.map((option: string, i: number) => (
+                <TouchableOpacity
+                  key={i}
+                  onPress={() => handleCustomChange(index, option)}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginRight: 20,
+                    marginBottom: 10,
+                  }}>
+
+                  {/* circle */}
+                  <View
+                    style={{
+                      width: 16,
+                      height: 16,
+                      borderRadius: 8,
+                      borderWidth: 2,
+                      borderColor: AppColors.lightBlue,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginRight: 5,
+                    }}>
+                    {value === option && (
+                      <View
+                        style={{
+                          width: 8,
+                          height: 8,
+                          borderRadius: 4,
+                          backgroundColor: AppColors.lightBlue,
+                        }}
+                      />
+                    )}
+                  </View>
+
+                  <Text>{option}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        );
+
+      // ✅ SELECT DROPDOWN
+      case 'select':
+        return (
+          <View key={index}>
+            <Text style={styles.labelStyle}>{field.label}</Text>
+
+            <ItemDropdown
+              value={value}
+              data={[]} // ⚠️ replace with dropdown API data
+              add={(val: any) => handleCustomChange(index, val)}
+              dropdownType={field.label}
             />
           </View>
-        </TouchableOpacity>
-        <View flex center>
-          <Text style={styles.heading}>{strings.placeAd}</Text>
-        </View>
-      </View>
+        );
 
-      <Text style={styles.AdTitle}>
-        {strings.tellUs} {placeAdInput.category_Name}
-      </Text>
+      // ✅ FILE PICKER
+      case 'file':
+        return (
+          <View key={index} marginB-15>
+            <Text style={styles.labelStyle}>{field.label}</Text>
 
-      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
-        <View marginV-20>
-          <InputField
-            label={strings.engTitle}
-            title={strings.enterTitle}
-            multiline={false}
-            height={45}
-            type={'default'}
-            value={placeAdInput.title}
-            onChange={text => {
-              handleTitleChange(text);
-            }}
-            trailing={
-              errors.title && <Text color={'red'}>{strings.requiredField}</Text>
-            }
-            editable={true}
-          />
-
-          <InputField
-            label={strings.arabTitle}
-            title={strings.enterArab}
-            multiline={false}
-            height={45}
-            type={'default'}
-            value={placeAdInput.titleinArabic}
-            onChange={text => {
-              setPlaceAdInput({...placeAdInput, titleinArabic: text});
-              setErrors({...errors, titleinArabic: false});
-            }}
-            trailing={
-              errors.titleinArabic && (
-                <Text color={'red'}>{strings.requiredField}</Text>
-              )
-            }
-            editable={true}
-          />
-
-          <TextField
-            label={strings.canonical}
-            labelStyle={styles.labelStyle}
-            placeholder={strings.enterCanonical}
-            placeholderTextColor={'#000000'}
-            color={'#000000'}
-            style={styles.fieldText}
-            fieldStyle={styles.fieldStyle1}
-            paddingH-15
-            marginB-20
-            value={placeAdInput.canonical_name}
-          />
-
-          <View marginB-20>
-            <TouchableOpacity
-              onPress={() =>
-                placeAdInput.image.length <= 4 ? openDocumentFile() : null
-              }>
+            <TouchableOpacity onPress={openDocumentFile}>
               <View
-                paddingH-15
-                centerV
-                row
                 style={[
                   styles.fieldStyle,
-                  {borderStyle: 'dashed', justifyContent: 'space-between'},
+                  {
+                    borderStyle: 'dashed',
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingHorizontal: 10,
+                  },
                 ]}>
-                <Text style={styles.fieldText}>{strings.UploadImage}</Text>
-                <Image
-                  source={AppImages.UPLOAD}
-                  tintColor={AppColors.lightBlue}
-                />
+                <Text>Select File</Text>
+                <Image source={AppImages.UPLOAD} />
               </View>
             </TouchableOpacity>
-            <Text style={{color: 'red', fontSize: 8}}>
-              *{strings.maxImages}
-            </Text>
             {placeAdInput.image.length != 0 && (
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View row>
@@ -549,8 +630,8 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
                       onPress={() => deleteImageAtIndex(index, image.id)}
                       key={index}>
                       <ImageBackground
-                        source={{uri: image.image}}
-                        style={{width: 60, height: 60, marginHorizontal: 5}}>
+                        source={{ uri: image.image }}
+                        style={{ width: 60, height: 60, marginHorizontal: 5 }}>
                         <Image
                           source={AppImages.DELETE}
                           style={{
@@ -565,201 +646,89 @@ const PlaceAdScreen: React.FC<Props> = ({editData}) => {
               </ScrollView>
             )}
           </View>
+        );
 
-          <View>
-            {errors.country && (
-              <Text color={'red'} style={{alignSelf: 'flex-end'}}>
-                {strings.requiredField}
-              </Text>
-            )}
-            <Text style={styles.labelStyle}>{strings.country}</Text>
-            <ItemDropdown
-              value={placeAdInput.country}
-              data={countryLists?.country}
-              add={setCountry}
-              dropdownType={strings.country}
-              error={stateDropdownTouched && !placeAdInput.country}
+      // ✅ MAP (placeholder)
+      case 'map':
+        return (
+          <View key={index} marginB-15>
+            <Text style={styles.labelStyle}>{field.label}</Text>
+            <Text>Select location (map integration pending)</Text>
+          </View>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  const sortedFields = useMemo(() => {
+    return [...(customLists?.data?.fields || [])].sort(
+      (a, b) => a.sort_order - b.sort_order
+    );
+  }, [customLists]);
+
+
+  return (
+    <View flex backgroundColor="white" padding-20>
+      <View row centerV>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+            clearFieldsExceptCountryAndCommonCountryId();
+          }}>
+          <View style={styles.circle}>
+            <Image
+              source={AppImages.ARROW_LEFT}
+              style={{ width: 25, height: 25 }}
             />
           </View>
+        </TouchableOpacity>
+        <View flex center>
+          <Text style={styles.heading}>{strings.placeAd}</Text>
+        </View>
+      </View>
 
-          <InputField
-            label={
-              placeAdInput.category_Name == 'Jobs'
-                ? strings.salary
-                : strings.price
-            }
-            title={
-              placeAdInput.category_Name == 'Jobs'
-                ? strings.enterSalary
-                : strings.enterPrice
-            }
-            multiline={false}
-            height={45}
-            type={'numeric'}
-            value={placeAdInput.price_norm}
-            onChange={text => {
-              setPriceValue(text);
-              setPlaceAdInput({
-                ...placeAdInput,
-                price: (text * currencyLists?.usdval).toFixed(2),
-              });
-              setErrors({...errors, priceValue: false});
-            }}
-            trailing={
-              <View row>
-                {errors.priceValue && (
-                  <Text color={'red'}>{strings.requiredField}</Text>
-                )}
-                <Text>
-                  {placeAdInput.price != 0 && placeAdInput.price + ' USD'}
-                </Text>
-              </View>
-            }
-            editable={true}
-          />
+      <Text style={styles.AdTitle}>
+        {strings.tellUs} {placeAdInput.category_Name}
+      </Text>
 
-          <InputField
-            label={strings.engDescription}
-            title={strings.enterDescription}
-            multiline={true}
-            height={80}
-            type={'default'}
-            value={placeAdInput.description}
-            onChange={text => {
-              handleDescriptionChange(text);
-            }}
-            trailing={
-              errors.description && (
-                <Text color={'red'}>{strings.requiredField}</Text>
-              )
-            }
-            editable={true}
-          />
+      {placeAdInput.categoryPath?.length > 0 && (
+        <View style={styles.categoryBadge}>
+          <Text style={styles.categoryText}>
+            {placeAdInput.categoryPath.map(item => item.name).join(' > ')}
+          </Text>
+        </View>
+      )}
 
-          <InputField
-            label={strings.arabDescription}
-            title={strings.enterArabDescription}
-            multiline={true}
-            height={80}
-            type={'default'}
-            value={placeAdInput.descriptioninArabic}
-            onChange={text => {
-              setPlaceAdInput({...placeAdInput, descriptioninArabic: text});
-              setErrors({...errors, descriptioninArabic: false});
-            }}
-            trailing={
-              errors.descriptioninArabic && (
-                <Text color={'red'}>{strings.requiredField}</Text>
-              )
-            }
-            editable={true}
-          />
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
+        <View marginV-20>
 
+{innerSubCategories.length > 0 && (
           <View>
-            {errors.state && (
-              <Text color={'red'} style={{alignSelf: 'flex-end'}}>
-                {strings.requiredField}
-              </Text>
-            )}
-            <Text style={styles.labelStyle}>{strings.state}</Text>
+            <Text style={styles.labelStyle}>Select Category</Text>
             <ItemDropdown
-              value={placeAdInput.state}
-              data={stateLists?.state}
-              add={setState}
-              dropdownType={strings.state}
-              onBlur={() => setStateDropdownTouched(true)}
-              error={cityDropdownTouched && !placeAdInput.state}
-            />
-          </View>
-
-          <View>
-            <Text style={styles.labelStyle}>{strings.city}</Text>
-            <ItemDropdown
-              value={placeAdInput.city}
-              data={cityLists?.city}
-              add={setCity}
-              dropdownType={strings.city}
-              onBlur={() => setCityDropdownTouched(true)}
-            />
-          </View>
-
-          <InputField
-            label={strings.area}
-            title={strings.enterArea}
-            multiline={false}
-            height={45}
-            type={'default'}
-            value={placeAdInput.area}
-            onChange={text => {
-              setPlaceAdInput({...placeAdInput, area: text});
-            }}
-            editable={true}
-          />
-
-          <InputField
-            label={strings.subArea}
-            title={strings.enterSubArea}
-            multiline={false}
-            height={45}
-            value={placeAdInput.sub_area}
-            onChange={text => {
-              setPlaceAdInput({...placeAdInput, sub_area: text});
-            }}
-            trailing={null}
-            editable={true}
-          />
-
-          <InputField
-            label={strings.subArea + '2'}
-            title={strings.enterSubArea + '2'}
-            multiline={false}
-            height={45}
-            value={placeAdInput.sub_area2}
-            onChange={text => {
-              setPlaceAdInput({...placeAdInput, sub_area2: text});
-            }}
-            trailing={null}
-            editable={true}
-          />
-
-          <View>
-            <Text style={styles.labelStyle}>{strings.viewCountries}</Text>
-            <AdsCountrySelect
-              countryLists={countryLists?.country}
-              Id={
-                editData
-                  ? editData.mapCountry.map(item => Number(item.country_id))
-                  : [Number(commonInput.common_country_id)]
+              value={placeAdInput.innercategory}
+              data={innerSubCategories}
+              add={(val) =>
+                setPlaceAdInput(prev => ({
+                  ...prev,
+                  innercategory: val,
+                }))
               }
+              dropdownType={'Select'}
             />
           </View>
-          <Checkbox
-            label={strings.negotiable}
-            labelStyle={styles.fieldText}
-            value={placeAdInput.negotiable}
-            color={'grey'}
-            containerStyle={{marginBottom: 20}}
-            onValueChange={value =>
-              setPlaceAdInput({...placeAdInput, negotiable: value})
-            }
-          />
+)}
 
-          {placeAdInput.featured == 2 && (
-            <Checkbox
-              label={strings.featured}
-              labelStyle={styles.fieldText}
-              value={placeAdInput.featuredSelect}
-              color={'grey'}
-              containerStyle={{marginBottom: 20}}
-              onValueChange={value =>
-                setPlaceAdInput({...placeAdInput, featuredSelect: value})
-              }
-            />
+
+          {sortedFields.map((field, index) =>
+            renderCustomField(field, index)
           )}
 
           <Button
             label={strings.next}
-            style={{backgroundColor: AppColors.lightBlue}}
+            style={{ backgroundColor: AppColors.lightBlue }}
             onPress={nextScreen}
           />
         </View>

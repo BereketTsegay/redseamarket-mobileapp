@@ -147,7 +147,7 @@ const MyJobDetails: React.FC<Props> = () => {
           {jobProfileList?.data.company.map((item, index) => (
             <View key={index} row style={{justifyContent:'space-between'}}>
               <Text style={styles.text}>{item.company}</Text>
-              <Text style={[styles.text,{fontSize:12}]}>{item.from_date} -> {item.to_date}</Text>
+              <Text style={[styles.text,{fontSize:12}]}>{item.from_date} {'->'} {item.to_date}</Text>
               </View>
           ))}
 
@@ -198,5 +198,4 @@ const MyJobDetails: React.FC<Props> = () => {
 };
 
 export default MyJobDetails;
-
 

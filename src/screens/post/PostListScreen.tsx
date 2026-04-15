@@ -12,6 +12,7 @@ import { RootState } from '../../../store';
 import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
 import { getWithAuthCall } from '../../api/apiClient';
 import { CommonContext } from '../../api/commonContext';
+import AppColors from '../../constants/AppColors';
 export type PostListScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
   'PostListScreen'
@@ -34,54 +35,70 @@ const PostListScreen: React.FC<Props> = () => {
   const strings = useSelector(
     (state: RootState) => state.language.resources[currentLanguage],
   );
-  const {dashboardLists,loadingDashBoardList} = useSelector(
-    (state: RootState) => state.DashBoardList,
+    const { categoryLists, loadingCategoryLists } = useSelector(
+    (state: RootState) => state.CategoryList,
   );
-  useEffect(() => {
-    getWithAuthCall('app/featured')
-    .then(response=>
-      setPlaceAdInput({...placeAdInput, featured:response.data.data})
-      )
+  // useEffect(() => {
+  //   getWithAuthCall('app/featured')
+  //   .then(response=>
+  //   {
+  //     console.log('featured response', response)
+  //     setPlaceAdInput({...placeAdInput, featured:response.data.data})
+  //   }
+  //     )
       
-  }, []);
+  // }, []);
 
   return (
-    <View flex backgroundColor="white" padding-20>
-      <View row>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <View style={styles.circle}>
-            <Image
-              source={AppImages.ARROW_LEFT}
-              style={{width: 25, height: 25}}
-            />
-          </View>
-        </TouchableOpacity>
-        <View flex center>
-          <Text style={styles.heading}>{strings.listing}</Text>
-          <Text style={styles.subHeading}>
-            {strings.chooseCategoryFits}
-          </Text>
-        </View>
-      </View>
+    <View flex backgroundColor={AppColors.white} padding-20>
+<View row centerV style={{marginBottom: 25}}>
+  <TouchableOpacity onPress={() => navigation.goBack()}>
+    <View style={styles.backBtn}>
+      <Image
+        source={AppImages.ARROW_LEFT}
+        style={{width: 18, height: 18, tintColor: '#111'}}
+      />
+    </View>
+  </TouchableOpacity>
+
+  <View flex center>
+    <Text style={styles.heading}>{strings.listing}</Text>
+    <Text style={styles.subHeading}>
+      {strings.chooseCategoryFits}
+    </Text>
+  </View>
+</View>
       <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
-        {dashboardLists?.data.categories.map((item,index) => (
-          <TouchableOpacity
-            onPress={() => {setPlaceAdInput({...placeAdInput, category:item.id, category_Name: item.name})
-              navigation.navigate(RouteNames.PostSecondScreen)}}
-            key={index}
-            style={styles.itemContainer}>
-            <Image
-          source={
-            item.image == null
-              ? AppImages.PLACEHOLDER
-              : { uri: 'https://admin-jamal.prompttechdemohosting.com/' + item.image }
-          }
-          style={{width:60, height:60}}
-          resizeMode="contain"
-        />
-            <Text style={styles.title}>{commonInput.language == 'ar' ? item.arabic_name : item.name}</Text>
-          </TouchableOpacity>
+        {categoryLists?.data.map((item,index) => (
+<TouchableOpacity
+  onPress={() => {
+    setPlaceAdInput({
+      ...placeAdInput,
+      category: item.id,
+      category_Name: item.name,
+    });
+    navigation.navigate(RouteNames.PostSecondScreen);
+  }}
+  key={index}
+  style={styles.tile}
+>
+  <View style={styles.tileIconBg}>
+    <Image
+      source={
+        item.image == null
+          ? AppImages.PLACEHOLDER
+          : {uri: item.image}
+      }
+      style={styles.tileIcon}
+      resizeMode="contain"
+    />
+  </View>
+
+  <Text style={styles.tileText} numberOfLines={1}>
+    {commonInput.language == 'ar' ? item.arabic_name : item.name}
+  </Text>
+</TouchableOpacity>
         ))}
       </View>
       </ScrollView>

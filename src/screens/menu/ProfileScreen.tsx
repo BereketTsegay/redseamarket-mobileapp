@@ -1,60 +1,51 @@
-import React, {useState, useEffect} from 'react';
-import {Button, Image, Text, View} from 'react-native-ui-lib';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  Text,
+  View,
+  TouchableOpacity,
+  Modal,
+} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import AppColors from '../../constants/AppColors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
-import {Linking, Modal, TouchableOpacity} from 'react-native';
-import Header from '../../components/Header';
+import {Linking, ScrollView} from 'react-native';
 import styles from './styles';
-import AppImages from '../../constants/AppImages';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchJobProfileList} from '../../api/jobs/JobProfileListSlice';
-import { fetchProfileDetails } from '../../api/profile/ProfileDetailsSlice';
-export type ProfileScreenNavigationProps = NativeStackNavigationProp<
-  RootStackParams,
-  'ProfileScreen'
->;
+import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
 
-export type ProfileScreenRouteProps = RouteProp<
-  RootStackParams,
-  'ProfileScreen'
->;
+export type ProfileScreenNavigationProps =
+  NativeStackNavigationProp<RootStackParams, 'ProfileScreen'>;
 
-interface Props {
-  image: any;
-  name: any;
-  onPress?: any;
-  number?: any;
-}
-
-const ProfileScreen: React.FC<Props> = () => {
+const ProfileScreen: React.FC = () => {
   const navigation = useNavigation<ProfileScreenNavigationProps>();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+
   const [exitModal, setExitModal] = useState(false);
+
   const {jobProfileList} = useSelector(
     (state: RootState) => state.JobProfileList,
   );
+
   const {profileDetails} = useSelector(
     (state: RootState) => state.ProfileDetails,
   );
-  const currentLanguage = useSelector(
-    (state: RootState) => state.language.currentLanguage,
-  );
+
   const strings = useSelector(
-    (state: RootState) => state.language.resources[currentLanguage],
+    (state: RootState) =>
+      state.language.resources[state.language.currentLanguage],
   );
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       dispatch(fetchProfileDetails({requestBody: ''}));
     });
-
     return unsubscribe;
   }, [navigation]);
 
@@ -62,41 +53,34 @@ const ProfileScreen: React.FC<Props> = () => {
     dispatch(fetchJobProfileList({requestBody: ''}));
   }, []);
 
-  const openCall = number => {
-    Linking.openURL(`tel:${number}`);
-  };
-
   const Logout = async () => {
-    setExitModal(false)
+    setExitModal(false);
     await AsyncStorage.removeItem(AppStrings.ACCESS_TOKEN);
-    await AsyncStorage.removeItem(AppStrings.COUNTRY);
     navigation.replace(RouteNames.LoginScreen);
   };
 
-  const List = ({image, name, onPress, number}: Props) => {
+  // ================= MENU ITEM =================
+  const MenuItem = ({icon, label, onPress, number}: any) => {
     return (
-      <TouchableOpacity onPress={onPress}>
-        <View row paddingV-8 centerV style={{justifyContent: 'space-between'}}>
-          <Image source={image} style={{width: 25, height: 27}} />
-          <View flex left marginL-20>
-            <Text style={styles.title}>{name}</Text>
+      <TouchableOpacity onPress={onPress} style={styles.menuItem}>
+        <View row centerV spread>
+          
+          {/* LEFT SIDE */}
+          <View row centerV>
+            <Text style={styles.iconText}>{icon}</Text>
+
+            <Text style={styles.menuText}>{label}</Text>
           </View>
+
+          {/* RIGHT SIDE */}
           <View row centerV>
             {number ? (
-              <View
-                paddingH-10
-                center
-                marginR-10
-                backgroundColor={AppColors.lightBlue}
-                style={{borderRadius:10}}>
-                <Text style={[styles.title, {color: AppColors.white}]}>
-                  {number && number}
-                </Text>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{number}</Text>
               </View>
-            ) : (
-              <View />
-            )}
-            <Image source={AppImages.RIGHT_ARROW} />
+            ) : null}
+
+            <Text style={styles.arrow}>›</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -104,150 +88,177 @@ const ProfileScreen: React.FC<Props> = () => {
   };
 
   return (
-    <View flex backgroundColor="#FFFFFF">
-      <Header />
+    <View flex style={{backgroundColor: '#F4F6FA'}} paddingB-40>
 
-      <Modal
-        visible={exitModal}
-        animationType="none"
-        transparent={true}
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}>
-          <View
-            paddingH-20
-            paddingV-15
-            style={{
-              backgroundColor: 'white',
-              width: '80%',
-              borderRadius: 10,
-            }}>
-            <Text style={styles.title}>Do you want to exit?</Text>
-            <View row marginT-20 style={{justifyContent: 'space-between'}}>
-              <Button
-                label={'No'}
-                backgroundColor={AppColors.white}
-                style={{borderWidth: 1, borderColor: AppColors.lightBlue}}
-                labelStyle={styles.title}
-                onPress={()=>setExitModal(false)}
-              />
-              <Button
-                label={'Yes'}
-                backgroundColor={AppColors.lightBlue}
-                labelStyle={[styles.title, {color: 'white'}]}
-                onPress={Logout}
-              />
+      {/* ================= HEADER ================= */}
+      <View style={styles.profileCard}>
+        <View row centerV>
+          {profileDetails?.data.profile_picture ? (
+            <Image
+              source={{uri: profileDetails.data.profile_picture}}
+              style={styles.avatar}
+            />
+          ) : (
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>
+                {profileDetails?.data?.name?.charAt(0) || 'U'}
+              </Text>
             </View>
+          )}
+
+          <View marginL-12>
+            <Text style={styles.name}>
+              {profileDetails?.data?.name || 'User'}
+            </Text>
+            <Text style={styles.email}>
+              {profileDetails?.data?.email || ''}
+            </Text>
           </View>
         </View>
-      </Modal>
-      <View flex>
-        <View margin-20>
-          <Text style={styles.subHeading}>{strings.myAccount}</Text>
-          <List
-            image={AppImages.PROFILE}
-            name={strings.profile}
+
+        <View row spread marginT-15>
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>
+              {profileDetails?.data.myads || 0}
+            </Text>
+            <Text style={styles.statLabel}>Ads</Text>
+          </View>
+
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>
+              {profileDetails?.data.myfavourite || 0}
+            </Text>
+            <Text style={styles.statLabel}>Favorites</Text>
+          </View>
+
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>
+              {profileDetails?.data.wallet_balance?.amount || 0}
+            </Text>
+            <Text style={styles.statLabel}>Wallet</Text>
+          </View>
+        </View>
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={{paddingHorizontal: 16, paddingBottom:40}}>
+
+          {/* ================= ALL MENU ITEMS ================= */}
+
+          <Text style={styles.sectionTitle}>Account</Text>
+
+          <MenuItem
+            icon="👤"
+            label={strings.profile}
             onPress={() => navigation.navigate(RouteNames.EditProfile)}
           />
 
-          <List
-            image={AppImages.MYADS}
-            name={strings.myAds}
-            onPress={() => navigation.navigate(RouteNames.AdsScreen)}
+          <MenuItem
+            icon="📢"
+            label={strings.myAds}
             number={profileDetails?.data.myads}
+            onPress={() => navigation.navigate(RouteNames.AdsScreen)}
           />
 
-          <List
-            image={AppImages.BRIEF}
-            name={strings.myJobProfile}
-            onPress={() => {
-              jobProfileList?.data
-                ? navigation.navigate('JobProfile', {
-                    screen: RouteNames.MyJobDetails,
-                  })
-                : navigation.navigate('JobProfile', {
-                    screen: RouteNames.MyJobProfile,
-                  });
-            }}
-          />
-
-          <List
-            image={AppImages.HEART}
-            name={strings.favorites}
-            onPress={() => navigation.navigate(RouteNames.FavoritesScreen)}
+            <MenuItem
+            icon="❤️"
+            label={strings.favorites}
             number={profileDetails?.data.myfavourite}
+            onPress={() => navigation.navigate(RouteNames.FavoritesScreen)}
           />
 
-          <View
-            row
-            paddingV-5
-            centerV
-            style={{justifyContent: 'space-between'}}>
-            <Image source={AppImages.WALLET} style={{width: 25, height: 27}} />
-            <View flex left marginL-20>
-              <Text style={styles.title}>{strings.wallet}</Text>
-            </View>
-            <View paddingH-10 center backgroundColor={AppColors.lightBlue} style={{borderRadius:10}}>
-              <Text style={[styles.title, {color: AppColors.white}]}>
-                {profileDetails?.data.user.wallet
-                  ? profileDetails?.data.user.wallet
-                  : 0}{' '}
-                USD
-              </Text>
-            </View>
-          </View>
-        </View>
+          <Text style={styles.sectionTitle}>Jobs</Text>
 
-        <View style={styles.divider} />
+          <MenuItem
+            icon="💼"
+            label={strings.myJobProfile}
+            onPress={() =>
+              navigation.navigate('JobProfile', {
+                screen: jobProfileList?.data
+                  ? RouteNames.MyJobDetails
+                  : RouteNames.MyJobProfile,
+              })
+            }
+          />
 
-        {/* <View margin-20>
-          <Text style={styles.subHeading}>Settings</Text>
-          <List image={AppImages.CITY} name={'City'}/>
+          <MenuItem
+            icon="📊"
+            label={strings.myJobDashboard}
+            onPress={() =>
+              navigation.navigate('JobProfile', {
+                screen: jobProfileList?.data
+                  ? RouteNames.MyJobDetails
+                  : RouteNames.MyJobProfile,
+              })
+            }
+          />
 
-          <List image={AppImages.LANG} name={'Language'}/>
-        </View>
+          <MenuItem
+            icon="🔍"
+            label={strings.candidateSearch}
+            onPress={() => {}}
+          />
 
+          <MenuItem
+            icon="🏢"
+            label={strings.myRecruiterProfile}
+            onPress={() => {}}
+          />
 
-        <View style={styles.divider} /> */}
+          <Text style={styles.sectionTitle}>Others</Text>
 
-        <View margin-20>
-          <Text style={styles.subHeading}>{strings.others}</Text>
-          <List
-            image={AppImages.SUPPORT}
-            name={strings.policy}
+          <MenuItem
+            icon="📄"
+            label={strings.policy}
             onPress={() =>
               Linking.openURL(
-                'https://jamal.prompttechdemohosting.com/#/privacy/policy',
+                'https://demo.redsea-market.com/page/privacy-policy',
               )
             }
           />
 
-          <List
-            image={AppImages.TERMS}
-            name={strings.terms}
+          <MenuItem
+            icon="📑"
+            label={strings.terms}
             onPress={() => navigation.navigate(RouteNames.TermsAndConditions)}
           />
 
-          {profileDetails?.data.user.phone && (
-            <List
-              image={AppImages.CALL}
-              name={strings.callUs}
-              onPress={() => openCall(profileDetails?.data.user.phone)}
+          {profileDetails?.data.phone_number && (
+            <MenuItem
+              icon="📞"
+              label={strings.callUs}
+              onPress={() =>
+                Linking.openURL(`tel:${profileDetails?.data.phone_number}`)
+              }
             />
           )}
 
-          <List
-            image={AppImages.LOGOUT}
-            name={strings.logout}
+          <MenuItem
+            icon="↪️"
+            label={strings.logout}
             onPress={() => setExitModal(true)}
           />
         </View>
-      </View>
+      </ScrollView>
+
+      {/* ================= LOGOUT MODAL ================= */}
+      <Modal visible={exitModal} transparent>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <Text style={styles.title}>Do you want to logout?</Text>
+
+            <View row spread marginT-20>
+              <TouchableOpacity onPress={() => setExitModal(false)}>
+                <Text>No</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={Logout}>
+                <Text style={{color: 'red'}}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

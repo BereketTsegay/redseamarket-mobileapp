@@ -10,7 +10,7 @@ import {
 import {RootStackParams, RouteNames} from '../../navigation';
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import DocumentPicker from 'react-native-document-picker';
+import { pick, types } from '@react-native-documents/picker';
 import {useNavigation} from '@react-navigation/native';
 import {
   FlatList,
@@ -72,8 +72,9 @@ const JobApply: React.FC<Props> = ({id}) => {
 
   const openDocumentFile = async () => {
     try {
-      const file = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
+      const file = await pick({
+        mode: 'open',
+         type: [types.pdf],
         allowMultiSelection: true,
       });
       const maxSizeInBytes = 500 * 1024; // 500kb in bytes
@@ -86,9 +87,8 @@ const JobApply: React.FC<Props> = ({id}) => {
         setErrors({...errors, cv_file: false});
       }
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        throw err;
-      }
+      console.log('File picker error:', err);
+      showToast('User cancelled file picker');
     }
   };
 

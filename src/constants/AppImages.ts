@@ -1,4 +1,5 @@
 const AppImages = {
+  LOGO: require('../images/logo.png'),
     BG: require('../images/Bg.png'),
     BGIMAGE: require('../images/BgImage.png'),
     PERSON1: require('../images/loginPerson.png'),
@@ -12,6 +13,7 @@ const AppImages = {
     HEART_FILL: require('../images/heart.png'),
     HEART: require('../images/heart-line.png'),
     MENU: require('../images/menu.png'),
+    BELL: require('../images/bell.png'),
     ADD: require('../images/add.png'),
     SEARCH: require('../images/search.png'),
     ARROW_DOWN: require('../images/arrow-down.png'),

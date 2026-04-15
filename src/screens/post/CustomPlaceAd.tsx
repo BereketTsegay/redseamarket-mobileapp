@@ -19,7 +19,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
+import { pick, types } from '@react-native-documents/picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AppImages from '../../constants/AppImages';
 import styles from './styles';
@@ -31,6 +31,7 @@ import {PlaceAdContext} from '../../api/placeAd/PlaceAdContext';
 import SelectDropdown from 'react-native-select-dropdown';
 import AppStyles from '../../constants/AppStyles';
 import moment from 'moment';
+import { showToast } from '../../constants/commonUtils';
 const {TextField} = Incubator;
 export type CustomPlaceAdNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -88,16 +89,16 @@ const CustomPlaceAd: React.FC<Props> = ({route}) => {
 
   const openDocumentFile = async id => {
     try {
-      const imgs = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles && DocumentPicker.types.images],
+      const imgs = await pick({
+        mode: 'open',
+        type: [types.allFiles && types.images],
         allowMultiSelection: false,
       });
       setImage(imgs[0].uri);
       updateFieldValue(id, imgs[0].uri);
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        throw err;
-      }
+      console.log('File picker error:', err);
+      showToast('User cancelled file picker');
     }
   };
 

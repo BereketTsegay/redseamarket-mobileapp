@@ -5,6 +5,7 @@ import {
   apiClient,
   getWithAuthCall,
 } from './apiClient';
+import { CategoryListResponse } from './category/CategoryListSlice';
 import {Country} from './country/countryResponse';
 import {CurrencyResponse} from './currency/CurrencyResponse';
 import { CustomField } from './customField/CustomFieldResponse';
@@ -169,7 +170,7 @@ export const fetchCountryList = async (
   requestBody: any,
 ): Promise<NetworkResponse<Country | null>> => {
   const response = await apiClient(
-    'app/customer/get/country',
+    'country',
     'POST',
     requestBody,
   );
@@ -191,7 +192,7 @@ export const fetchStateList = async (
   requestBody: any,
 ): Promise<NetworkResponse<Country | null>> => {
   const response = await apiClient(
-    'app/customer/get/state',
+    'state',
     'POST',
     requestBody,
   );
@@ -213,7 +214,7 @@ export const fetchCityList = async (
   requestBody: any,
 ): Promise<NetworkResponse<Country | null>> => {
   const response = await apiClient(
-    'app/customer/get/city',
+    'city',
     'POST',
     requestBody,
   );
@@ -251,9 +252,9 @@ export const fetchCurrencyList = async (
 //API FOR CATEGORY LIST
 export const fetchCategoryList = async (
   requestBody: any,
-): Promise<NetworkResponse<DashBoardDetails | null>> => {
+): Promise<NetworkResponse<CategoryListResponse | null>> => {
   const response = await apiClient(
-    'app/customer/get/category/ads',
+    'category',
     'POST',
     requestBody,
   );
@@ -275,7 +276,7 @@ export const fetchSubCategoryList = async (
   requestBody: any,
 ): Promise<NetworkResponse<SubCategoryResponse | null>> => {
   const response = await apiClient(
-    'app/customer/get/subcategory',
+    'inner-category',
     'POST',
     requestBody,
   );
@@ -407,7 +408,7 @@ export const fetchCustomField = async (
   requestBody: any,
 ): Promise<NetworkResponse<CustomField | null>> => {
   const response = await apiClient(
-    'app/customer/ads/custom_field_and_dependency',
+    'form',
     'POST',
     requestBody,
   );
@@ -451,7 +452,7 @@ export const fetchAdList = async (
   requestBody: any,
 ): Promise<NetworkResponse<AdListResponse | null>> => {
   const response = await apiClient(
-    'app/customer/view/myAds',
+    'my-ads',
     'POST',
     requestBody,
   );
@@ -473,7 +474,7 @@ export const fetchProfileDetails = async (
   requestBody: any,
 ): Promise<NetworkResponse<ProfileResponse | null>> => {
   const response = await apiClient(
-    'app/customer/view/profile',
+    'profile',
     'POST',
     requestBody,
   );
