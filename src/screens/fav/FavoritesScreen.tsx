@@ -56,10 +56,9 @@ const FavoritesScreen: React.FC<Props> = () => {
 
   return (
     <View flex backgroundColor='#FFFFFF'>
-       <Header/>
+       <Header title='Favorites'/>
 
        <View flex paddingH-10 style={{width:screenWidth,alignItems:'center'}}>
-          <Text style={styles.text}>{strings.favorites}</Text>
 
           {loadingFavLists ?
     <ActivityIndicator color={AppColors.blue} size={30}/>

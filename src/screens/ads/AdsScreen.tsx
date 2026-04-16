@@ -20,6 +20,7 @@ import { CommonContext } from '../../api/commonContext';
 import { styles } from './styles';
 import { fetchAdList } from '../../api/ads/AdListSlice';
 import AppFonts from '../../constants/AppFonts';
+import moment from 'moment';
 
 export type AdsScreenNavigationProps =
   NativeStackNavigationProp<RootStackParams, 'AdsScreen'>;
@@ -186,14 +187,14 @@ const AdsScreen: React.FC = () => {
       </View>
 
       <View style={styles.content}>
-        <View gap-4>
+        <View gap-2>
           <Text style={styles.title} numberOfLines={1}>
             {getTitle(item)}
           </Text>
 
           {/* 🔥 REF */}
           <Text>
-            📌 Ref: <Text style={styles.meta}>{item.ref_no}</Text>
+            📌 <Text style={[styles.meta,{color: '#1b08ee'}]}>{item.ref_no}</Text>
           </Text>
 
           {/* 🔥 CATEGORY */}
@@ -203,18 +204,18 @@ const AdsScreen: React.FC = () => {
 
           {/* 🔥 DESCRIPTION */}
           {getDescription(item) ? (
-            <Text style={styles.desc} numberOfLines={2}>
+            <Text style={styles.desc} numberOfLines={1}>
               📝 {getDescription(item)}
             </Text>
           ) : null}
 
           {/* 🔥 DATE */}
           <Text style={styles.date}>
-            📅 {item.created_at?.split('T')[0]}
+            📅 {moment(item.created_at).format('MMM DD, YYYY')}
           </Text>
         </View>
 
-        <View bottom style={{ borderTopColor: '#EEE', borderTopWidth: 1 }}>
+        <View bottom marginT-10 style={{ borderTopColor: '#EEE', borderTopWidth: 1 }}>
           {item.status === 'live' && (
             <TouchableOpacity
               style={styles.viewBtn}
@@ -234,14 +235,60 @@ const AdsScreen: React.FC = () => {
               <Text style={styles.stopText}>⏸ Stop Sharing</Text>
             </TouchableOpacity>
           )}
+
+          {item.status === 'draft' && (
+            <TouchableOpacity style={[styles.stopBtn, { backgroundColor: '#8b8e90' }]}>
+              <Text style={[styles.stopText, { color: '#fff' }]}>Complete Ad</Text>
+            </TouchableOpacity>
+          )}
+
+          {item.status === 'pending-payment' && (
+            <TouchableOpacity style={[styles.stopBtn, { backgroundColor: '#579ef0' }]}>
+              <Text style={[styles.stopText, { color: '#fff' }]}>Complete Payment</Text>
+            </TouchableOpacity>
+          )}
+
+          {item.status === 'under-review' && (
+            <TouchableOpacity style={[styles.stopBtn, { backgroundColor: '#81ddeb' }]}>
+              <Text style={[styles.stopText, { color: '#fff' }]}>🕒 Under Review</Text>
+            </TouchableOpacity>
+          )}
+
+          {item.status === 'rejected' && (
+            <>
+              <TouchableOpacity style={[styles.stopBtn, { backgroundColor: '#f19d9d' }]}>
+                <Text style={[styles.stopText, { color: '#5b5757' }]}>❌ Ad Rejected</Text>
+              </TouchableOpacity>
+
+              <Text style={styles.reasonText}>
+                Reason: {item.reject_reason || 'No reason provided'}
+              </Text>
+
+              <TouchableOpacity style={[styles.editBtn, { backgroundColor: '#579ef0' }]}>
+                <Text style={[styles.editText, { color: '#fff' }]}>✏️ Edit & Resubmit</Text>
+              </TouchableOpacity>
+            </>
+          )}
+
+          {item.status === 'expired' && (
+            <TouchableOpacity style={[styles.stopBtn, { backgroundColor: '#f19d9d' }]}>
+              <Text style={[styles.stopText, { color: '#5b5757' }]}> Renew Now</Text>
+            </TouchableOpacity>
+          )}
+
+          {item.status === 'stopped' && (
+            <TouchableOpacity style={[styles.stopBtn, { backgroundColor: '#033d11' }]}>
+              <Text style={[styles.stopText, { color: '#fff' }]}>▶️ Start Sharing</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>
   );
 
   return (
-    <View flex backgroundColor={AppColors.white} paddingB-80>
-      <Header />
+    <View flex backgroundColor={AppColors.white}>
+      <Header title="My Ads" />
 
       {/* ================= TABS ================= */}
       <View>
@@ -341,9 +388,11 @@ const AdsScreen: React.FC = () => {
 
             ListFooterComponent={
               loadingMore ? (
-                <ActivityIndicator size="small" color={AppColors.blue} />
-              ) : !hasMore ? (
-                <Text style={{ textAlign: 'center', padding: 10 }}>
+                <View paddingB-12>
+                  <ActivityIndicator size="small" color={AppColors.blue} />
+                </View>
+              ) : !hasMore && ads.length > 0 ? (
+                <Text style={{ textAlign: 'center', padding: 10, marginBottom: 12, color: '#666' }}>
                   --End--
                 </Text>
               ) : null

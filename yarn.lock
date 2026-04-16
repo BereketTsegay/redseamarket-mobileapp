@@ -5969,6 +5969,16 @@ react-native-gesture-handler@*, react-native-gesture-handler@^2.31.1, react-nati
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
 
+react-native-image-picker@^8.2.1:
+  version "8.2.1"
+  resolved "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-8.2.1.tgz"
+  integrity sha512-FBeGYJGFDjMdGCcyubDJgBAPCQ4L1D3hwLXyUU91jY9ahOZMTbluceVvRmrEKqnDPFJ0gF1NVhJ0nr1nROFLdg==
+
+react-native-image-resizer@^1.4.5:
+  version "1.4.5"
+  resolved "https://registry.npmjs.org/react-native-image-resizer/-/react-native-image-resizer-1.4.5.tgz"
+  integrity sha512-33EgL3C9pyvjKpullAB6fWyD5QhoYEpNNB9rxNvUsrpAnL2mHBW7PTrUCCZudJeB6Weg7nbweKrSw1nnto5aqg==
+
 react-native-is-edge-to-edge@^1.3.1:
   version "1.3.1"
   resolved "https://registry.npmjs.org/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.3.1.tgz"
@@ -6094,7 +6104,7 @@ react-native-worklets@^0.8.1, react-native-worklets@0.8.x:
     convert-source-map "^2.0.0"
     semver "^7.7.3"
 
-react-native@*, "react-native@>= 0.76.0", react-native@>=0.59.0, react-native@>=0.65.0, react-native@>=0.70.3, react-native@>=0.77.3, react-native@>=0.79.0, "react-native@0.81 - 0.85", react-native@0.85.0:
+react-native@*, "react-native@>= 0.76.0", react-native@>=0.59.0, react-native@>=0.65.0, react-native@>=0.70.3, react-native@>=0.77.3, react-native@>=0.79.0, react-native@>=v0.40.0, "react-native@0.81 - 0.85", react-native@0.85.0:
   version "0.85.0"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.85.0.tgz"
   integrity sha512-z2ltUAS9xzdL4HQeG7wpsYMv2o35R4D8qZwbXu0SbeamZ4+ZIBxc84Ay4Vb6fRExBpsT06aZFV+W030W9JxDFQ==

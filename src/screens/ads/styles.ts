@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import AppColors from '../../constants/AppColors';
+import AppFonts from '../../constants/AppFonts';
 
 export const styles = StyleSheet.create({
 
@@ -45,11 +46,13 @@ title: {
 desc: {
   fontSize: 12,
   color: '#444',
+  fontFamily: AppFonts.POPPINS_REGULAR
 },
 
 date: {
   fontSize: 11,
   color: '#98A2B3',
+  fontFamily: AppFonts.POPPINS_REGULAR
 },
 
 actionRow: {
@@ -112,6 +115,29 @@ activeTabText: {
 meta: {
   fontSize: 12,
   color: '#666',
+  fontFamily: AppFonts.POPPINS_REGULAR
+},
+reasonText: {
+  fontSize: 12,
+  color: '#D92D20', // soft red
+  marginVertical: 6,
+  fontWeight: '500',
+},
+
+editBtn: {
+  backgroundColor: '#EEF4FF',
+  paddingVertical: 6,
+  paddingHorizontal: 10,
+  borderRadius: 10,
+  marginTop: 6,
+  flex:1,
+  alignItems: 'center'
+},
+
+editText: {
+  fontSize: 12,
+  fontWeight: '600',
+  color: '#3538CD',
 },
 
 });

@@ -18,6 +18,7 @@ import { fetchSubCategoryList } from '../../api/subCategories/SubCategoryListSli
 import AppColors from '../../constants/AppColors';
 import AppFonts from '../../constants/AppFonts';
 import { PlaceAdContext } from '../../api/placeAd/PlaceAdContext';
+import { BackHeader } from './BackHeader';
 
 export type PostSecondScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -29,7 +30,7 @@ const PostSecondScreen: React.FC = () => {
   const { placeAdInput, setPlaceAdInput } = useContext(PlaceAdContext);
 
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
-const [subCategories, setSubCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const { loadingSubCategoryLists } = useSelector(
     (state: RootState) => state.SubCategoryList,
   );
@@ -50,7 +51,7 @@ const [subCategories, setSubCategories] = useState([]);
       });
       dispatch(fetchSubCategoryList({ requestBody: request })).then((res: any) => {
         console.log('sub category response', res.payload);
-        setSubCategories(res.payload.subCategoryLists.data);    
+        setSubCategories(res.payload.subCategoryLists.data);
       });
     }
   }, []);
@@ -78,53 +79,37 @@ const [subCategories, setSubCategories] = useState([]);
 
     navigation.navigate(RouteNames.PlaceAdScreen);
   };
-console.log('place ad input in second screen', placeAdInput);
+
   // ✅ Render item
   const renderItem = ({ item }: any) => {
     return (
-      <TouchableOpacity onPress={() => handleCategoryPress(item)}>
-        <View row marginH-30 marginV-20>
-          <Text
-            style={{
-              fontSize: 14,
-              fontFamily: AppFonts.POPPINS_SEMIBOLD,
-            }}>
-            {item.name}
-          </Text>
-        </View>
+      <TouchableOpacity
+        onPress={() => handleCategoryPress(item)}
+        activeOpacity={0.85}
+        style={styles.card1}
+      >
+        <View row centerV spread>
+          {/* LEFT TEXT */}
+          <View>
+            <Text style={styles.title}>
+              {item.name}
+            </Text>
+          </View>
 
-        <View
-          style={{
-            borderBottomColor: '#00000029',
-            borderBottomWidth: 1,
-          }}
-        />
+          {/* RIGHT ICON */}
+          <Image
+            source={AppImages.RIGHT_ARROW}
+            style={styles.arrow}
+          />
+        </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View flex backgroundColor="white" paddingV-20>
+    <View flex backgroundColor={AppColors.white} padding-20>
       {/* Header */}
-      <View row paddingH-20>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <View style={styles.circle}>
-            <Image
-              source={AppImages.ARROW_LEFT}
-              style={{ width: 25, height: 25 }}
-            />
-          </View>
-        </TouchableOpacity>
-
-        <View flex center>
-          <Text style={styles.heading}>
-            {placeAdInput.category_Name}
-          </Text>
-          <Text style={styles.subHeading}>
-            {strings.chooseCategoryFits}
-          </Text>
-        </View>
-      </View>
+      <BackHeader title={placeAdInput.category_Name} sub={strings.chooseCategoryFits} navigation={navigation} />
 
       {/* Content */}
       {loadingSubCategoryLists ? (
@@ -132,7 +117,11 @@ console.log('place ad input in second screen', placeAdInput);
       ) : (
         <FlatList
           data={subCategories || []}
-          contentContainerStyle={{ marginTop: 20 }}
+          contentContainerStyle={{
+            marginTop: 20,
+            paddingBottom: 20,
+          }}
+          showsVerticalScrollIndicator={false}
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
         />

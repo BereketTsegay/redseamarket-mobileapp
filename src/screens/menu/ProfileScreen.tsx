@@ -17,7 +17,6 @@ import styles from './styles';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {RootState} from '../../../store';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchJobProfileList} from '../../api/jobs/JobProfileListSlice';
 import {fetchProfileDetails} from '../../api/profile/ProfileDetailsSlice';
 
 export type ProfileScreenNavigationProps =
@@ -28,10 +27,6 @@ const ProfileScreen: React.FC = () => {
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
 
   const [exitModal, setExitModal] = useState(false);
-
-  const {jobProfileList} = useSelector(
-    (state: RootState) => state.JobProfileList,
-  );
 
   const {profileDetails} = useSelector(
     (state: RootState) => state.ProfileDetails,
@@ -48,10 +43,6 @@ const ProfileScreen: React.FC = () => {
     });
     return unsubscribe;
   }, [navigation]);
-
-  useEffect(() => {
-    dispatch(fetchJobProfileList({requestBody: ''}));
-  }, []);
 
   const Logout = async () => {
     setExitModal(false);
@@ -88,7 +79,7 @@ const ProfileScreen: React.FC = () => {
   };
 
   return (
-    <View flex style={{backgroundColor: '#F4F6FA'}} paddingB-40>
+    <View flex style={{backgroundColor: '#F4F6FA'}}>
 
       {/* ================= HEADER ================= */}
       <View style={styles.profileCard}>
@@ -173,12 +164,7 @@ const ProfileScreen: React.FC = () => {
             icon="💼"
             label={strings.myJobProfile}
             onPress={() =>
-              navigation.navigate('JobProfile', {
-                screen: jobProfileList?.data
-                  ? RouteNames.MyJobDetails
-                  : RouteNames.MyJobProfile,
-              })
-            }
+              navigation.navigate('JobProfile')}
           />
 
           <MenuItem

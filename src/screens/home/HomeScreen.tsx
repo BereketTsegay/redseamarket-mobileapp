@@ -147,7 +147,7 @@ const HomeScreen: React.FC = () => {
   };
 
   return (
-    <View flex backgroundColor={AppColors.white} paddingB-60>
+    <View flex backgroundColor={AppColors.white}>
 
       {/* 🔴 HEADER */}
       <View style={styles.headerContainer}>

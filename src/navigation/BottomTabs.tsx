@@ -1,28 +1,34 @@
-import React, { useEffect, useRef } from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native-ui-lib';
-import { StyleSheet, Animated } from 'react-native';
-import { CurvedBottomBar } from 'react-native-curved-bottom-bar';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  BackHandler,
+  Animated,
+} from 'react-native';
+import { Image, Text } from 'react-native-ui-lib';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParams } from './RoutesParams';
-import { RouteNames } from './Routes';
-import AppImages from '../constants/AppImages';
-import AppFonts from '../constants/AppFonts';
+
 import ProfileScreen from '../screens/menu/ProfileScreen';
 import AdsScreen from '../screens/ads/AdsScreen';
 import FavoritesScreen from '../screens/fav/FavoritesScreen';
 import HomeScreen from '../screens/home/HomeScreen';
+
+import AppImages from '../constants/AppImages';
+import AppFonts from '../constants/AppFonts';
+import AppColors from '../constants/AppColors';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { fetchProfileDetails } from '../api/profile/ProfileDetailsSlice';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 
-export type BottomTabsNavigationProps =
-  NativeStackNavigationProp<RootStackParams, 'BottomTabs'>;
-
 const BottomTabs: React.FC = () => {
-  const navigation = useNavigation<BottomTabsNavigationProps>();
+  const navigation = useNavigation();
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
+
+  const [activeTab, setActiveTab] = useState('Home');
+  const [replace, setReplace] = useState(false); // ✅ FIX
 
   const strings = useSelector(
     (state: RootState) =>
@@ -33,205 +39,210 @@ const BottomTabs: React.FC = () => {
     dispatch(fetchProfileDetails({ requestBody: '' }));
   }, []);
 
-  const handleCenterClick = () => {
-    navigation.navigate('PostScreen', { editData: null });
-  };
+  /* 🔥 BACK HANDLER FIX */
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        if (activeTab !== 'Home' && !replace) {
+          setActiveTab('Home');
+          return true;
+        } else if (replace) {
+          setActiveTab('Menu');
+          return true;
+        }
+        return false;
+      },
+    );
+    return () => backHandler.remove();
+  }, [activeTab, replace]);
 
-  // 🔥 ANIMATED TAB ICON
-  const AnimatedTab = ({ isActive, icon, label }) => {
-    const scale = useRef(new Animated.Value(1)).current;
+  /* 🔥 TAB RENDER */
+const renderTab = (tabName: string, iconName: any) => {
+  const isActive = activeTab === tabName;
 
-    useEffect(() => {
+  const scale = useRef(new Animated.Value(1)).current;
+  const translateY = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.parallel([
       Animated.spring(scale, {
         toValue: isActive ? 1.15 : 1,
+        friction: 5,
         useNativeDriver: true,
-      }).start();
-    }, [isActive]);
+      }),
+      Animated.spring(translateY, {
+        toValue: isActive ? -4 : 0, // 🔥 slight lift
+        friction: 6,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [isActive]);
 
-    return (
+  return (
+    <TouchableOpacity
+      key={tabName}
+      style={styles.tabWrapper}
+      onPress={() => setActiveTab(tabName)}
+      activeOpacity={0.8}
+    >
       <Animated.View
         style={[
           styles.tabItem,
           isActive && styles.activeTab,
-          { transform: [{ scale }] },
+          {
+            transform: [{ scale }, { translateY }],
+          },
         ]}
       >
         <Image
-          source={icon}
-          style={[
-            styles.icon,
-            { tintColor: isActive ? '#1E88E5' : '#9AA0A6' },
-          ]}
+          source={iconName}
+          style={{
+            width: 24,
+            height: 24,
+            tintColor: isActive ? AppColors.blue : '#aaa',
+          }}
         />
 
         <Text
           style={[
-            styles.label,
-            { color: isActive ? '#1E88E5' : '#9AA0A6' },
+            styles.text,
+            {
+              color: isActive ? AppColors.blue : '#aaa',
+            },
           ]}
         >
-          {label}
+          {tabName}
         </Text>
       </Animated.View>
-    );
-  };
-
-  const renderIcon = (routeName, selectedTab) => {
-    let icon, label;
-
-    switch (routeName) {
-      case RouteNames.HomeScreen:
-        icon = AppImages.HOME;
-        label = strings.home;
-        break;
-      case RouteNames.FavoritesScreen:
-        icon = AppImages.HEART_FILL;
-        label = strings.favorites;
-        break;
-      case RouteNames.AdsScreen:
-        icon = AppImages.AD;
-        label = strings.myAds;
-        break;
-      case RouteNames.ProfileScreen:
-        icon = AppImages.MENU;
-        label = strings.menu;
-        break;
-    }
-
-    return (
-      <AnimatedTab
-        isActive={routeName === selectedTab}
-        icon={icon}
-        label={label}
-      />
-    );
-  };
-
-  const renderTabBar = ({ routeName, selectedTab, navigate }) => (
-    <TouchableOpacity
-      onPress={() => navigate(routeName)}
-      style={styles.tabWrapper}
-      activeOpacity={0.7}
-    >
-      {renderIcon(routeName, selectedTab)}
     </TouchableOpacity>
   );
+};
+
+  /* 🔥 SCREEN SWITCH */
+  const renderScreen = () => {
+    switch (activeTab) {
+      case 'Favorites':
+        return <FavoritesScreen />;
+      case 'MY Ads':
+        return <AdsScreen />;
+      case 'Menu':
+        return <ProfileScreen />;
+      case 'Home':
+      default:
+        return <HomeScreen />;
+    }
+  };
 
   return (
-    <CurvedBottomBar.Navigator
-      type="DOWN"
-      height={60}
-      circleWidth={60}
-      bgColor="#FFFFFF"  
-      screenOptions={{ headerShown: false }}
-      initialRouteName={RouteNames.HomeScreen}
+    <View style={{ flex: 1, backgroundColor: AppColors.white}}>
+      
+      {/* 🔥 SCREEN */}
+      {renderScreen()}
 
-      // 🔥 FLOATING CENTER BUTTON
-      renderCircle={() => (
+      {/* 🔥 BOTTOM BAR */}
+      <View style={styles.container}>
+        <View style={styles.tabBar}>
+
+          {renderTab('Home', AppImages.HOME)}
+          {renderTab('Favorites', AppImages.HEART_FILL)}
+
+          {/* 🔥 SPACE FOR CENTER BUTTON */}
+          <View style={{ width: 60 }} />
+
+          {renderTab('MY Ads', AppImages.AD)}
+          {renderTab('Menu', AppImages.MENU)}
+
+        </View>
+
+        {/* 🔥 CENTER BUTTON (FIXED) */}
         <TouchableOpacity
-          onPress={handleCenterClick}
+          style={styles.centerButton}
           activeOpacity={0.9}
-          style={styles.centerWrapper}>
-          <View style={styles.centerButton}>
-            <Image
-              source={AppImages.ADD}
-              style={{ width: 28, height: 28, tintColor: '#fff' }}
-            />
-          </View>
+          onPress={() =>
+            navigation.navigate('PostScreen', { editData: null })
+          }
+        >
+          <Image
+            source={AppImages.ADD}
+            style={{ width: 28, height: 28, tintColor: '#fff' }}
+          />
         </TouchableOpacity>
-      )}
-
-      tabBar={renderTabBar}
-    >
-      <CurvedBottomBar.Screen
-        name={RouteNames.HomeScreen}
-        position="LEFT"
-        component={HomeScreen}
-      />
-      <CurvedBottomBar.Screen
-        name={RouteNames.FavoritesScreen}
-        position="LEFT"
-        component={FavoritesScreen}
-      />
-      <CurvedBottomBar.Screen
-        name={RouteNames.AdsScreen}
-        position="RIGHT"
-        component={AdsScreen}
-      />
-      <CurvedBottomBar.Screen
-        name={RouteNames.ProfileScreen}
-        position="RIGHT"
-        component={ProfileScreen}
-      />
-    </CurvedBottomBar.Navigator>
+      </View>
+    </View>
   );
 };
 
 export default BottomTabs;
 
-/* ================= 🔥 NEXT LEVEL STYLES ================= */
-
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+
+  tabBar: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 70,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    borderTopWidth: 1,
+    borderColor: '#eee',
+
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 10,
+  },
+
   tabWrapper: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
 
-  tabItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-  },
+tabItem: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingVertical: 6,
+  paddingHorizontal: 10,
+  borderRadius: 16,
+},
 
   activeTab: {
-    backgroundColor: '#E3F2FD',
+    backgroundColor: 'rgba(241, 200, 155, 0.15)',
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 16,
   },
 
-  icon: {
-    width: 22,
-    height: 22,
-  },
-
-  label: {
-    fontSize: 10,
+  text: {
     fontFamily: AppFonts.POPPINS_MEDIUM,
-    marginTop: 3,
+    fontSize: 11,
   },
 
-  // 🔥 FLOATING CENTER BUTTON
-  centerWrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
+  /* 🔥 CENTER BUTTON */
   centerButton: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: '#1E88E5',
+    position: 'absolute',
+    top: -25,
+    alignSelf: 'center',
+
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: AppColors.darkBlue,
 
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: -50,
-  },
 
-  // 🔴 BADGE
-  badge: {
-    position: 'absolute',
-    top: -4,
-    right: -10,
-    backgroundColor: '#FF3B30',
-    borderRadius: 10,
-    paddingHorizontal: 5,
-    paddingVertical: 1,
-  },
-
-  badgeText: {
-    color: '#fff',
-    fontSize: 9,
-    fontWeight: '600',
+    shadowColor: AppColors.darkBlue,
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 12,
   },
 });

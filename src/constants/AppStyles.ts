@@ -35,7 +35,8 @@ const AppStyles = StyleSheet.create({
       },
       fieldText:{
         fontSize:12,
-        fontFamily:AppFonts.POPPINS_LIGHT
+        fontFamily:AppFonts.POPPINS_LIGHT,
+        color:'black'
         
       },
       text:{

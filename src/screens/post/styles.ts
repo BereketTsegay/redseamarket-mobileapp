@@ -10,10 +10,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#E6E6E6',
   },
 
   heading: {
@@ -138,6 +136,32 @@ categoryText: {
   fontSize: 14,
   color: '#1A73E8', // primary blue
   fontFamily: AppFonts.POPPINS_SEMIBOLD,
+},
+card1: {
+  backgroundColor: '#FFFFFF',
+  borderRadius: 16,
+  paddingVertical: 16,
+  paddingHorizontal: 16,
+  marginBottom: 12,
+},
+
+title: {
+  fontSize: 14,
+  fontFamily: AppFonts.POPPINS_SEMIBOLD,
+  color: '#101828',
+},
+
+subtitle: {
+  fontSize: 11,
+  color: '#98A2B3',
+  marginTop: 4,
+  fontFamily: AppFonts.POPPINS_REGULAR,
+},
+
+arrow: {
+  width: 18,
+  height: 18,
+  tintColor: '#D0D5DD',
 },
 });
 export default styles;

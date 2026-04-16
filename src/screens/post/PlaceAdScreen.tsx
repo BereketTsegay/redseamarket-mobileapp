@@ -38,6 +38,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppStrings from '../../constants/AppStrings';
 import { showToast } from '../../constants/commonUtils';
 import { fetchSubCategoryList } from '../../api/subCategories/SubCategoryListSlice';
+import { BackHeader } from './BackHeader';
 const { TextField } = Incubator;
 export type PlaceAdScreenNavigationProps = NativeStackNavigationProp<
   RootStackParams,
@@ -66,7 +67,7 @@ const PlaceAdScreen: React.FC<Props> = ({ editData }) => {
   const { customLists } = useSelector(
     (state: RootState) => state.CustomFieldList,
   );
-const [innerSubCategories, setInnerSubCategories] = useState([]);
+  const [innerSubCategories, setInnerSubCategories] = useState([]);
   const currentLanguage = useSelector(
     (state: RootState) => state.language.currentLanguage,
   );
@@ -89,7 +90,7 @@ const [innerSubCategories, setInnerSubCategories] = useState([]);
         parent_id: placeAdInput.subcategory,
       });
       dispatch(fetchSubCategoryList({ requestBody: request })).then((res: any) => {
-        setInnerSubCategories(res.payload.subCategoryLists.data);    
+        setInnerSubCategories(res.payload.subCategoryLists.data);
       });
     }
   }, []);
@@ -670,24 +671,11 @@ const [innerSubCategories, setInnerSubCategories] = useState([]);
 
 
   return (
-    <View flex backgroundColor="white" padding-20>
-      <View row centerV>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-            clearFieldsExceptCountryAndCommonCountryId();
-          }}>
-          <View style={styles.circle}>
-            <Image
-              source={AppImages.ARROW_LEFT}
-              style={{ width: 25, height: 25 }}
-            />
-          </View>
-        </TouchableOpacity>
-        <View flex center>
-          <Text style={styles.heading}>{strings.placeAd}</Text>
-        </View>
-      </View>
+    <View flex backgroundColor={AppColors.white} padding-20>
+      <BackHeader title={strings.placeAd} navigation={navigation} onBackPress={() => {
+        navigation.goBack();
+        clearFieldsExceptCountryAndCommonCountryId();
+      }} />
 
       <Text style={styles.AdTitle}>
         {strings.tellUs} {placeAdInput.category_Name}
@@ -702,24 +690,24 @@ const [innerSubCategories, setInnerSubCategories] = useState([]);
       )}
 
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled'>
-        <View marginV-20>
+        <View marginT-20>
 
-{innerSubCategories.length > 0 && (
-          <View>
-            <Text style={styles.labelStyle}>Select Category</Text>
-            <ItemDropdown
-              value={placeAdInput.innercategory}
-              data={innerSubCategories}
-              add={(val) =>
-                setPlaceAdInput(prev => ({
-                  ...prev,
-                  innercategory: val,
-                }))
-              }
-              dropdownType={'Select'}
-            />
-          </View>
-)}
+          {innerSubCategories.length > 0 && (
+            <View>
+              <Text style={styles.labelStyle}>Select Category</Text>
+              <ItemDropdown
+                value={placeAdInput.innercategory}
+                data={innerSubCategories}
+                add={(val) =>
+                  setPlaceAdInput(prev => ({
+                    ...prev,
+                    innercategory: val,
+                  }))
+                }
+                dropdownType={'Select'}
+              />
+            </View>
+          )}
 
 
           {sortedFields.map((field, index) =>
