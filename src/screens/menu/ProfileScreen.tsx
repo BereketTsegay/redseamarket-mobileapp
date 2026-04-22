@@ -79,7 +79,7 @@ const ProfileScreen: React.FC = () => {
   };
 
   return (
-    <View flex style={{backgroundColor: '#F4F6FA'}}>
+    <View flex style={{backgroundColor: AppColors.white}}>
 
       {/* ================= HEADER ================= */}
       <View style={styles.profileCard}>
@@ -132,7 +132,7 @@ const ProfileScreen: React.FC = () => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{paddingHorizontal: 16, paddingBottom:40}}>
+        <View style={{paddingHorizontal: 16, paddingBottom:10}}>
 
           {/* ================= ALL MENU ITEMS ================= */}
 

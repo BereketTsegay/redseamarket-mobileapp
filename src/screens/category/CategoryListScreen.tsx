@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {Image, Text, View} from 'react-native-ui-lib';
 import {RootStackParams, RouteNames} from '../../navigation';
-import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-import {ActivityIndicator, FlatList, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, TouchableOpacity} from 'react-native';
 import styles from './styles';
 import AppImages from '../../constants/AppImages';
 import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit';
@@ -17,11 +16,6 @@ import SortModal from '../../components/SortModal';
 import FilterModal from '../../components/FilterModal';
 
 type CategoryListScreenNavigationProps = NativeStackNavigationProp<
-  RootStackParams,
-  'CategoryListScreen'
->;
-
-type CategoryListScreenRouteProps = RouteProp<
   RootStackParams,
   'CategoryListScreen'
 >;
@@ -40,7 +34,6 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
   const [sortOpen, setSortOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [initialValue, setValue] = useState('');
-  const [FilterValue, setFilterValue] = useState([]);
   const dispatch: ThunkDispatch<RootState, any, AnyAction> = useDispatch();
   const {categoryLists, loadingCategoryLists} = useSelector(
     (state: RootState) => state.CategoryList,
@@ -48,13 +41,13 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
 
   useEffect(() => {
     list('','','','','','','');
-  }, []);
+  }, [list]);
 
-  const list = (initialValue,state,city,area,subarea,priceFrom,priceTo) => {
+  const list = React.useCallback((sortValue,state,city,area,subarea,priceFrom,priceTo) => {
     let request = JSON.stringify({
       category: cat_Id,
       country: countryId,
-      sort: initialValue,
+      sort: sortValue,
       state_id:state,
       city:city,
       area: area,
@@ -65,7 +58,7 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
     });
     // console.log(request)
     dispatch(fetchCategoryList({requestBody: request}));
-  };
+  }, [cat_Id, countryId, dispatch]);
 
   const closeSheet = () => {
     setSortOpen(false);
@@ -112,7 +105,13 @@ const CategoryListScreen: React.FC<Props> = ({route}) => {
 
       <View row centerV style={styles.row}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(RouteNames.SearchListScreen,{alert:true})}>
+          onPress={() =>
+            navigation.navigate(RouteNames.SearchListScreen, {
+              alert: true,
+              categoryId: cat_Id,
+              categoryName: name,
+            })
+          }>
           <View row center>
             <Image
               source={AppImages.SEARCH}

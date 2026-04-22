@@ -11,7 +11,7 @@ export type RootStackParams = {
   ProfileScreen:undefined;
   PostListScreen:undefined;
   DetailsScreen:undefined;
-  CategoryListScreen:undefined;
+  CategoryListScreen: {cat_Id: any; name: any; countryId: any};
   FilterScreen:undefined;
   PostSecondScreen:undefined;
   PlaceAdScreen:undefined;
@@ -29,7 +29,11 @@ export type RootStackParams = {
   HiringListScreen: undefined;
   EditProfile: undefined;
   HiringJobDetails: undefined;
-  SearchListScreen: undefined;
+  SearchListScreen: {
+    alert: boolean;
+    categoryId?: any;
+    categoryName?: any;
+  };
   ForgotPasswordScreen: undefined;
   PasswordResetScreen: {email: any};
   NotificationScreen: undefined;
